@@ -23,7 +23,7 @@ import com.google.gson.Gson;
 import spring.orm.contract.DiagnosticBillDao;
 import spring.orm.contract.PatientDao;
 import spring.orm.contract.TestDao;
-import spring.orm.model.testModel;
+import spring.orm.model.TestModel;
 import spring.orm.model.input.BillInputModel;
 import spring.orm.model.output.PatientNameOutputModel;
 import spring.orm.services.TestServices;
@@ -45,7 +45,7 @@ public class TestBillGenController {
 	@RequestMapping("/dcadmin/booktest")
 	public String GetCat(Model model) {
 
-		List<testModel> lc = td.gettests();
+		List<TestModel> lc = td.gettests();
 		List<PatientNameOutputModel> lp = pdao.getAllPatientidsNames();
 
 		System.out.println("*********************" + lc);
@@ -64,7 +64,7 @@ public class TestBillGenController {
 	@RequestMapping(value = "/dcadmin/gettestbycat", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> GettestbyCat(@RequestParam String cat, Model model) {
 
-		List<testModel> test = td.gettestbycat(cat);
+		List<TestModel> test = td.gettestbycat(cat);
 		// System.out.println(test.get(1));
 
 		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(test));

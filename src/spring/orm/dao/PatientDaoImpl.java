@@ -205,7 +205,7 @@ public class PatientDaoImpl implements PatientDao {
 	public List<Object> getapptests(int p) {
 		// TODO Auto-generated method stub
 		List<Object> lm3 = em.createQuery(
-				"select d.id.dgbltestId,t.test_name from Diagnostictestbill d , testModel t,DiagnosticBillModel d1 where d.id.dgblId=d1.dgbl_id and d.id.dgbltestId=t.test_id and d1.dgbl_patn_id=:p ")
+				"select d.id.dgbltestId,t.test_name from Diagnostictestbill d , TestModel t,DiagnosticBillModel d1 where d.id.dgblId=d1.dgbl_id and d.id.dgbltestId=t.test_id and d1.dgbl_patn_id=:p ")
 				.setParameter("p", p).getResultList();
 
 		return lm3;

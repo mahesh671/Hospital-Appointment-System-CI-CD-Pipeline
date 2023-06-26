@@ -38,7 +38,7 @@ th {
 
 	<jsp:include page="nav.jsp" />
 	<%
-	List<testModel> slist = (List<testModel>) request.getAttribute("tests");
+	List<TestModel> slist = (List<TestModel>) request.getAttribute("tests");
 	%>
 
 <h3 align="center">Test Details</h3>
@@ -64,7 +64,7 @@ th {
 
 
 					<%
-					for (testModel s : slist) {
+					for (TestModel s : slist) {
 					%>
 					<tbody>
 						<tr>

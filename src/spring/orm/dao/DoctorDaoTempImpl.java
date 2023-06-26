@@ -28,10 +28,9 @@ public class DoctorDaoTempImpl implements DoctorsDaoTemp {
 	@Override
 	@Transactional
 	public Long findCount() {
-		// TODO Auto-generated method stub
-		System.out.println("in dao");
-		Long d = em.createQuery("select count(d) from DoctorTemp d where d.isDeleted = :status", Long.class)
+		// This method retrieves the count of non-deleted doctors from the database.
 
+		Long d = em.createQuery("select count(d) from DoctorTemp d where d.isDeleted = :status", Long.class)
 				.setParameter("status", false).getSingleResult();
 		return d;
 	}
@@ -39,15 +38,17 @@ public class DoctorDaoTempImpl implements DoctorsDaoTemp {
 	@Transactional
 	@Override
 	public List<DoctorTemp> getAllDoc() {
-		// TODO Auto-generated method stub
+		// This method retrieves all doctors from the database.
 
 		return em.createQuery("select d from DoctorTemp d", DoctorTemp.class).getResultList();
 	}
 
 	@Transactional
 	public List<DoctorTemp> getAllDocSpec(String Spec) {
-		// TODO Auto-generated method stub
-
+		/*
+		 * This method retrieves all doctors with a specific specialization from the
+		 * database.
+		 */
 		return em.createQuery("select d from Doctor d where d.specialization.id=: spec", DoctorTemp.class)
 				.setParameter("spec", Spec).getResultList();
 
@@ -55,43 +56,44 @@ public class DoctorDaoTempImpl implements DoctorsDaoTemp {
 
 	@Transactional
 	public DoctorTemp getdoc(int Id) {
-		// TODO Auto-generated method stub
-
-		return em.createQuery("select d from DoctorTemp d where d.doctId=:doct ",DoctorTemp.class).setParameter("doct", Id).getSingleResult();
+		/*
+		 * This method retrieves a specific doctor based on the provided ID from the
+		 * database.
+		 */
+		return em.createQuery("select d from DoctorTemp d where d.doctId=:doct ", DoctorTemp.class)
+				.setParameter("doct", Id).getSingleResult();
 	}
 
 	@Transactional
 	@Override
 	public void saveDoc(DoctorTemp s) {
-		// TODO Auto-generated method stub
-		System.out.println("hello");
-
 		em.persist(s);
 	}
 
 	@Transactional
 	@Override
 	public void updatedoc(DoctorTemp s) {
-		// TODO Auto-generated method stub
-
-		System.out.println("In Update Spec");
 		em.merge(s);
 
 	}
 
 	@Override
 	public List<DoctorList> getallDocScheduleBySpec(String spec, String like) {
-		// TODO Auto-generated method stub
+		/*
+		 * This method retrieves doctors' schedules based on a specific specialization
+		 * and weekday pattern from the database.
+		 */
 		List<DoctorList> dout = em.createQuery(
 				"select new spring.orm.model.output.DoctorList( d.doctId,d.doctName) from DoctorTemp d where (d.schedule.weekday ='ALL' or d.schedule.weekday like CONCAT('%', :like, '%')) and d.specialization.id=:spec and d.isDeleted = false ",
 				DoctorList.class).setParameter("like", like).setParameter("spec", spec).getResultList();
-			
+
 		return dout;
 	}
 
 	@Override
 	public DoctorOutPutModel getDocById(int id) {
-		// TODO Auto-generated method stub
+		
+	
 		DoctorOutPutModel d = new DoctorOutPutModel();
 		d.setD(em.find(DoctorTemp.class, id));
 		d.setDocsche(docschedule.getSchedulebyId(d.getDoctId()));
@@ -101,7 +103,6 @@ public class DoctorDaoTempImpl implements DoctorsDaoTemp {
 	}
 
 	public List<DoctorOutPutModel> getallDocSchedule() {
-		// TODO Auto-generated method stub
 		List<DoctorOutPutModel> dout = new ArrayList<>();
 		for (DoctorTemp d : em.createQuery("select d from DoctorTemp d where isDeleted = false", DoctorTemp.class)
 				.getResultList()) {
@@ -115,7 +116,6 @@ public class DoctorDaoTempImpl implements DoctorsDaoTemp {
 	public void deletedoc(int id) {
 		DoctorTemp d = em.find(DoctorTemp.class, id);
 		d.setDeleted(true);
-
 		em.merge(d);
 
 	}

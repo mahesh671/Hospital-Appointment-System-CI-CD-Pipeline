@@ -18,6 +18,10 @@ public class RegistrationService {
 	private UserDao udao;
 
 	public void registerPatient(RegistrationForm rf) {
+		/*
+		 * This method is responsible for registering a new patient based on the
+		 * provided RegistrationForm object.
+		 */
 		PatientModel patient = new PatientModel();
 		patient.setPatn_name(rf.getName());
 		patient.setPatn_age(rf.getAge());
@@ -37,18 +41,21 @@ public class RegistrationService {
 	}
 
 	public UserPass getUser(String uname) {
-		// TODO Auto-generated method stub
+		// This method retrieves the UserPass object based on the provided username.
+
 		return udao.getUserDetails(uname);
 	}
 
 	public void updateUser(UserPass user) {
-		// TODO Auto-generated method stub
+		// This method updates the user's information in the database.
+
 		udao.updateUser(user);
 
 	}
 
 	public boolean isUsernameAvailable(String username) {
-		// TODO Auto-generated method stub
+		// This method checks the availability of a username.
+
 		UserPass userDetails = udao.getUserDetails(username);
 		if (userDetails != null && userDetails.getUsername().equals(username)) {
 			return false;
@@ -57,7 +64,8 @@ public class RegistrationService {
 	}
 
 	public PatientModel getPatientDetails(int patn_id) {
-		// TODO Auto-generated method stub
+		// This method retrieves the PatientModel object based on the provided patient ID.
+
 		return udao.getPatientDetails(patn_id);
 	}
 }

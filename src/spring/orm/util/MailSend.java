@@ -137,8 +137,7 @@ public class MailSend {
 			e.printStackTrace();
 		}
 
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	public static void sendEmail(HttpServletRequest request, HttpServletResponse response, MailAppOutputModel app,

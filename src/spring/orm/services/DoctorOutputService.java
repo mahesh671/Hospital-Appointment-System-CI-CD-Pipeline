@@ -41,15 +41,17 @@ public class DoctorOutputService {
 	@Autowired
 	private AppointmentDao appdao;
 
+	/*
+	 * Retrieve a list of doctors with their schedules based on specialization and
+	 * appointment date
+	 */
 	public List<DoctorList> getAllDocBySpecDate(String specialization, Date appointmentDated) {
-		// TODO Auto-generated method stub
 		List<DoctorList> docspec = new ArrayList<>();
 		Map<Integer, String> daymap = new HashMap<>();
 		daymap.put(1, "M");
 		daymap.put(2, "T");
 		daymap.put(3, "W");
 		daymap.put(4, "H");
-
 		daymap.put(5, "F");
 		daymap.put(6, "S");
 		daymap.put(0, "U");
@@ -60,21 +62,22 @@ public class DoctorOutputService {
 			docspec.add(d);
 
 		}
-
 		return docspec;
 	}
 
+	// Retrieve doctor information based on ID
 	public DoctorOutPutModel getDocbyID(int id) {
-		// TODO Auto-generated method stub
 		return doctdao.getDocById(id);
 	}
 
+	// Get available time slots for a doctor on a specific date
 	public List<String> getDocTimeSlots(int id, String date) {
 		DoctorSchedule s = docschedao.getSchedulebyId(id);
 		List<String> slots = generateTimeSlots(s.getTimeFrom(), s.getTimeTo(), s.getAverageAppointmentTime(), date, id);
 		return slots;
 	}
 
+	// Generate time slots based on the doctor's schedule and availability
 	public List<String> generateTimeSlots(String fromTime, String toTime, int avgTime, String date, int id) {
 		List<String> timeSlots = new ArrayList<>();
 
@@ -94,6 +97,7 @@ public class DoctorOutputService {
 		return timeSlots;
 	}
 
+	// Add a new doctor with the provided information
 	public int addDoc(DoctorInput d, CommonsMultipartFile pic) {
 		DoctorTemp dt = new DoctorTemp();
 		Specialization s = specdao.getSpecialization(d.getDocspec());
@@ -109,9 +113,11 @@ public class DoctorOutputService {
 	}
 
 	@Transactional
+	// Update doctor information based on the provided data
 	public int updateDoc(DoctorUpdateModel d, CommonsMultipartFile docphoto) {
-		// TODO Auto-generated method stub
 		DoctorTemp dt = doctdao.getdoc(d.getDoc_id());
+		
+		//user may update a single field so we tried to check each conditions to update
 		if (d.getDocspec() != null) {
 			Specialization s = specdao.getSpecialization(d.getDocspec());
 			dt.setSpecialization(s);
@@ -134,7 +140,6 @@ public class DoctorOutputService {
 			dt.setDoctName(d.getDocname());
 
 		}
-		// ds.setTimeFrom();
 		doctdao.updatedoc(dt);
 		docschedao.updateSchedule(d);
 		return dt.getDoctId();

@@ -20,13 +20,13 @@ public class SpecializationDaoImpl implements SpecializationDao {
 	@Transactional
 	@Override
 	public Specialization getSpecialization(String Id) {
-		// TODO Auto-generated method stub
+		// Retrieve a specialization by its ID
 		return em.find(Specialization.class, Id);
 	}
 
 	@Override
 	public List<Specialization> getAllSpec() {
-		// TODO Auto-generated method stub
+		// Retrieve all specializations that are not marked as deleted
 		return em.createQuery("select s from Specialization s where isDeleted = false", Specialization.class)
 				.getResultList();
 	}
@@ -34,12 +34,7 @@ public class SpecializationDaoImpl implements SpecializationDao {
 	@Transactional
 	@Override
 	public void delSpec(String id) {
-		// TODO Auto-generated method stub
-		// System.out.println("daoLayer");
-		// Query q = em.createQuery("delete from Specialization s where s.id=:id");
-		// q.setParameter("id", id);
-		// System.out.println(q.executeUpdate());
-		System.out.println(id);
+		// Delete a specialization by setting its 'isDeleted' flag to true
 		Specialization s = em.find(Specialization.class, id);
 		s.setDeleted(true);
 		em.merge(s);
@@ -48,11 +43,12 @@ public class SpecializationDaoImpl implements SpecializationDao {
 	@Transactional
 	@Override
 	public void addSpec(Specialization s) {
-		// TODO Auto-generated method stub
-
+		// Add a specialization to the database
 		if (em.find(Specialization.class, s.getId()) == null) {
+			//If the specialization is new then add
 			em.persist(s);
 		} else {
+			//If the specialization is soft deleted then change the status
 			Specialization alreadyexisted = em.find(Specialization.class, s.getId());
 			alreadyexisted.setDeleted(false);
 			em.merge(alreadyexisted);
@@ -62,50 +58,9 @@ public class SpecializationDaoImpl implements SpecializationDao {
 	@Transactional
 	@Override
 	public void updateSpec(Specialization s) {
-		// TODO Auto-generated method stub
-
+		// Update a specialization in the database
 		em.merge(s);
 
 	}
-
-	// public List<Specialization> getspec() {
-	//
-	// return em.createQuery("SELECT t FROM Specialization t", Specialization.class).getResultList();
-	// }
-
-	// @Override
-
-	// public void savespec(String idInput,String titleInput,String descriptionInput) {
-	// StoredProcedureQuery query = em.createStoredProcedureQuery("insert_test");
-	// System.out.println("called");
-	// // query.registerStoredProcedureParameter(1, Integer.class, ParameterMode.IN);
-	// query.registerStoredProcedureParameter(1, String.class, ParameterMode.IN);
-	// query.registerStoredProcedureParameter(2, String.class, ParameterMode.IN);
-	// query.registerStoredProcedureParameter(3, Integer.class, ParameterMode.IN);
-	//
-	// query.setParameter(1, idInput);
-	// query.setParameter(2, titleInput);
-	// query.setParameter(3, descriptionInput);
-	//
-	//
-	// query.execute();
-	// System.out.println("inserted");
-	// }
-
-	// @Override
-	// public Specialization gettestbyid(String id) {
-	// // TODO Auto-generated method stub
-	// //
-	// // System.out.println(
-	// // em.createQuery("select t from testModel t where t.test_id=id", testModel.class).getSingleResult());
-	// // return em.createQuery("select t from testModel t where t.test_id=id", testModel.class).getResultList();
-	// // // TODO Auto-generated method stub
-	// return em.createQuery("select t from testModel t where t.test_id=:id",Specialization.class).setParameter("id",
-	// id)
-	// .getSingleResult();
-	//
-	// }
-
-	// TODO Auto-generated method stub
 
 }

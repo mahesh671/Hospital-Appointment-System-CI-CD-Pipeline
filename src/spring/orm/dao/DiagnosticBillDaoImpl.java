@@ -89,11 +89,11 @@ public class DiagnosticBillDaoImpl implements DiagnosticBillDao {
 
 				tests1 = em
 						.createQuery("SELECT t.test_name, t.test_method, t.test_price "
-								+ "FROM testModel t, TestBookStatus tb " + "WHERE t.test_id = :testId "
+								+ "FROM TestModel t, TestBookStatus tb " + "WHERE t.test_id = :testId "
 								+ "AND tb.status = 'pending' " + "AND tb.id.test_id = t.test_id")
 						.setParameter("testId", j).getResultList();
 
-				int testsprice = (int) em.createQuery("select t.test_price from testModel t where t.test_id=:j ")
+				int testsprice = (int) em.createQuery("select t.test_price from TestModel t where t.test_id=:j ")
 						.setParameter("j", j).getSingleResult();
 
 				amt = amt + testsprice;
@@ -134,7 +134,7 @@ public class DiagnosticBillDaoImpl implements DiagnosticBillDao {
 
 			for (int i = 0; i < t1.size(); i++) {
 
-				int price2 = (int) em.createQuery("select t.test_price from testModel t where t.test_id=:j ")
+				int price2 = (int) em.createQuery("select t.test_price from TestModel t where t.test_id=:j ")
 						.setParameter("j", t1.get(i)).getSingleResult();
 				DiagnosticBillModelId id = new DiagnosticBillModelId((Integer) d1.getDgbl_id(), t1.get(i));
 				billid = ((Integer) d1.getDgbl_id());

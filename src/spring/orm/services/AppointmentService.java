@@ -37,6 +37,7 @@ public class AppointmentService {
 	private PatientDao patdao;
 
 	public List<AppointmentEntity> getAllAppointments() {
+		// Retrieve all appointments
 		List<AppointmentEntity> alist = apdao.getAllAppointments();
 		for (AppointmentEntity a : alist) {
 			// Format date
@@ -51,7 +52,7 @@ public class AppointmentService {
 	}
 
 	public int bookAppointment(AppointmentForm app) {
-		// TODO Auto-generated method stub
+		// Book an appointment
 		DateTimeFormatter sqlformat = DateTimeFormatter.ofPattern("HH:mm:ss");
 		System.out.println(LocalTime.parse(app.getSlots(), DateTimeFormatter.ofPattern("hh:mm a")).format(sqlformat));
 		int app_id = apdao.bookAppointment(patdao.getPatientById(app.getExistingPatientid()),
@@ -63,7 +64,7 @@ public class AppointmentService {
 	}
 
 	public RescheduleAppOutput getAppointmentByIdOutput(int app_id) {
-		// TODO Auto-generated method stub
+		// Get appointment details by ID for rescheduling
 		RescheduleAppOutput r = new RescheduleAppOutput();
 		AppointmentEntity a = apdao.getAppointmentById(app_id);
 		r.setApp_id(a.getAppn_id());
@@ -77,7 +78,7 @@ public class AppointmentService {
 	}
 
 	public int bookAppointmentWithNewPatient(AppointmentForm app) {
-
+		// Book an appointment with a new patient
 		PatientModel p = new PatientModel();
 		p.setPatn_name(app.getNewPatientName());
 		p.setPatn_age(app.getNewPatientAge());
@@ -96,13 +97,13 @@ public class AppointmentService {
 	}
 
 	public void cancelAppointment(int app_id) {
-		// TODO Auto-generated method stub
+		// Cancel an appointment
 		apdao.cancelAppointment(app_id);
 
 	}
 
 	public MailAppOutputModel getAppointmentByID(int app_id) {
-		// TODO Auto-generated method stub
+		// Get appointment details by ID
 		AppointmentEntity a = apdao.getAppointmentById(app_id);
 		MailAppOutputModel ao = new MailAppOutputModel();
 		ao.setAppn_id(a.getAppn_id());
@@ -114,14 +115,12 @@ public class AppointmentService {
 		ao.setDoc_Photo(a.getDoctor().getDoctPhoto());
 		ao.setAppn_payreference(a.getAppn_payreference());
 		ao.setPat_name(a.getPm().getPatn_name());
-		String mail="";
-		if(a.getPm().getAccessPatientId()!=null)
-		{
-			mail=a.getPm().getAccessPatient().getUserPass().getMail();
+		String mail = "";
+		if (a.getPm().getAccessPatientId() != null) {
+			mail = a.getPm().getAccessPatient().getUserPass().getMail();
 		}
-		if (a.getPm().getUserPass() != null)
-		{
-			mail=a.getPm().getUserPass().getMail();
+		if (a.getPm().getUserPass() != null) {
+			mail = a.getPm().getUserPass().getMail();
 		}
 		ao.setMail(mail);
 		return ao;
@@ -130,12 +129,13 @@ public class AppointmentService {
 
 	@Transactional
 	public void reschduleAppointment(RescheduleAppointmentModel rm) {
-		// TODO Auto-generated method stub
+		// Reschedule an appointment
 		apdao.reschduleAppointment(rm);
 
 	}
 
 	public int bookAppointment(AppointmentForm appointment, int patientId) {
+		// Book an appointment with a specified patient ID
 		DateTimeFormatter sqlFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
 		System.out.println(
 				LocalTime.parse(appointment.getSlots(), DateTimeFormatter.ofPattern("hh:mm a")).format(sqlFormat));
@@ -150,13 +150,13 @@ public class AppointmentService {
 	}
 
 	public List<AppointmentEntity> getPatientAppointmentByID(int patn_id) {
-
+		// Get all appointments of a patient by their ID
 		List<AppointmentEntity> alist = apdao.getAppointmentsByPatientId(patn_id);
 		return alist;
 	}
 
 	public List<AppoutformFamily> getFormFamily(int id) {
-		// TODO Auto-generated method stub
+		// Get family members for form filling
 		List<AppoutformFamily> r = new ArrayList<>();
 		for (PatientModel p : patdao.getAllFamily(id)) {
 			AppoutformFamily f = new AppoutformFamily();

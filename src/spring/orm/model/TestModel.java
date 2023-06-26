@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "tests")
-public class testModel {
+public class TestModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "test_id")
@@ -37,7 +37,7 @@ public class testModel {
 		this.isDeleted = isDeleted;
 	}
 
-	public testModel(int test_id, String test_name, String test_category, int test_price, String test_method,
+	public TestModel(int test_id, String test_name, String test_category, int test_price, String test_method,
 			String test_fromrange, String test_torange) {
 
 		this.test_id = test_id;
@@ -113,7 +113,7 @@ public class testModel {
 		this.test_torange = test_torange;
 	}
 
-	public testModel() {
+	public TestModel() {
 		super();
 	}
 

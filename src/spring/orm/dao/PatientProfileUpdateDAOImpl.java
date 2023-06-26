@@ -8,13 +8,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import spring.orm.contract.PatientProfileUpdateDAO;
 import spring.orm.model.entity.PatientMedicalProfile;
 import spring.orm.model.output.PrescriptionOutputmodel;
 
-@Repository
+@Component
 public class PatientProfileUpdateDAOImpl implements PatientProfileUpdateDAO {
 
 	@PersistenceContext
@@ -33,8 +33,16 @@ public class PatientProfileUpdateDAOImpl implements PatientProfileUpdateDAO {
 
 		String hql = "select new spring.orm.model.output.PrescriptionOutputmodel(a.appn_id,a.appn_sch_date,p.patn_parameter,p.patn_pargroup,p.patn_value,p.patn_prescription) "
 				+ "from PatientMedicalProfile p,AppointmentEntity a where (p.id.patn_id in(select f.pfmbPatnId from FamilyMembers f where f.patnAccessPatnId=:p) or p.id.patn_id=:p ) and a.pm.patn_id=p.id.patn_id";
-		System.out.println(hql);
-		List<PrescriptionOutputmodel> lp = em.createQuery(hql, spring.orm.model.output.PrescriptionOutputmodel.class)
+		System.out.println(hql); // to show the following attributes , including family members
+		List<PrescriptionOutputmodel> lp = em.createQuery(hql, spring.orm.model.output.PrescriptionOutputmodel.class) // this
+																														// output
+																														// model
+																														// consists
+																														// of
+																														// patientmedicalprofile
+																														// and
+																														// DiagnosticBill
+																														// attributes
 				.setParameter("p", id).getResultList();
 		return lp;
 	}
@@ -48,10 +56,10 @@ public class PatientProfileUpdateDAOImpl implements PatientProfileUpdateDAO {
 				+ "from AppointmentEntity a where a.appn_id not in(select pmp.id.patn_appn_id from PatientMedicalProfile pmp where pmp.id.patn_id =: patn_id ) and a.pm.patn_id=:patn_id")
 				.setParameter("patn_id", patn_id)
 
-				.getResultList();
+				.getResultList(); // to get the appointment ids that are unique combination of patient &
+									// appointment id in PatientMedicalProfile to insert
 		System.out.println(lp2);
 
 		return lp2;
 	}
-
 }

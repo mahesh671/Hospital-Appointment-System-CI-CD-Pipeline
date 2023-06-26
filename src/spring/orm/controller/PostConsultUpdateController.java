@@ -47,11 +47,11 @@ public class PostConsultUpdateController {
 
 	@RequestMapping(value = "patient/getallPrescription", method = RequestMethod.GET)
 	public String getallPrescription(Model model, @SessionAttribute("patientSession") PatientSession patientSession) {
-		int p = patientSession.getId();
-		List<PrescriptionOutputmodel> lm = pcudao.getallPrescription(p);
+		int p = patientSession.getId();// to maintain same session id when logged in
+		List<PrescriptionOutputmodel> lm = pcudao.getallPrescription(p); // merged PatientMedicalProfile & DiagnosticBillModel attributes
 		model.addAttribute("pres", lm);
 		System.out.println(lm.toString());
-		return "patient/patpresdisplay";
+		return "patient/patpresdisplay"; //reflects at patients page , which displays in the format of table, it also includes prescription image
 	}
 
 }

@@ -1,5 +1,8 @@
 package spring.orm.services;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -40,7 +43,16 @@ public class ReportServices {
 
 	public boolean isImageFile(CommonsMultipartFile file) {
 		// TODO Auto-generated method stub
-		return false;
+		// Define the allowed image file extensions
+		List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png", "gif");
+
+		// Get the file extension from the original filename
+		String originalFilename = file.getOriginalFilename();
+		String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
+
+		// Check if the file extension is in the allowed list
+		return allowedExtensions.contains(fileExtension);
+
 	}
 
 }

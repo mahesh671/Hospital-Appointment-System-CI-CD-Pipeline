@@ -6,51 +6,51 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import spring.orm.contract.TestDao;
-import spring.orm.model.testModel;
+import spring.orm.model.TestModel;
 
 @Service
 public class TestServices {
 	@Autowired
 	private TestDao tdao;
 
-	public List<testModel> gettests() {
-		System.out.println("in gettest dao");
+	public List<TestModel> gettests() {
+		//Used to get and display the test
 		return tdao.gettests();
 	}
 
 
 
-	public testModel gettestbyid(int id) {
+	public TestModel gettestbyid(int id) {
+		//get the test bt testid
 		return tdao.gettestbyid(id);
 	}
 
-	public void updatetest(testModel t) {
+	public void updatetest(TestModel t) {
+		//Used to update the test
 		tdao.updatetest(t);
 
 	}
 
 	public void deltest(int test_id) {
-		// TODO Auto-generated method stub
+		//Used to delete the test
 		tdao.deltest(test_id);
 
 	}
 
-	public List<testModel> getcat() {
-		// TODO Auto-generated method stub
-		return tdao.getcat();
-	}
+	
 
 	public List<String> getTestCat() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public List<testModel> gettestbycat(String cat) { // TODO Auto-generated method stub return
+	public List<TestModel> gettestbycat(String cat) { 
+		//Gives the test by categorywise in testbillgen
 		return tdao.gettestbycat(cat);
 	}
 
 	public Object gettestprice(int test) {
-		// TODO Auto-generated method stub
+		//Gives the test price used in testbillgen
 		return tdao.gettestprice(test);
 	}
 

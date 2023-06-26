@@ -27,92 +27,123 @@ public class LoginController {
 	private static final String ROLE_PATIENT = "Patient";
 	private static final String ROLE_DIAGNOSTIC_CENTER = "DCADMIN";
 
-	private boolean isExpired;
+	
 	private String otp;
-
-	// private final UserServices userService;
 
 	private final RegistrationService rs;
 
 	@Autowired
 	public LoginController(RegistrationService rs) {
-		// this.userService = userService;
+		/*
+		 * Constructor for the LoginController class that takes a RegistrationService
+		 * object as a parameter
+		 */
 		this.rs = rs;
+		// Assign the passed RegistrationService object to the 'rs' instance variable
 	}
 
 	@RequestMapping(value = "/")
 	public String dcscreen() {
-		return "login/home";
+		// This method maps the root URL ("/") to display the login home page
+
+		return "login/home";// Returns the name of the view template for the login home page
 	}
 
 	@RequestMapping(value = "/forget", method = RequestMethod.GET)
 	public String getForgetPage() {
+		// This method maps the "/forget" URL to display the forget password page
+
 		return "login/forgetPage";
+		// Returns the name of the view template for the forget password page
+
 	}
 
 	@RequestMapping(value = { "admin/change", "dcadmin/change", "patient/change" }, method = RequestMethod.GET)
 	public String getChangePage() {
+		/*
+		 * This method maps multiple URLs ("/admin/change", "/dcadmin/change",
+		 * "/patient/change") to display the change password page
+		 */
 		return "login/changepass";
+		// Returns the name of the view template for the change password page
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String getRegisterPage() {
-		return "login/registerPage";
+		// This method maps the "/register" URL to display the registration page.
+
+		return "login/registerPage";// Returns the name of the view template for the registration page.
 	}
 
 	@RequestMapping(value = "/forgetVal", method = RequestMethod.POST)
 	public String sendMail(@RequestParam String uname, Model m) {
-		// Code for sending an email with OTP to the user
+		/*
+		 * This method maps the "/forgetVal" URL to handle a POST request for sending an
+		 * email with OTP to the user.
+		 * 
+		 * Code for sending an email with OTP to the user
+		 */
+		MailSend mailSender = new MailSend(); // Create an instance of the MailSend class to send the email
+		UserPass user = rs.getUser(uname); // Retrieve the user information based on the provided username
+		String userEmail = user.getMail(); // Get the email address of the user
+		otp = mailSender.generateOTP(); // Generate an OTP (one-time password)
+		System.out.println(user.getMail() + " " + user.getUsername()); // Print the user's email and username for
+																		// debugging purposes
+		mailSender.sendOTPMail(userEmail, otp); // Send the OTP via email to the user's email address
 
-		MailSend mailSender = new MailSend();
-		UserPass user = rs.getUser(uname);
-		String userEmail = user.getMail();
-		otp = mailSender.generateOTP();
-		System.out.println(user.getMail() + " " + user.getUsername());
-		mailSender.sendOTPMail(userEmail, otp);
+		LocalDateTime expiretime = LocalDateTime.now().plusMinutes(5); // Set the expiration time of the OTP to 5
+																		// minutes from the current time
+		user.setOtp(otp); // Set the generated OTP for the user
+		user.setotptime(expiretime); // Set the expiration time of the OTP for the user
+		rs.updateUser(user); // Update the user information in the registration service
+		m.addAttribute("user", user); // Add the user object to the model attribute for further use in the view
 
-		LocalDateTime expiretime = LocalDateTime.now().plusMinutes(5);
-		user.setOtp(otp);
-		user.setotptime(expiretime);
-		rs.updateUser(user);
-		m.addAttribute("user", user);
-
-		return "login/reset";
+		return "login/reset"; // Return the name of the view template for the password reset page
 	}
 
 	@RequestMapping(value = "/passwordset", method = RequestMethod.POST)
 	public String otpValidate(@RequestParam String lcpass, @RequestParam String lotp, @RequestParam String uname) {
-		// Code for validating the OTP and updating the user's password
-
-		UserPass user = rs.getUser(uname);
+		/*
+		 * This method maps the "/passwordset" URL to handle a POST request for OTP
+		 * validation and password update.
+		 */
+		UserPass user = rs.getUser(uname); // Retrieve the user information based on the provided username
 		if (LocalDateTime.now().isBefore(user.getotptime())) {
-			// userService.updateUser(lcpass, uname);
+			// Check if the current time is before the OTP expiration time
+
 			if (user.getOtp().equals(lotp)) {
-				user.setPassword(lcpass);
-				rs.updateUser(user);
+				// Validate if the entered OTP matches the stored OTP for the user
+
+				user.setPassword(lcpass); // Update the user's password with the new password
+				rs.updateUser(user); // Update the user information in the registration service
 			}
 
-			return "login/success";
+			return "login/success"; // Return the name of the view template for the password reset success page
 		} else {
-			System.out.println("OTP Expired");
-			// Handle OTP expired scenario
-			return "login/otpExpired";
+			return "login/otpExpired"; // Return the name of the view template for the OTP expiration page
 		}
 	}
 
-	@RequestMapping(value = "/passwordchange", method = RequestMethod.POST)
+	@RequestMapping(value = {"admin/passwordchange","admin/passwordchange","admin/passwordchange"} ,method = RequestMethod.POST)
 	public String passwordChange(@RequestParam String lcpass, @RequestParam String opass, @RequestParam String uname) {
-		// Code for changing the user's password
-
-		UserPass user = rs.getUser(uname);
+		/*
+		 * This method maps the "/passwordchange" URL to handle a POST request for
+		 * password change.
+		 */
+		UserPass user = rs.getUser(uname); // Retrieve the user information based on the provided username
 		if (user.getPassword().equals(opass)) {
-			user.setPassword(lcpass);
-			rs.updateUser(user);
-			return "login/success";
+			// Check if the entered old password matches the stored password for the user
+
+			user.setPassword(lcpass); // Update the user's password with the new password
+			rs.updateUser(user); // Update the user information in the registration service
+
+			return "login/success"; // Return the name of the view template for the password change success page
 		} else {
 			System.out.println("Wrong Old Password");
-			// Handle wrong old password scenario
-			return "login/changepass";
+			// Handle wrong old password scenario (e.g., display error message, log the
+			// error, etc.)
+
+			return "login/changepass"; // Return the name of the view template for the password change page
 		}
 	}
 
@@ -128,8 +159,6 @@ public class LoginController {
 	@ResponseBody
 	public String checkUsernameAvailability(@RequestParam String username) {
 		// Code for checking the availability of a username
-
-		System.out.println("in check");
 		boolean isUsernameAvailable = rs.isUsernameAvailable(username);
 
 		if (isUsernameAvailable) {
@@ -142,8 +171,9 @@ public class LoginController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String redirectToDashboard(@RequestParam("uname") String uname, @RequestParam("pass") String pass,
 			HttpSession session, Model model) {
-		// Code for validating the user's credentials and redirecting to the corresponding dashboard based on the user's
-		// role
+		/* Code for validating the user's credentials and redirecting to the
+		 corresponding dashboard based on the user's role
+		*/ 
 
 		UserPass user = rs.getUser(uname);
 		if (user != null && user.getPassword().equals(pass)) {
@@ -170,12 +200,16 @@ public class LoginController {
 					patientSession.setEmail(user.getMail());
 					// patientSession.setLastAppointmentId(patientModel.getPatn_lastapp_id());
 
-					// Set other relevant data in the patient session
-					// ...
-
-					// Store patient session in the HttpSession
+					/*
+					 * Set other relevant data in the patient session
+					 * 
+					 * 
+					 * Store patient session in the HttpSession
+					 */ 
 					session.setAttribute("patientSession", patientSession);
-					// Redirect to patient dashboard
+					 /* Redirect to patient
+					 * dashboard
+					 */
 					return "redirect:/patient/";
 				}
 			case ROLE_DIAGNOSTIC_CENTER:

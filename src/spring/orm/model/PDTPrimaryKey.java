@@ -8,19 +8,21 @@ import javax.persistence.ManyToOne;
 @Embeddable
 public class PDTPrimaryKey implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+
 	@ManyToOne
 	@JoinColumn(name = "dgbl_id")
 	private PatientDiagnosis pd; 
 	
 	@ManyToOne
 	@JoinColumn(name="dgbl_test_id")
-	private testModel tm;
+	private TestModel tm;
 	
 	public PDTPrimaryKey() {
 		
 	}
 
-	public PDTPrimaryKey(PatientDiagnosis pd, testModel tm) {
+	public PDTPrimaryKey(PatientDiagnosis pd, TestModel tm) {
 		this.pd = pd;
 		this.tm = tm;
 	}
@@ -33,11 +35,11 @@ public class PDTPrimaryKey implements Serializable{
 		this.pd = pd;
 	}
 
-	public testModel getTm() {
+	public TestModel getTm() {
 		return tm;
 	}
 
-	public void setTm(testModel tm) {
+	public void setTm(TestModel tm) {
 		this.tm = tm;
 	}
 	

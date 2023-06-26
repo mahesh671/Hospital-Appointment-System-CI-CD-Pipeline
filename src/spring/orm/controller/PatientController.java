@@ -25,7 +25,7 @@ import spring.orm.contract.SpecializationDao;
 import spring.orm.contract.TestDao;
 import spring.orm.contract.UserDao;
 import spring.orm.model.PatientSession;
-import spring.orm.model.testModel;
+import spring.orm.model.TestModel;
 import spring.orm.model.input.FamilyMembersInput;
 import spring.orm.model.output.OutputPatientTestReports;
 import spring.orm.model.output.ParaGroupOutput;
@@ -83,7 +83,7 @@ public class PatientController {
 	public String ptest(@SessionAttribute("patientSession") PatientSession patientSession, Model model) {
 
 		System.out.println("called?");
-		List<testModel> tm = tdao.gettests();
+		List<TestModel> tm = tdao.gettests();
 		//
 		model.addAttribute("tests", tm);
 		//
@@ -122,15 +122,15 @@ public class PatientController {
 		System.out.println(lo);
 		return lo;
 	}
-
-	@RequestMapping(value = "/getTestDetails", method = RequestMethod.POST)
-	public ResponseEntity<Object> getTestDetails(@SessionAttribute("patientSession") PatientSession patientSession,
-			@RequestParam int testid) {
-
-		List<Object> lo = tdao.getviewtests(testid);
-		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(lo));
-
-	}
+///?? why this method and getviewtests
+//	@RequestMapping(value = "/getTestDetails", method = RequestMethod.POST)
+//	public ResponseEntity<Object> getTestDetails(@SessionAttribute("patientSession") PatientSession patientSession,
+//			@RequestParam int testid) {
+//
+//		List<Object> lo = tdao.getviewtests(testid);
+//		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(lo));
+//
+//	}
 
 	@RequestMapping(value = "/getapptests", method = RequestMethod.GET)
 	public ResponseEntity<String> getapptests(@SessionAttribute("patientSession") PatientSession patientSession) {
