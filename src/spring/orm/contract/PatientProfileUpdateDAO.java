@@ -1,0 +1,16 @@
+package spring.orm.contract;
+
+import java.util.List;
+
+import spring.orm.model.entity.PatientMedicalProfile;
+import spring.orm.model.output.PrescriptionOutputmodel;
+
+public interface PatientProfileUpdateDAO {
+
+	void save(PatientMedicalProfile pmp);
+
+	List<PrescriptionOutputmodel> getallPrescription(int id);
+
+	public List<Integer> getAllappnids(int patn_id);
+
+}
