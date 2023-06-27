@@ -179,11 +179,10 @@ public class PatientDAOImpl implements PatientDAO {
 	@Transactional
 	public List<PatientlastvisitOutput> getlastvisit(int p) {
 		// Retrieve the patient's last visit details for the given patient ID
-		List<PatientlastvisitOutput> lm = em.createQuery(
-				"SELECT new spring.orm.model.output.PatientlastvisitOutput(a.appn_id, d.doctName, a.appn_sch_date, a.appn_status) "
-						+ "FROM AppointmentEntity a JOIN a.doctor d WHERE a.pm.patn_id = :p AND a.appn_status = 2 ORDER BY a.appn_sch_date DESC",
-				spring.orm.model.output.PatientlastvisitOutput.class).setParameter("p", p).getResultList();
-		return lm;
+		String hql = "select new spring.orm.model.output.PatientlastvisitOutput(p.patn_lastvisit,d.doctName,a.appn_payamount,a.appn_sch_date) from AppointmentEntity a,PatientModel p,DoctorTemp d where p.patn_id=:p and p.patn_id=a.pm.patn_id and d.id=a.doctor.id and a.appn_status='YETO'";
+		List<PatientlastvisitOutput> lp = em.createQuery(hql, spring.orm.model.output.PatientlastvisitOutput.class)
+				.setParameter("p", p).getResultList();
+		return lp;
 	}
 
 	///
@@ -191,7 +190,7 @@ public class PatientDAOImpl implements PatientDAO {
 	public List<Object> getapptests(int p) {
 		// Retrieve the diagnostic test IDs and names for the given patient ID
 		List<Object> lm3 = em.createQuery(
-				"SELECT d.id.dgbltestId, t.test_name FROM Diagnostictestbill d, testModel t, DiagnosticBillModel d1 "
+				"SELECT d.id.dgbltestId, t.test_name FROM Diagnostictestbill d, TestModel t, DiagnosticBillModel d1 "
 						+ "WHERE d.id.dgblId = d1.dgbl_id AND d.id.dgbltestId = t.test_id AND d1.dgbl_patn_id = :p")
 				.setParameter("p", p).getResultList();
 

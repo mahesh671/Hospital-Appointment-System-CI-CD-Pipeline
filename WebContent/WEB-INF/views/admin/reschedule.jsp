@@ -76,5 +76,5 @@
 	
 
 </body>
-<script type="text/javascript" src="./js/reschedule.js"></script>
+<script type="text/javascript" src="../js/reschedule.js"></script>
 </html>

@@ -30,7 +30,7 @@ public class PaymentController {
 	public String pay(String billid, String amount, String currency, Model model)
 			throws RazorpayException, JSONException {
 		System.out.println(billid + amount + currency);
-		RazorpayClient razorpayClient = new RazorpayClient("rzp_test_j9AU4Na98kCuvD", "OjyDABQUyWEfafePUqBlqILA");
+		RazorpayClient razorpayClient = new RazorpayClient("rzp_test_wTvwL5iaSRljth", "AvneRMjZuce3P1NzgAM18omy");
 		JSONObject options = new JSONObject();
 		int amt = Integer.parseInt(amount) * 100;
 		options.put("amount", amt); // Amount in paise (e.g., 1000 paise = Rs 10)
@@ -50,7 +50,7 @@ public class PaymentController {
 	@ResponseBody
 	public String pay(String amount, String currency, Model model) throws RazorpayException {
 		System.out.println(amount + currency);
-		RazorpayClient razorpayClient = new RazorpayClient("rzp_test_j9AU4Na98kCuvD", "OjyDABQUyWEfafePUqBlqILA");
+		RazorpayClient razorpayClient = new RazorpayClient("rzp_test_wTvwL5iaSRljth", "AvneRMjZuce3P1NzgAM18omy");
 		JSONObject options = new JSONObject();
 		int amt = Integer.parseInt(amount) * 100;
 		options.put("amount", amt); // Amount in paise (e.g., 1000 paise = Rs 10)

@@ -22,7 +22,7 @@ public class PatientServices {
 	 */
 	public List<Object> getapptests(int p) {
 		// TODO: Implement the logic to retrieve appointment tests
-		return null;
+		return pd.getapptests(p);
 	}
 
 	/**

@@ -61,7 +61,7 @@ public class AppointmentController {
 	private AppointmentService appser;
 
 	@RequestMapping(value = "admin/newappointment")
-	public String getnewApp(Model m) {
+	public String getNewApp(Model m) {
 		// Retrieve all specializations and add them to the model
 		List<Specialization> aplist = specdao.getAllSpec();
 		m.addAttribute("speclist", aplist);
@@ -73,7 +73,7 @@ public class AppointmentController {
 	}
 
 	@RequestMapping(value = { "patient/newappointment" })
-	public String getnewPatApp(@SessionAttribute("patientSession") PatientSession patientSession, Model m) {
+	public String getNewPatApp(@SessionAttribute("patientSession") PatientSession patientSession, Model m) {
 		// Retrieve all specializations and add them to the model
 
 		List<Specialization> aplist = specdao.getAllSpec();
