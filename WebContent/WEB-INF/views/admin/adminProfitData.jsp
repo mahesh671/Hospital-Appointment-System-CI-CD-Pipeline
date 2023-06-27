@@ -5,32 +5,8 @@
 <html>
 <head>
     <title>Hospital Doctor Profit Information</title>
-    <style>
-        .container {
-            display: flex;
-            justify-content: center;
-        }
+    <link rel="stylesheet" type="text/css" href="./css/adminProfitData.css">
 
-        table {
-            border-collapse: collapse;
-            width: 30%;
-            margin: 10px;
-        }
-
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-        
-        #t1 {
-         margin-left: 5%
-        }
-    </style>
 </head>
 <body>
 

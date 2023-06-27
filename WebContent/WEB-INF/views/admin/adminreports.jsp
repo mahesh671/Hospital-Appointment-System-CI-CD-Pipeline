@@ -10,6 +10,8 @@
 <meta charset="ISO-8859-1">
 <title>Home</title>
 <jsp:include page="scripts.jsp" />
+<script src="./js/adminreports.js"></script>
+
 
 </head>
 
@@ -43,26 +45,6 @@
 			<div id="content"></div>
 	</center>
 	</div>
-	<script>
-		function jspPage(path) {
-			$(document).ready(function() {
-				console.log("data")
-				$.ajax({
-					url : path,
-					method : 'GET',
-					data : $('#filter').serialize(),
-					success : function(data) {
-						
-						$('#content').html(data);
-					},
-					error : function(xhr, status, error) {
-					
-						console.log('Error: ' + error);
-					}
-				});
-			})
-		}
-	</script>
 
 </body>
 </html>

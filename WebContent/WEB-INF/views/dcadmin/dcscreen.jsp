@@ -50,6 +50,7 @@
 		type : 'GET',
 		data:{
 			from:from,
+			to:to
 		},
 		
 		success : function(data) {

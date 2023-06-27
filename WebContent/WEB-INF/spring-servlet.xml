@@ -65,9 +65,18 @@
 	</bean>
 	<!-- enable the configuration of transactional behavior based on annotations -->
 	<tx:annotation-driven transaction-manager="transactionManager" />
-	
-	
-	
-	
+
+
+	<!-- Enable serving of static resources for each user type -->
+	<mvc:resources mapping="/admin/css/**" location="/WEB-INF/views/admin/css/" />
+	<mvc:resources mapping="/admin/js/**" location="/WEB-INF/views/admin/js/" />
+
+	<mvc:resources mapping="/dcadmin/css/**" location="/WEB-INF/views/dcadmin/css/" />
+	<mvc:resources mapping="/dcadmin/js/**" location="/WEB-INF/views/dcadmin/js/" />
+
+	<mvc:resources mapping="/patient/css/**" location="/WEB-INF/views/patient/css/" />
+	<mvc:resources mapping="/patient/js/**" location="/WEB-INF/views/patient/js/" />
+
+
 
 </beans>
