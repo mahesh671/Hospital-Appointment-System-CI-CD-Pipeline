@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 
-import spring.orm.contract.TestDao;
+import spring.orm.contract.TestDAO;
 import spring.orm.model.TestModel;
 import spring.orm.model.input.TestInputModel;
 import spring.orm.model.output.testsPatientsModel;
@@ -25,7 +25,7 @@ import spring.orm.model.output.testsPatientsModel;
 public class TestController {
 
 	@Autowired
-	private TestDao testdao;
+	private TestDAO testdao;
 	
 	
 	// Page mapping for "dcadmin/dcpatients"
@@ -135,6 +135,15 @@ public class TestController {
        //Calls the method to get the patients according to testwise
 		List<testsPatientsModel> tpm = testdao.gettestwisepatients(test);
         return tpm;
+	}
+	
+	@RequestMapping(value = "dcadmin/getalltestpatientdetails", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+	public @ResponseBody List<testsPatientsModel> getalltestpatientdetails(@RequestParam int test,
+			@RequestParam String date1, @RequestParam String date2, Model model) {
+
+		List<testsPatientsModel> tpm = testdao.getalltestpatientdetails(test, date1, date2);
+		// System.out.println(tpm.toString());
+		return tpm;
 	}
 
 }

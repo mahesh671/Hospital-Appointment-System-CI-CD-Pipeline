@@ -60,7 +60,7 @@
 							</select>
 						</div>
 					</div>
-					</form>
+					</form> 
 				</div>
 				</br></br></br>
 				<div id="content">

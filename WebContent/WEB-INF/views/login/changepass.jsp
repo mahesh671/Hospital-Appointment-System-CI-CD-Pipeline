@@ -5,27 +5,10 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Change Password</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<style>
-    body {
-        background-color: #f8f9fa;
-    }
-    
-    .container {
-        max-width: 400px;
-        margin-top: 100px;
-    }
-    
-    .logo {
-        width: 100px;
-        height: 100px;
-        margin-bottom: 20px;
-    }
-    
-    .form-label {
-        font-weight: bold;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="../css/changepass.css">
+
 </head>
 <body>
 <div class="container text-center">

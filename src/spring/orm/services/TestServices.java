@@ -5,13 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import spring.orm.contract.TestDao;
+import spring.orm.contract.TestDAO;
 import spring.orm.model.TestModel;
 
 @Service
 public class TestServices {
 	@Autowired
-	private TestDao tdao;
+	private TestDAO tdao;
 
 	public List<TestModel> gettests() {
 		//Used to get and display the test

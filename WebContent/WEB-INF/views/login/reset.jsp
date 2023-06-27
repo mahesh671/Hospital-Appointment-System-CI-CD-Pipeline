@@ -6,26 +6,9 @@
 <meta charset="ISO-8859-1">
 <title>Set Password</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<style>
-    body {
-        background-color: #f8f9fa;
-    }
-    
-    .container {
-        max-width: 400px;
-        margin-top: 100px;
-    }
-    
-    .logo {
-        width: 100px;
-        height: 100px;
-        margin-bottom: 20px;
-    }
-    
-    .form-label {
-        font-weight: bold;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="./css/reset.css">
+
+
 </head>
 <body>
 <div class="container text-center">

@@ -76,6 +76,10 @@
 
 	<mvc:resources mapping="/patient/css/**" location="/WEB-INF/views/patient/css/" />
 	<mvc:resources mapping="/patient/js/**" location="/WEB-INF/views/patient/js/" />
+	
+	
+	<mvc:resources mapping="/css/**" location="/WEB-INF/views/login/css/" />
+	<mvc:resources mapping="/js/**" location="/WEB-INF/views/login/js/" />
 
 
 

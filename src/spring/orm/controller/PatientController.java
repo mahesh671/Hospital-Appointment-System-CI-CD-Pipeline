@@ -17,19 +17,17 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.google.gson.Gson;
 
-import spring.orm.contract.DiagnosticBillDao;
-import spring.orm.contract.DocScheduleDao;
-import spring.orm.contract.DoctorsDaoTemp;
-import spring.orm.contract.PatientDao;
-import spring.orm.contract.SpecializationDao;
-import spring.orm.contract.TestDao;
-import spring.orm.contract.UserDao;
+import spring.orm.contract.DiagnosticBillDAO;
+import spring.orm.contract.DocScheduleDAO;
+import spring.orm.contract.DoctorsDAOTemp;
+import spring.orm.contract.PatientDAO;
+import spring.orm.contract.SpecializationDAO;
+import spring.orm.contract.TestDAO;
+import spring.orm.contract.UserDAO;
 import spring.orm.model.PatientSession;
 import spring.orm.model.TestModel;
 import spring.orm.model.input.FamilyMembersInput;
 import spring.orm.model.output.OutputPatientTestReports;
-import spring.orm.model.output.ParaGroupOutput;
-import spring.orm.model.output.PatientlastvisitOutput;
 import spring.orm.services.DoctorOutputService;
 import spring.orm.services.PatientFamilyMembersService;
 
@@ -37,35 +35,38 @@ import spring.orm.services.PatientFamilyMembersService;
 @RequestMapping("/patient")
 public class PatientController {
 	@Autowired
-	private SpecializationDao specdao;
+	private SpecializationDAO specdao;
 
 	@Autowired
-	private DoctorsDaoTemp docdao;
+	private DoctorsDAOTemp docdao;
 	@Autowired
-	private PatientDao pdao;
+	private PatientDAO pdao;
 
 	@Autowired
-	private UserDao udao;
+	private UserDAO udao;
 	@Autowired
-	private TestDao tdao;
+	private TestDAO tdao;
 	@Autowired
-	private DiagnosticBillDao dbo;
+	private DiagnosticBillDAO dbo;
 
 	@Autowired
 
 	private DoctorOutputService docserv;
 	@Autowired
-	private DocScheduleDao docschdao;
+	private DocScheduleDAO docschdao;
 	PatientSession ps;
 
 	@Autowired
 	private PatientFamilyMembersService pfms;
 
+	// Handles the base URL to retrieve patient dashboard view
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String basePage(@SessionAttribute("patientSession") PatientSession patientSession) {
 		// System.out.println(PatientSession);
 		return "patient/patient";
 	}
+
+	// Handles the /profile GET request and retrieves the patient profile information
 
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	public String viewProfile(@SessionAttribute("patientSession") PatientSession patientSession, Model model) {
@@ -79,6 +80,7 @@ public class PatientController {
 		return "patient/profile";
 	}
 
+	// Handles the /patienttest GET request and retrieves the list of conducted tests and patient test reports
 	@RequestMapping(value = "/patienttest", method = RequestMethod.GET)
 	public String ptest(@SessionAttribute("patientSession") PatientSession patientSession, Model model) {
 
@@ -95,6 +97,7 @@ public class PatientController {
 		return "patient/patienttest";
 	}
 
+	// Handles the /gettestbydate POST request and retrieves patient test reports within a date range
 	@RequestMapping(value = "/gettestbydate", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> gettestbydate(@SessionAttribute("patientSession") PatientSession patientSession,
 			@RequestParam String date1, @RequestParam String date2, Model model) {
@@ -105,6 +108,8 @@ public class PatientController {
 
 	}
 
+	// Handles the /myfamily GET request and retrieves the list of family members for the patient
+
 	@RequestMapping(value = "/myfamily", method = RequestMethod.GET)
 	public String viewMyprofile(@SessionAttribute("patientSession") PatientSession patientSession, Model m) {
 		System.out.println("Inside get all fm"); //
@@ -114,57 +119,7 @@ public class PatientController {
 		return "patient/myfamily";
 	}
 
-	@RequestMapping(value = "/getapptestcards", method = RequestMethod.GET)
-	public @ResponseBody List<Object> getapptestcards(
-			@SessionAttribute("patientSession") PatientSession patientSession) {
-		int p = patientSession.getId();
-		List<Object> lo = pdao.getapptestcards(p);
-		System.out.println(lo);
-		return lo;
-	}
-///?? why this method and getviewtests
-//	@RequestMapping(value = "/getTestDetails", method = RequestMethod.POST)
-//	public ResponseEntity<Object> getTestDetails(@SessionAttribute("patientSession") PatientSession patientSession,
-//			@RequestParam int testid) {
-//
-//		List<Object> lo = tdao.getviewtests(testid);
-//		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(lo));
-//
-//	}
-
-	@RequestMapping(value = "/getapptests", method = RequestMethod.GET)
-	public ResponseEntity<String> getapptests(@SessionAttribute("patientSession") PatientSession patientSession) {
-		int p = patientSession.getId();
-		List<Object> lo = pdao.getapptests(p);
-		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(lo));
-		// return "patient/myprofile";
-	}
-
-	@RequestMapping(value = "/getapps", method = RequestMethod.GET)
-	public ResponseEntity<String> getapps(@SessionAttribute("patientSession") PatientSession patientSession) {
-		int p = patientSession.getId();
-		List<Object> lo = pdao.getapps(p);
-		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(lo));
-		// return "patient/myprofile";
-	}
-
-	@RequestMapping(value = "/getOutParaGroup", method = RequestMethod.GET)
-	public ResponseEntity<String> getParaGroup(@SessionAttribute("patientSession") PatientSession patientSession) {
-		int p = patientSession.getId();
-		List<ParaGroupOutput> lo = pdao.getParaGroupParaout(p);
-		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(lo));
-		// return "patient/myprofile";
-	}
-
-	@RequestMapping(value = "/getPrescriptionView", method = RequestMethod.GET)
-	public @ResponseBody List<PatientlastvisitOutput> getPrescriptionLastVisit(
-			@SessionAttribute("patientSession") PatientSession patientSession) {
-		int p = patientSession.getId();
-		List<PatientlastvisitOutput> lo = pdao.getlastvisit(p);
-		return lo;
-		// return "patient/myprofile";
-	}
-
+	// Handles the /savefm POST request and saves a family member for the patient
 	@RequestMapping(value = "/savefm", method = RequestMethod.POST)
 	public @ResponseBody String savefm(@ModelAttribute FamilyMembersInput fm,
 			@SessionAttribute("patientSession") PatientSession patientSession, Model model) {

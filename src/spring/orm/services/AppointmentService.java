@@ -13,9 +13,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import spring.orm.contract.AppointmentDao;
-import spring.orm.contract.DoctorsDaoTemp;
-import spring.orm.contract.PatientDao;
+import spring.orm.contract.AppointmentDAO;
+import spring.orm.contract.DoctorsDAOTemp;
+import spring.orm.contract.PatientDAO;
 import spring.orm.model.PatientModel;
 import spring.orm.model.entity.AppointmentEntity;
 import spring.orm.model.input.AppointmentForm;
@@ -28,13 +28,13 @@ import spring.orm.model.output.RescheduleAppOutput;
 public class AppointmentService {
 
 	@Autowired
-	private AppointmentDao apdao;
+	private AppointmentDAO apdao;
 
 	@Autowired
-	private DoctorsDaoTemp docdao;
+	private DoctorsDAOTemp docdao;
 
 	@Autowired
-	private PatientDao patdao;
+	private PatientDAO patdao;
 
 	public List<AppointmentEntity> getAllAppointments() {
 		// Retrieve all appointments

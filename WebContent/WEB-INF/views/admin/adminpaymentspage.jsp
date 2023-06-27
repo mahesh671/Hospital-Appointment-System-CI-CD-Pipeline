@@ -92,7 +92,7 @@
 
 	
 
-	<script src="js/adminpaymentspage.js"></script>
+	<script src="./js/adminpaymentspage.js"></script>
 	
 
 </body>

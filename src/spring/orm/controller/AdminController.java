@@ -17,12 +17,12 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.google.gson.Gson;
 
-import spring.orm.contract.AdminDao;
-import spring.orm.contract.AppointmentDao;
-import spring.orm.contract.DoctorsDaoTemp;
-import spring.orm.contract.PatientDao;
+import spring.orm.contract.AdminDAO;
+import spring.orm.contract.AppointmentDAO;
+import spring.orm.contract.DoctorsDAOTemp;
+import spring.orm.contract.PatientDAO;
 import spring.orm.contract.PatientProfileUpdateDAO;
-import spring.orm.contract.SpecializationDao;
+import spring.orm.contract.SpecializationDAO;
 import spring.orm.model.Specialization;
 import spring.orm.model.entity.AppointmentEntity;
 import spring.orm.model.input.AdminFilter;
@@ -36,20 +36,20 @@ import spring.orm.services.UpdateProfileService;
 public class AdminController {
 
 	@Autowired
-	private SpecializationDao specdao;
+	private SpecializationDAO specdao;
 
 	@Autowired
-	private AppointmentDao apdao;
+	private AppointmentDAO apdao;
 	@Autowired
-	private DoctorsDaoTemp docdao;
+	private DoctorsDAOTemp docdao;
 	@Autowired
 	private HttpSession httpSession;
 	@Autowired
 	private UpdateProfileService ups;
 	@Autowired
-	private PatientDao pdao;
+	private PatientDAO pdao;
 	@Autowired
-	private AdminDao ad;
+	private AdminDAO ad;
 
 	@Autowired
 	private PatientProfileUpdateDAO pcudao;

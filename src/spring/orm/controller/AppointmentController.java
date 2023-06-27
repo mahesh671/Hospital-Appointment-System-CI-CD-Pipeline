@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.google.gson.Gson;
 
-import spring.orm.contract.AppointmentDao;
-import spring.orm.contract.DoctorsDaoTemp;
-import spring.orm.contract.PatientDao;
-import spring.orm.contract.SpecializationDao;
+import spring.orm.contract.AppointmentDAO;
+import spring.orm.contract.DoctorsDAOTemp;
+import spring.orm.contract.PatientDAO;
+import spring.orm.contract.SpecializationDAO;
 import spring.orm.model.PatientSession;
 import spring.orm.model.Specialization;
 import spring.orm.model.entity.DoctorTemp;
@@ -46,17 +46,17 @@ import spring.orm.util.MailSend;
 public class AppointmentController {
 
 	@Autowired
-	private SpecializationDao specdao;
+	private SpecializationDAO specdao;
 	@Autowired
 	private DoctorOutputService docserv;
 
 	@Autowired
-	private PatientDao patdao;
+	private PatientDAO patdao;
 	@Autowired
-	private DoctorsDaoTemp docdao;
+	private DoctorsDAOTemp docdao;
 
 	@Autowired
-	private AppointmentDao apd;
+	private AppointmentDAO apd;
 	@Autowired
 	private AppointmentService appser;
 
@@ -157,7 +157,6 @@ public class AppointmentController {
 			HttpServletRequest request, HttpServletResponse response) {
 
 		if (appointment.getBookingType().equals("NEW PATIENT")) {
-			
 
 			// Book an appointment with a new patient
 			int app_id = appser.bookAppointmentWithNewPatient(appointment);
@@ -171,7 +170,7 @@ public class AppointmentController {
 			String userMail = appser.getAppointmentByID(app_id).getMail();
 			if (!userMail.equals("")) {
 				try {
-					MailSend.sendEmail(request, response, appser.getAppointmentByID(app_id), userMail);
+					MailSend.sendBookingEmail(request, response, appser.getAppointmentByID(app_id), userMail);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -204,7 +203,7 @@ public class AppointmentController {
 		}
 		String userMail = patientSession.getEmail();
 		try {
-			MailSend.sendEmail(request, response, appser.getAppointmentByID(app_id), userMail);
+			MailSend.sendBookingEmail(request, response, appser.getAppointmentByID(app_id), userMail);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -273,18 +272,17 @@ public class AppointmentController {
 
 		model.addAttribute("specdata", specdata);
 		model.addAttribute("docdata", docdata);
-		
+
 		return "admin/bookedapp";
 	}
 
 	@RequestMapping(value = "admin/fetchBookData", method = RequestMethod.GET)
 	public String getBookAppData(@ModelAttribute BookedAppForm baf, Model model) {
-		
-		
+
 		// Fetch booked appointment data based on the BookedAppForm
 		List<OutputBookedAppointmnets> data = apd.fetchBookedAppData(baf, null);
 		model.addAttribute("data", data);
-		
+
 		return "admin/BookedAppData";
 	}
 

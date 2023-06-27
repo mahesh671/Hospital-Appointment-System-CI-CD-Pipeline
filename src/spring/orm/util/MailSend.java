@@ -137,18 +137,17 @@ public class MailSend {
 			e.printStackTrace();
 		}
 
-		
 	}
 
-	public static void sendEmail(HttpServletRequest request, HttpServletResponse response, MailAppOutputModel app,
-			String UserMail) throws Exception {
+	public static void sendBookingEmail(HttpServletRequest request, HttpServletResponse response,
+			MailAppOutputModel app, String UserMail) throws Exception {
 		// Set up model attributes with the variables for JSP replacements
 
 		// Resolve JSP view
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 		viewResolver.setPrefix("/WEB-INF/views/");
 		viewResolver.setSuffix(".jsp");
-		String viewName = "temp";
+		String viewName = "BookingMailTemplete";
 		request.setAttribute("appointment", app);
 		// Render JSP
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/views/" + viewName + ".jsp");
@@ -192,14 +191,14 @@ public class MailSend {
 
 	}
 
-	public static void sendEmail1(HttpServletRequest request, HttpServletResponse response, String mail, String data)
-			throws ServletException, IOException {
+	public static void sendEmailTestBooking(HttpServletRequest request, HttpServletResponse response, String mail,
+			String data) throws ServletException, IOException {
 		// Resolve JSP view
 		System.out.println("in mail");
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 		viewResolver.setPrefix("/WEB-INF/views/");
 		viewResolver.setSuffix(".jsp");
-		String viewName = "temp1";
+		String viewName = "TestBookingMailTemplet";
 		request.setAttribute("booktest", data);
 		// Render JSP
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/views/" + viewName + ".jsp");

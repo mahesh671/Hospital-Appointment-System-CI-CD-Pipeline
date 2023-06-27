@@ -2,50 +2,45 @@ package spring.orm.services;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import spring.orm.contract.PatientDao;
-import spring.orm.contract.FamilyMembersDao;
+import spring.orm.contract.FamilyMembersDAO;
+import spring.orm.contract.PatientDAO;
 import spring.orm.model.PatientModel;
 import spring.orm.model.PatientSession;
-import spring.orm.model.Specialization;
-import spring.orm.model.entity.FamilyMembers;
 import spring.orm.model.input.FamilyMembersInput;
-import spring.orm.model.output.FamilyOutputModel;
 
 @Service
 public class PatientFamilyMembersService {
 	@Autowired
-	FamilyMembersDao fmdao;
+	FamilyMembersDAO fmdao;
 	@Autowired
-	private PatientDao pdao;
-	
+	private PatientDAO pdao;
 
 	@Transactional
 	public int addfm(FamilyMembersInput fm, PatientSession patientSession) {
-		// TODO Auto-generated method stub
+		// Create a new PatientModel object and set the required information
 		PatientModel pm = new PatientModel();
 		pm.setPatn_name(fm.getPfmbName());
 		pm.setPatn_age(fm.getPfmbAge());
 		pm.setPatn_gender(fm.getPfmbGender());
 		pm.setPatn_bgroup(fm.getPfmbbgroup());
 		pm.setAccessPatientId(patientSession.getId());
-		System.out.println(pm);
+
+		// Save the PatientModel and get the patient ID
 		int pid = fmdao.savefm(pm);
-		System.out.println(pid);
-		fmdao.addfamily(pm, pid, patientSession.getId(),fm.getPfmbRelation());
+
+		// Add the family member using the FamilyMembersDao
+		fmdao.addfamily(pm, pid, patientSession.getId(), fm.getPfmbRelation());
+
 		return pm.getPatn_id();
 	}
 
-
 	public List<FamilyMembersInput> getAllFamilyMembers(Integer id) {
-		// TODO Auto-generated method stub
-		System.out.println("in getfamily dao");
+		// Retrieve all family members for the given ID using the FamilyMembersDao
 		return fmdao.getfamily(id);
 	}
 

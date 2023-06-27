@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.google.gson.Gson;
 
-import spring.orm.contract.PatientDao;
+import spring.orm.contract.PatientDAO;
 import spring.orm.contract.PatientProfileUpdateDAO;
 import spring.orm.model.PatientSession;
 import spring.orm.model.entity.PatientMedicalProfile;
@@ -24,7 +24,7 @@ import spring.orm.model.output.patientPrescriptionOutputmodel;
 public class PostConsultUpdateController {
 
 	@Autowired
-	private PatientDao pdao;
+	private PatientDAO pdao;
 
 	@Autowired
 	private PatientProfileUpdateDAO pcudao;

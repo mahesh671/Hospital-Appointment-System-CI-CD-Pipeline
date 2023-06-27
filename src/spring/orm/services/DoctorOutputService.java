@@ -14,10 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import spring.orm.contract.AppointmentDao;
-import spring.orm.contract.DocScheduleDao;
-import spring.orm.contract.DoctorsDaoTemp;
-import spring.orm.contract.SpecializationDao;
+import spring.orm.contract.AppointmentDAO;
+import spring.orm.contract.DocScheduleDAO;
+import spring.orm.contract.DoctorsDAOTemp;
+import spring.orm.contract.SpecializationDAO;
 import spring.orm.model.DoctorSchedule;
 import spring.orm.model.Specialization;
 import spring.orm.model.entity.DoctorTemp;
@@ -30,16 +30,16 @@ import spring.orm.model.output.DoctorOutPutModel;
 public class DoctorOutputService {
 
 	@Autowired
-	private DocScheduleDao docschedao;
+	private DocScheduleDAO docschedao;
 
 	@Autowired
-	private SpecializationDao specdao;
+	private SpecializationDAO specdao;
 
 	@Autowired
-	private DoctorsDaoTemp doctdao;
+	private DoctorsDAOTemp doctdao;
 
 	@Autowired
-	private AppointmentDao appdao;
+	private AppointmentDAO appdao;
 
 	/*
 	 * Retrieve a list of doctors with their schedules based on specialization and

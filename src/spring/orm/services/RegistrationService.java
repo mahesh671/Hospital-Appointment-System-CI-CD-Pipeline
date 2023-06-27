@@ -3,8 +3,8 @@ package spring.orm.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import spring.orm.contract.PatientDao;
-import spring.orm.contract.UserDao;
+import spring.orm.contract.PatientDAO;
+import spring.orm.contract.UserDAO;
 import spring.orm.model.PatientModel;
 import spring.orm.model.UserPass;
 import spring.orm.model.input.RegistrationForm;
@@ -13,9 +13,9 @@ import spring.orm.model.input.RegistrationForm;
 public class RegistrationService {
 
 	@Autowired
-	private PatientDao patientDao;
+	private PatientDAO patientDAO;
 	@Autowired
-	private UserDao udao;
+	private UserDAO udao;
 
 	public void registerPatient(RegistrationForm rf) {
 		/*
@@ -29,7 +29,7 @@ public class RegistrationService {
 
 		// Perform additional logic if needed
 
-		int id = patientDao.savePatient(patient);
+		int id = patientDAO.savePatient(patient);
 		UserPass user = new UserPass();
 		user.setUsername(rf.getUname());
 		user.setPassword(rf.getPass());

@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Component;
 
-import spring.orm.contract.AdminDao;
+import spring.orm.contract.AdminDAO;
 import spring.orm.model.output.OutputDoctorProfit;
 import spring.orm.model.output.OutputSpecializationProfit;
 import spring.orm.model.output.OutputTestNameProfit;
@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 @Component
-public class AdminImplDAO implements AdminDao {
+public class AdminImplDAO implements AdminDAO {
 	@PersistenceContext
 	EntityManager em;
 	@Override

@@ -15,13 +15,13 @@ import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 
-import spring.orm.contract.SpecializationDao;
+import spring.orm.contract.SpecializationDAO;
 
 @Controller
 public class PaymentController {
 
 	@Autowired
-	private SpecializationDao specdao;
+	private SpecializationDAO specdao;
 	@Autowired
 	private HttpSession httpSession;
 

@@ -7,13 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import spring.orm.contract.DCDao;
+import spring.orm.contract.DCDAO;
 
 @Component
 public class ReportServices {
 	@Autowired
-	DCDao dc;
+	DCDAO dc;
 
+	// Uploads the image file into db based on report id
 	public String fileUploadMethod(CommonsMultipartFile file, int id) {
 		byte[] filepath = null;
 		if (!file.isEmpty()) {
@@ -37,12 +38,13 @@ public class ReportServices {
 
 	public void saveFileDetails(int id, byte[] filepath) {
 
+		// Save the file details for the given ID and file path using the DCDao contract
 		dc.saveReportInfo(id, filepath);
 
 	}
 
 	public boolean isImageFile(CommonsMultipartFile file) {
-		// TODO Auto-generated method stub
+
 		// Define the allowed image file extensions
 		List<String> allowedExtensions = Arrays.asList("jpg", "jpeg", "png", "gif");
 

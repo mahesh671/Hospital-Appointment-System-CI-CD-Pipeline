@@ -11,29 +11,9 @@
 <title>Home</title>
 <jsp:include page="scripts.jsp" />
 
-
+ <link rel="stylesheet" type="text/css" href="./css/testspage.css">
 </head>
-<style>
-#table {
-	max-height: 300px; /* Adjust the height as needed */
-	overflow-y: scroll;
-}
 
-table {
-	width: 100%;
-	border-collapse: collapse;
-}
-
-th, td {
-	padding: 8px;
-	text-align: left;
-	border-bottom: 1px solid #ddd;
-}
-
-th {
-	background-color: #f2f2f2;
-}
-</style>
 <body>
 
 	<jsp:include page="nav.jsp" />

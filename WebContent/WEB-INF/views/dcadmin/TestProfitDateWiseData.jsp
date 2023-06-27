@@ -5,28 +5,7 @@
 <html>
 <head>
     <title>Hospital Test Information</title>
-    <style>
-        .container {
-            display: flex;
-            justify-content: center;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 30%;
-            margin: 10px;
-        }
-
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+     <link rel="stylesheet" type="text/css" href="./css/TestProfitDateWiseData.css">
 </head>
 <body>
     

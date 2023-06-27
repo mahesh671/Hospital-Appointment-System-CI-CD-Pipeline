@@ -14,9 +14,9 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.google.gson.Gson;
 
-import spring.orm.contract.DocScheduleDao;
-import spring.orm.contract.DoctorsDaoTemp;
-import spring.orm.contract.SpecializationDao;
+import spring.orm.contract.DocScheduleDAO;
+import spring.orm.contract.DoctorsDAOTemp;
+import spring.orm.contract.SpecializationDAO;
 import spring.orm.model.entity.DoctorTemp;
 import spring.orm.model.input.DoctorInput;
 import spring.orm.model.input.DoctorUpdateModel;
@@ -28,16 +28,16 @@ public class DoctorController {
 
 	//Injects the respective class objects
 	@Autowired
-	private DoctorsDaoTemp docdao;
+	private DoctorsDAOTemp docdao;
 
 	@Autowired
-	private SpecializationDao specdao;
+	private SpecializationDAO specdao;
 
 	@Autowired
 	private DoctorOutputService docoutput;
 
 	@Autowired
-	private DocScheduleDao docschdao;
+	private DocScheduleDAO docschdao;
 
 	@RequestMapping(value = "admin/savedoc", method = RequestMethod.POST)
 	public String savespec(@ModelAttribute DoctorInput d, @RequestParam CommonsMultipartFile docphoto, Model model) {
