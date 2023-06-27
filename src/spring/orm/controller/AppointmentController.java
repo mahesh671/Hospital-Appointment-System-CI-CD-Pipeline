@@ -2,10 +2,11 @@ package spring.orm.controller;
 
 import java.sql.Date;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,8 +23,10 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.google.gson.Gson;
 
+
+
 import spring.orm.contract.AppointmentDAO;
-import spring.orm.contract.DoctorsDAOTemp;
+import spring.orm.contract.DoctorsDAO;
 import spring.orm.contract.PatientDAO;
 import spring.orm.contract.SpecializationDAO;
 import spring.orm.model.PatientSession;
@@ -45,56 +48,91 @@ import spring.orm.util.MailSend;
 @RequestMapping
 public class AppointmentController {
 
-	@Autowired
-	private SpecializationDAO specdao;
-	@Autowired
-	private DoctorOutputService docserv;
 
-	@Autowired
-	private PatientDAO patdao;
-	@Autowired
-	private DoctorsDAOTemp docdao;
+	private SpecializationDAO specializationDAO;
+	
+	private DoctorOutputService doctorservice;
 
-	@Autowired
-	private AppointmentDAO apd;
-	@Autowired
-	private AppointmentService appser;
+	private PatientDAO patientDAO;
+	
+	private DoctorsDAO doctorDAO;
 
+	private AppointmentDAO appointmentDAO;
+	
+	private AppointmentService appointmentService;
+	private static final Logger logger = LoggerFactory.getLogger(AppointmentController.class);
+
+	
+	@Autowired
+	public AppointmentController(SpecializationDAO specializationDAO,DoctorOutputService doctorservice,PatientDAO patientDAO,DoctorsDAO doctorsDAO, AppointmentDAO appointmentDAO,AppointmentService a)
+	{
+		
+
+		this.appointmentDAO=appointmentDAO;
+		this.appointmentService=a;
+		this.doctorDAO=doctorsDAO;
+		this.doctorservice=doctorservice;
+		this.patientDAO=patientDAO;
+		this.specializationDAO=specializationDAO;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	@RequestMapping(value = "admin/newappointment")
 	public String getNewApp(Model m) {
 		// Retrieve all specializations and add them to the model
-		List<Specialization> aplist = specdao.getAllSpec();
+		String basePath = System.getProperty("catalina.base");
+        logger.info("Log base path: " + basePath);
+		logger.info("Entered to new appointment page");
+		List<Specialization> aplist = specializationDAO.getAllSpec();
 		m.addAttribute("speclist", aplist);
 		// Retrieve all patients and add them to the model
 
-		m.addAttribute("patlist", patdao.getAllPatientModels());
-		System.out.println(patdao.getAllPatientModels());
+		m.addAttribute("patlist", patientDAO.getAllPatientModels());
+		System.out.println(patientDAO.getAllPatientModels());
 		return "admin/appointment";
 	}
 
+	
+	
+	
+	
+	
+	
 	@RequestMapping(value = { "patient/newappointment" })
 	public String getNewPatApp(@SessionAttribute("patientSession") PatientSession patientSession, Model m) {
 		// Retrieve all specializations and add them to the model
 
-		List<Specialization> aplist = specdao.getAllSpec();
+		List<Specialization> aplist = specializationDAO.getAllSpec();
 		m.addAttribute("speclist", aplist);
 
 		// Retrieve the family appointments for the patient session and add them to the
 		// model
-		List<AppoutformFamily> apfamily = appser.getFormFamily(patientSession.getId());
+		List<AppoutformFamily> apfamily = appointmentService.getFormFamily(patientSession.getId());
 		m.addAttribute("fam", apfamily);
 		return "patient/appointment";
 	}
 
+	
+	
+	
+	
+	
+	
 	@RequestMapping(value = "patient/appointments")
 	public String getpatientBookedAppForm(@SessionAttribute("patientSession") PatientSession patientSession, Model m) {
 
 		// Retrieve all specializations and add them to the model
-		List<Specialization> specdata = specdao.getAllSpec();
+		List<Specialization> specdata = specializationDAO.getAllSpec();
 		m.addAttribute("specdata", specdata);
 
 		// Retrieve all doctors and add them to the model
-		List<DoctorTemp> docdata = docdao.getAllDoc();
+		List<DoctorTemp> docdata = doctorDAO.getAllDoc();
 		m.addAttribute("docdata", docdata);
 		System.out.println(specdata);
 		System.out.println(docdata);
@@ -102,6 +140,12 @@ public class AppointmentController {
 		return "patient/bookedapp";
 	}
 
+	
+	
+	
+	
+	
+	
 	@RequestMapping(value = "patient/fetchBookData", method = RequestMethod.GET)
 	public String getpatientBookAppData(@SessionAttribute("patientSession") PatientSession patientSession,
 			@ModelAttribute BookedAppForm baf, Model m) {
@@ -110,12 +154,18 @@ public class AppointmentController {
 
 		// Fetch booked appointment data based on the BookedAppForm and patientSession
 		// ID
-		List<OutputBookedAppointmnets> data = apd.fetchBookedAppData(baf, patientSession.getId());
+		List<OutputBookedAppointmnets> data = appointmentDAO.fetchBookedAppData(baf, patientSession.getId());
 		m.addAttribute("data", data);
 		System.out.println(data);
 		return "patient/BookedAppData";
 	}
 
+	
+	
+	
+	
+	
+	
 	@RequestMapping(value = { "admin/fetchBySpecialization",
 			"patient/fetchBySpecialization" }, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> fetchBySpecialization(@RequestParam String specialization,
@@ -124,17 +174,22 @@ public class AppointmentController {
 		Date appointmentDated = Date.valueOf(appointmentDate);
 
 		// Fetch doctors by specialization and appointment date
-		List<DoctorList> dlist = docserv.getAllDocBySpecDate(specialization, appointmentDated);
+		List<DoctorList> dlist = doctorservice.getAllDocBySpecDate(specialization, appointmentDated);
 		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(dlist));
 
 	}
 
+	
+	
+	
+	
+	
 	@RequestMapping(value = { "admin/fetchdoctor",
 			"patient/fetchdoctor" }, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> fetchDoctor(@RequestParam int id) {
 
 		// Fetch doctor details by ID
-		DoctorOutPutModel d = docserv.getDocbyID(id);
+		DoctorOutPutModel d = doctorservice.getDocbyID(id);
 
 		// Update the doctor's consultation fee
 		d.setDoctCfee(d.getDoctCfee() + d.getDoctCfee() * 0.1);
@@ -142,16 +197,29 @@ public class AppointmentController {
 		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(d));
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
 	@RequestMapping(value = { "admin/fetchtimeSlots", "admin/reschedule/fetchtimeSlots",
 			"patient/reschedule/fetchtimeSlots",
 			"patient/fetchtimeSlots" }, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> fetchTimeSlots(@RequestParam int id, @RequestParam String date) {
 
 		// Fetch available time slots for the given doctor ID and date
-		List<String> d = docserv.getDocTimeSlots(id, Date.valueOf(date).toString());
+		List<String> d = doctorservice.getDocTimeSlots(id, Date.valueOf(date).toString());
 		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(d));
 	}
 
+	
+	
+	
+	
+	
 	@RequestMapping(value = "admin/newappointment/create", method = RequestMethod.POST)
 	public @ResponseBody void newAppointmentBooking(@ModelAttribute AppointmentForm appointment,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -159,18 +227,18 @@ public class AppointmentController {
 		if (appointment.getBookingType().equals("NEW PATIENT")) {
 
 			// Book an appointment with a new patient
-			int app_id = appser.bookAppointmentWithNewPatient(appointment);
+			int app_id = appointmentService.bookAppointmentWithNewPatient(appointment);
 
 		} else {
 			System.out.println("harsha");
 			System.out.println(appointment);
-			int app_id = appser.bookAppointment(appointment);
+			int app_id = appointmentService.bookAppointment(appointment);
 
 			// Book an appointment
-			String userMail = appser.getAppointmentByID(app_id).getMail();
+			String userMail = appointmentService.getAppointmentByID(app_id).getMail();
 			if (!userMail.equals("")) {
 				try {
-					MailSend.sendBookingEmail(request, response, appser.getAppointmentByID(app_id), userMail);
+					MailSend.sendBookingEmail(request, response, appointmentService.getAppointmentByID(app_id), userMail);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -180,6 +248,12 @@ public class AppointmentController {
 		System.out.println("appn details" + appointment.toString());
 	}
 
+	
+	
+	
+	
+	
+	
 	@RequestMapping(value = "patient/newappointment/create", method = RequestMethod.POST)
 	public @ResponseBody void newAppointmentPatientBooking(
 			@SessionAttribute("patientSession") PatientSession patientSession,
@@ -192,18 +266,18 @@ public class AppointmentController {
 			System.out.println(appointment);
 			appointment.setExistingPatientid(String.valueOf(patientSession.getId()));
 			// Book an appointment with an existing patient (self)
-			app_id = appser.bookAppointment(appointment);
+			app_id = appointmentService.bookAppointment(appointment);
 
 		} else {
 			System.out.println("harsha");
 			System.out.println(appointment);
 			// Book an appointment
-			app_id = appser.bookAppointment(appointment);
+			app_id = appointmentService.bookAppointment(appointment);
 
 		}
 		String userMail = patientSession.getEmail();
 		try {
-			MailSend.sendBookingEmail(request, response, appser.getAppointmentByID(app_id), userMail);
+			MailSend.sendBookingEmail(request, response, appointmentService.getAppointmentByID(app_id), userMail);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -211,35 +285,57 @@ public class AppointmentController {
 
 	}
 
+	
+	
+	
+	
+	
+	
+	
 	@RequestMapping(value = { "admin/cancel/{app_id}", "patient/cancel/{app_id}" })
 	public String cancelAppointment(@PathVariable int app_id, Model m) {
 		// Cancel an appointment
 
-		appser.cancelAppointment(app_id);
+		appointmentService.cancelAppointment(app_id);
 
 		return "redirect:../appointments";
 	}
 
+	
+	
+	
+	
+	
+	
 	@RequestMapping(value = "patient/reschedule/{app_id}")
 	public String reschedulePatAppointment(@PathVariable int app_id, Model m) {
 		// Get the appointment details for rescheduling
 
-		RescheduleAppOutput rapp = appser.getAppointmentByIdOutput(app_id);
+		RescheduleAppOutput rapp = appointmentService.getAppointmentByIdOutput(app_id);
 		System.out.println(rapp);
 		m.addAttribute("app", rapp);
 		return "admin/reschedule";
 	}
 
+	
+	
+	
+	
 	@RequestMapping(value = "admin/reschedule/{app_id}")
 	public String rescheduleAppointment(@PathVariable int app_id, Model m) {
 		// Extract the appointment details from the RescheduleAppointmentModel object
-		RescheduleAppOutput rapp = appser.getAppointmentByIdOutput(app_id);
+		RescheduleAppOutput rapp = appointmentService.getAppointmentByIdOutput(app_id);
 		rapp.setApp_id(app_id);
 		System.out.println(rapp);
 		m.addAttribute("app", rapp);
 		return "admin/reschedule";
 	}
 
+	
+	
+	
+	
+	
 	@RequestMapping(value = { "admin/reschedule/success", "patient/reschedule/success" }, method = RequestMethod.POST)
 	public String rescheduleAppointment(@ModelAttribute RescheduleAppointmentModel rescheduleModel) {
 		// Extract the appointment details from the RescheduleAppointmentModel object
@@ -257,18 +353,26 @@ public class AppointmentController {
 		System.out.println("in form submission" + rescheduleDate + " " + slot);
 
 		// Update the appointment details in the database using the appointmentId
-		appser.reschduleAppointment(rescheduleModel);
+		appointmentService.reschduleAppointment(rescheduleModel);
 		// Redirect to a success page or show a success message
 		return "admin/success";
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
 	@RequestMapping(value = "admin/appointments")
 	public String getBookedAppForm(Model model) {
 		// Get the data for the booked appointment form
 
-		List<Specialization> specdata = specdao.getAllSpec();
+		List<Specialization> specdata = specializationDAO.getAllSpec();
 
-		List<DoctorTemp> docdata = docdao.getAllDoc();
+		List<DoctorTemp> docdata = doctorDAO.getAllDoc();
 
 		model.addAttribute("specdata", specdata);
 		model.addAttribute("docdata", docdata);
@@ -276,11 +380,20 @@ public class AppointmentController {
 		return "admin/bookedapp";
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@RequestMapping(value = "admin/fetchBookData", method = RequestMethod.GET)
 	public String getBookAppData(@ModelAttribute BookedAppForm baf, Model model) {
 
 		// Fetch booked appointment data based on the BookedAppForm
-		List<OutputBookedAppointmnets> data = apd.fetchBookedAppData(baf, null);
+		List<OutputBookedAppointmnets> data = appointmentDAO.fetchBookedAppData(baf, null);
 		model.addAttribute("data", data);
 
 		return "admin/BookedAppData";

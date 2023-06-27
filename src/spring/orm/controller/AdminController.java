@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 
 import spring.orm.contract.AdminDAO;
 import spring.orm.contract.AppointmentDAO;
-import spring.orm.contract.DoctorsDAOTemp;
+import spring.orm.contract.DoctorsDAO;
 import spring.orm.contract.PatientDAO;
 import spring.orm.contract.PatientProfileUpdateDAO;
 import spring.orm.contract.SpecializationDAO;
@@ -41,7 +41,7 @@ public class AdminController {
 	@Autowired
 	private AppointmentDAO apdao;
 	@Autowired
-	private DoctorsDAOTemp docdao;
+	private DoctorsDAO docdao;
 	@Autowired
 	private HttpSession httpSession;
 	@Autowired

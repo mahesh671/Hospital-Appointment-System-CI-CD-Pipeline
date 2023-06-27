@@ -15,7 +15,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import com.google.gson.Gson;
 
 import spring.orm.contract.DocScheduleDAO;
-import spring.orm.contract.DoctorsDAOTemp;
+import spring.orm.contract.DoctorsDAO;
 import spring.orm.contract.SpecializationDAO;
 import spring.orm.model.entity.DoctorTemp;
 import spring.orm.model.input.DoctorInput;
@@ -28,7 +28,7 @@ public class DoctorController {
 
 	//Injects the respective class objects
 	@Autowired
-	private DoctorsDAOTemp docdao;
+	private DoctorsDAO docdao;
 
 	@Autowired
 	private SpecializationDAO specdao;

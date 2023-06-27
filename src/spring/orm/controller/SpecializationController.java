@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.google.gson.Gson;
-import spring.orm.contract.DoctorsDAOTemp;
+import spring.orm.contract.DoctorsDAO;
 import spring.orm.contract.SpecializationDAO;
 import spring.orm.model.Specialization;
 
@@ -23,7 +23,7 @@ public class SpecializationController {
 	@Autowired
 	private SpecializationDAO specdao;
 	@Autowired
-	private DoctorsDAOTemp docdao;
+	private DoctorsDAO docdao;
 
 	@GetMapping("/getspecdetails")
 	public String specdetails(Model model) {

@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import spring.orm.contract.DocScheduleDAO;
-import spring.orm.contract.DoctorsDAOTemp;
+import spring.orm.contract.DoctorsDAO;
 import spring.orm.model.entity.DoctorTemp;
 import spring.orm.model.output.DoctorList;
 import spring.orm.model.output.DoctorOutPutModel;
 
 @Repository
-public class DoctorDAOTempImpl implements DoctorsDAOTemp {
+public class DoctorDAOTempImpl implements DoctorsDAO {
 
 	@PersistenceContext
 	private EntityManager em;

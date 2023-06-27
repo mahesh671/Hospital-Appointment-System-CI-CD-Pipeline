@@ -6,7 +6,7 @@ import spring.orm.model.entity.DoctorTemp;
 import spring.orm.model.output.DoctorList;
 import spring.orm.model.output.DoctorOutPutModel;
 
-public interface DoctorsDAOTemp {
+public interface DoctorsDAO {
 
 	// Retrieves a DoctorTemp object by its ID
 	public DoctorTemp getdoc(int Id);

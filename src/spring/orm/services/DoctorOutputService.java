@@ -16,7 +16,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import spring.orm.contract.AppointmentDAO;
 import spring.orm.contract.DocScheduleDAO;
-import spring.orm.contract.DoctorsDAOTemp;
+import spring.orm.contract.DoctorsDAO;
 import spring.orm.contract.SpecializationDAO;
 import spring.orm.model.DoctorSchedule;
 import spring.orm.model.Specialization;
@@ -36,7 +36,7 @@ public class DoctorOutputService {
 	private SpecializationDAO specdao;
 
 	@Autowired
-	private DoctorsDAOTemp doctdao;
+	private DoctorsDAO doctdao;
 
 	@Autowired
 	private AppointmentDAO appdao;

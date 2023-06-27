@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import spring.orm.contract.AppointmentDAO;
-import spring.orm.contract.DoctorsDAOTemp;
+import spring.orm.contract.DoctorsDAO;
 import spring.orm.contract.PatientDAO;
 import spring.orm.model.PatientModel;
 import spring.orm.model.entity.AppointmentEntity;
@@ -31,7 +31,7 @@ public class AppointmentService {
 	private AppointmentDAO apdao;
 
 	@Autowired
-	private DoctorsDAOTemp docdao;
+	private DoctorsDAO docdao;
 
 	@Autowired
 	private PatientDAO patdao;

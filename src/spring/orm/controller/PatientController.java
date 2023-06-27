@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 
 import spring.orm.contract.DiagnosticBillDAO;
 import spring.orm.contract.DocScheduleDAO;
-import spring.orm.contract.DoctorsDAOTemp;
+import spring.orm.contract.DoctorsDAO;
 import spring.orm.contract.PatientDAO;
 import spring.orm.contract.SpecializationDAO;
 import spring.orm.contract.TestDAO;
@@ -38,7 +38,7 @@ public class PatientController {
 	private SpecializationDAO specdao;
 
 	@Autowired
-	private DoctorsDAOTemp docdao;
+	private DoctorsDAO docdao;
 	@Autowired
 	private PatientDAO pdao;
 

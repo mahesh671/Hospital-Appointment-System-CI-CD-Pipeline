@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import spring.orm.contract.AppointmentDAO;
-import spring.orm.contract.DoctorsDAOTemp;
+import spring.orm.contract.DoctorsDAO;
 import spring.orm.contract.PatientDAO;
 import spring.orm.model.PatientModel;
 import spring.orm.model.entity.AppointmentEntity;
@@ -43,7 +43,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 	private PatientDAO patdao;
 
 	@Autowired
-	private DoctorsDAOTemp doctdao;
+	private DoctorsDAO doctdao;
 
 	@Override
 	@Transactional
