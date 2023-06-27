@@ -165,7 +165,7 @@ public class TestDAOImpl implements TestDAO {
 	public List<TestModel> gettests() {
 
 		System.out.println("1");
-		List<TestModel> t = em.createQuery("SELECT t FROM testModel t where isDeleted = false", TestModel.class)
+		List<TestModel> t = em.createQuery("SELECT t FROM TestModel t where isDeleted = false", TestModel.class)
 				.getResultList();
 		System.out.println("Hello" + t);
 		return t;
