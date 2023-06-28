@@ -8,10 +8,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import spring.orm.contract.AppointmentDAO;
 import spring.orm.contract.DoctorsDAO;
@@ -23,22 +25,27 @@ import spring.orm.model.input.RescheduleAppointmentModel;
 import spring.orm.model.output.AppoutformFamily;
 import spring.orm.model.output.MailAppOutputModel;
 import spring.orm.model.output.RescheduleAppointmentOutput;
+import spring.orm.util.MailSend;
 
-@Service
+@Component
 public class AppointmentService {
 
-	@Autowired
-	private AppointmentDAO apdao;
+	private AppointmentDAO appointmentDAO;
+
+	private DoctorsDAO doctorDAO;
+
+	private PatientDAO patientDAO;
 
 	@Autowired
-	private DoctorsDAO docdao;
-
-	@Autowired
-	private PatientDAO patdao;
+	public AppointmentService(AppointmentDAO apdao, DoctorsDAO docdao, PatientDAO patdao) {
+		this.appointmentDAO = apdao;
+		this.doctorDAO = docdao;
+		this.patientDAO = patdao;
+	}
 
 	public List<AppointmentEntity> getAllAppointments() {
 		// Retrieve all appointments
-		List<AppointmentEntity> alist = apdao.getAllAppointments();
+		List<AppointmentEntity> alist = appointmentDAO.getAllAppointments();
 		for (AppointmentEntity a : alist) {
 			// Format date
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -55,8 +62,8 @@ public class AppointmentService {
 		// Book an appointment
 		DateTimeFormatter sqlformat = DateTimeFormatter.ofPattern("HH:mm:ss");
 		System.out.println(LocalTime.parse(app.getSlots(), DateTimeFormatter.ofPattern("hh:mm a")).format(sqlformat));
-		int app_id = apdao.bookAppointment(patdao.getPatientById(app.getExistingPatientid()),
-				docdao.getDoctor(app.getDoctor()),
+		int app_id = appointmentDAO.bookAppointment(patientDAO.getPatientById(app.getExistingPatientid()),
+				doctorDAO.getDoctor(app.getDoctor()),
 				app.getAppointmentDate().toString() + " "
 						+ LocalTime.parse(app.getSlots(), DateTimeFormatter.ofPattern("hh:mm a")).format(sqlformat),
 				app.getAppnrefer(), app.getAppnfee());
@@ -66,7 +73,7 @@ public class AppointmentService {
 	public RescheduleAppointmentOutput getAppointmentByIdOutput(int app_id) {
 		// Get appointment details by ID for rescheduling
 		RescheduleAppointmentOutput r = new RescheduleAppointmentOutput();
-		AppointmentEntity a = apdao.getAppointmentById(app_id);
+		AppointmentEntity a = appointmentDAO.getAppointmentById(app_id);
 		r.setApp_id(a.getAppn_id());
 		r.setSlot(a.getAppn_sch_date().toLocalDateTime().toLocalTime());
 		r.setApp_sch_date(Date.valueOf(a.getAppn_sch_date().toLocalDateTime().toLocalDate()));
@@ -86,10 +93,10 @@ public class AppointmentService {
 		p.setPatn_rdate(LocalDate.now());
 		p.setPatn_gender(app.getNewPatientGender());
 
-		patdao.addNewPatient(p);
+		patientDAO.addNewPatient(p);
 		DateTimeFormatter sqlformat = DateTimeFormatter.ofPattern("HH:mm:ss");
 		System.out.println("in docdao appointment");
-		int app_id = apdao.bookAppointment(p, docdao.getDoctor(app.getDoctor()),
+		int app_id = appointmentDAO.bookAppointment(p, doctorDAO.getDoctor(app.getDoctor()),
 				app.getAppointmentDate().toString() + " "
 						+ LocalTime.parse(app.getSlots(), DateTimeFormatter.ofPattern("hh:mm a")).format(sqlformat),
 				app.getAppnrefer(), app.getAppnfee());
@@ -98,13 +105,13 @@ public class AppointmentService {
 
 	public void cancelAppointment(int app_id) {
 		// Cancel an appointment
-		apdao.cancelAppointment(app_id);
+		appointmentDAO.cancelAppointment(app_id);
 
 	}
 
 	public MailAppOutputModel getAppointmentByID(int app_id) {
 		// Get appointment details by ID
-		AppointmentEntity a = apdao.getAppointmentById(app_id);
+		AppointmentEntity a = appointmentDAO.getAppointmentById(app_id);
 		MailAppOutputModel ao = new MailAppOutputModel();
 		ao.setAppn_id(a.getAppn_id());
 		ao.setDoc_name(a.getDoctor().getDoctName());
@@ -130,7 +137,7 @@ public class AppointmentService {
 	@Transactional
 	public void reschduleAppointment(RescheduleAppointmentModel rm) {
 		// Reschedule an appointment
-		apdao.reschduleAppointment(rm);
+		appointmentDAO.reschduleAppointment(rm);
 
 	}
 
@@ -140,8 +147,8 @@ public class AppointmentService {
 		System.out.println(
 				LocalTime.parse(appointment.getSlots(), DateTimeFormatter.ofPattern("hh:mm a")).format(sqlFormat));
 
-		int appointmentId = apdao.bookAppointment(patdao.getPatientById(patientId),
-				docdao.getDoctor(appointment.getDoctor()),
+		int appointmentId = appointmentDAO.bookAppointment(patientDAO.getPatientById(patientId),
+				doctorDAO.getDoctor(appointment.getDoctor()),
 				appointment.getAppointmentDate().toString() + " " + LocalTime
 						.parse(appointment.getSlots(), DateTimeFormatter.ofPattern("hh:mm a")).format(sqlFormat),
 				appointment.getAppnrefer(), appointment.getAppnfee());
@@ -151,14 +158,14 @@ public class AppointmentService {
 
 	public List<AppointmentEntity> getPatientAppointmentByID(int patn_id) {
 		// Get all appointments of a patient by their ID
-		List<AppointmentEntity> alist = apdao.getAppointmentsByPatientId(patn_id);
+		List<AppointmentEntity> alist = appointmentDAO.getAppointmentsByPatientId(patn_id);
 		return alist;
 	}
 
 	public List<AppoutformFamily> getFormFamily(int id) {
 		// Get family members for form filling
 		List<AppoutformFamily> r = new ArrayList<>();
-		for (PatientModel p : patdao.getFamilyDetailsById(id)) {
+		for (PatientModel p : patientDAO.getFamilyDetailsById(id)) {
 			AppoutformFamily f = new AppoutformFamily();
 			f.setFam_patn_name(p.getPatn_name());
 			f.setFam_patni_id(p.getPatn_id());
@@ -166,5 +173,17 @@ public class AppointmentService {
 
 		}
 		return r;
+	}
+
+	public void sendBookingMail(HttpServletRequest request, HttpServletResponse response, int app_id) {
+		String userMail = getAppointmentByID(app_id).getMail();
+		if (!userMail.equals("")) {
+			try {
+				MailSend.sendBookingEmail(request, response, getAppointmentByID(app_id), userMail);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }

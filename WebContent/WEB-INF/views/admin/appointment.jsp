@@ -73,14 +73,14 @@
 							<label for="bookingType">Booking Type:</label><br>
 							<div class="form-check form-check-inline">
 								<input class="form-check-input" type="radio" name="bookingType"
-									id="existingBooking" value="existing Patient" checked>
+									id="existingBooking" value="existing_Patient" checked>
 								<label class="form-check-label" for="existingBooking">Existing
 									Patient</label>
 							</div>
 
 							<div class="form-check form-check-inline">
 								<input class="form-check-input" type="radio" name="bookingType"
-									id="newBooking" value="NEW PATIENT"> <label
+									id="newBooking" value="NEW_PATIENT"> <label
 									class="form-check-label" for="newBooking">New Patient</label>
 							</div>
 							<input type="numeric" value="" hidden id="appnfee" name="appnfee">

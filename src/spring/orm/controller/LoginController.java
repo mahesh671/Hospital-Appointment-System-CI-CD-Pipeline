@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.ThreadContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,16 +30,15 @@ public class LoginController {
 	private static final String ROLE_PATIENT = "Patient";
 	private static final String ROLE_DIAGNOSTIC_CENTER = "DCADMIN";
 
-	
 	private String otp;
 
 	private final RegistrationService registrationService;
+	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
 	@Autowired
 	public LoginController(RegistrationService rs) {
 		/*
-		 * Constructor for the LoginController class that takes a RegistrationService
-		 * object as a parameter
+		 * Constructor for the LoginController class that takes a RegistrationService object as a parameter
 		 */
 		this.registrationService = rs;
 		// Assign the passed RegistrationService object to the 'rs' instance variable
@@ -45,6 +47,8 @@ public class LoginController {
 	@RequestMapping(value = "/")
 	public String dcScreen() {
 		// This method maps the root URL ("/") to display the login home page
+		String retrievedCatalinaHome = System.getProperty("catalina.home");
+		System.out.println(retrievedCatalinaHome);
 
 		return "login/home";// Returns the name of the view template for the login home page
 	}
@@ -61,8 +65,8 @@ public class LoginController {
 	@RequestMapping(value = { "admin/change", "dcadmin/change", "patient/change" }, method = RequestMethod.GET)
 	public String getChangePage() {
 		/*
-		 * This method maps multiple URLs ("/admin/change", "/dcadmin/change",
-		 * "/patient/change") to display the change password page
+		 * This method maps multiple URLs ("/admin/change", "/dcadmin/change", "/patient/change") to display the change
+		 * password page
 		 */
 		return "login/changepass";
 		// Returns the name of the view template for the change password page
@@ -78,13 +82,13 @@ public class LoginController {
 	@RequestMapping(value = "/forgetVal", method = RequestMethod.POST)
 	public String sendMail(@RequestParam String uname, Model m) {
 		/*
-		 * This method maps the "/forgetVal" URL to handle a POST request for sending an
-		 * email with OTP to the user.
+		 * This method maps the "/forgetVal" URL to handle a POST request for sending an email with OTP to the user.
 		 * 
 		 * Code for sending an email with OTP to the user
 		 */
 		MailSend mailSender = new MailSend(); // Create an instance of the MailSend class to send the email
-		UserPass user = registrationService.getUser(uname); // Retrieve the user information based on the provided username
+		UserPass user = registrationService.getUser(uname); // Retrieve the user information based on the provided
+															// username
 		String userEmail = user.getMail(); // Get the email address of the user
 		otp = mailSender.generateOTP(); // Generate an OTP (one-time password)
 		System.out.println(user.getMail() + " " + user.getUsername()); // Print the user's email and username for
@@ -102,12 +106,13 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = "/passwordset", method = RequestMethod.POST)
-	public String otpValidate(@RequestParam String newPassword, @RequestParam String enteredOTP, @RequestParam String userName) {
+	public String otpValidate(@RequestParam String newPassword, @RequestParam String enteredOTP,
+			@RequestParam String userName) {
 		/*
-		 * This method maps the "/passwordset" URL to handle a POST request for OTP
-		 * validation and password update.
+		 * This method maps the "/passwordset" URL to handle a POST request for OTP validation and password update.
 		 */
-		UserPass user = registrationService.getUser(userName); // Retrieve the user information based on the provided username
+		UserPass user = registrationService.getUser(userName); // Retrieve the user information based on the provided
+																// username
 		if (LocalDateTime.now().isBefore(user.getotptime())) {
 			// Check if the current time is before the OTP expiration time
 
@@ -124,13 +129,15 @@ public class LoginController {
 		}
 	}
 
-	@RequestMapping(value = {"admin/passwordchange","admin/passwordchange","admin/passwordchange"} ,method = RequestMethod.POST)
-	public String passwordChange(@RequestParam String newPassword, @RequestParam String oldPassword, @RequestParam String userName) {
+	@RequestMapping(value = { "admin/passwordchange", "admin/passwordchange",
+			"admin/passwordchange" }, method = RequestMethod.POST)
+	public String passwordChange(@RequestParam String newPassword, @RequestParam String oldPassword,
+			@RequestParam String userName) {
 		/*
-		 * This method maps the "/passwordchange" URL to handle a POST request for
-		 * password change.
+		 * This method maps the "/passwordchange" URL to handle a POST request for password change.
 		 */
-		UserPass user = registrationService.getUser(userName); // Retrieve the user information based on the provided username
+		UserPass user = registrationService.getUser(userName); // Retrieve the user information based on the provided
+																// username
 		if (user.getPassword().equals(oldPassword)) {
 			// Check if the entered old password matches the stored password for the user
 
@@ -171,9 +178,10 @@ public class LoginController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String redirectToDashboard(@RequestParam("uname") String userName, @RequestParam("pass") String password,
 			HttpSession session, Model model) {
-		/* Code for validating the user's credentials and redirecting to the
-		 corresponding dashboard based on the user's role
-		*/ 
+		/*
+		 * Code for validating the user's credentials and redirecting to the corresponding dashboard based on the user's
+		 * role
+		 */
 
 		UserPass user = registrationService.getUser(userName);
 		if (user != null && user.getPassword().equals(password)) {
@@ -181,6 +189,9 @@ public class LoginController {
 			switch (role) {
 			case ROLE_ADMINISTRATOR:
 				// Redirect to administrator dashboard
+				ThreadContext.put("logFile", "adminLogFile");
+				logger.info("Entered into Admin Page Successfully");
+				ThreadContext.remove("logFile");
 				return "redirect:/admin/";
 			case ROLE_PATIENT:
 				PatientModel patientModel = registrationService.getPatientDetails(user.getPatient().getPatn_id());
@@ -205,15 +216,23 @@ public class LoginController {
 					 * 
 					 * 
 					 * Store patient session in the HttpSession
-					 */ 
+					 */
+					ThreadContext.put("logFile", "patientLogFile");
+					logger.info("Entered into Patient Page Successfully");
+					ThreadContext.remove("logFile");
 					session.setAttribute("patientSession", patientSession);
-					 /* Redirect to patient
-					 * dashboard
+					/*
+					 * Redirect to patient dashboard
 					 */
 					return "redirect:/patient/";
 				}
 			case ROLE_DIAGNOSTIC_CENTER:
 				// Redirect to diagnostic center dashboard
+
+				ThreadContext.put("logFile", "dcadminLogFile");
+				logger.info("Entered into DcAdmin Page Successfully");
+				logger.warn("Warning");
+				ThreadContext.remove("logFile");
 				return "redirect:/dcadmin/";
 			}
 		}

@@ -144,6 +144,7 @@
 
 
 	<build>
+		<finalName>Hospital</finalName>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>

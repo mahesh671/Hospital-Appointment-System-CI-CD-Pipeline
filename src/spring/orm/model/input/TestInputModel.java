@@ -2,7 +2,7 @@ package spring.orm.model.input;
 
 public class TestInputModel {
 
-	private int test_id;
+	private Integer test_id;
 
 	private String test_name;
 
@@ -19,7 +19,7 @@ public class TestInputModel {
 		return test_id;
 	}
 
-	public void setTest_id(int test_id) {
+	public void setTest_id(Integer test_id) {
 		this.test_id = test_id;
 	}
 
