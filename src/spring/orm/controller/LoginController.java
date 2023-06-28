@@ -4,10 +4,11 @@ import java.time.LocalDateTime;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.ThreadContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,15 +25,22 @@ import spring.orm.services.RegistrationService;
 import spring.orm.util.MailSend;
 
 @Controller
+@PropertySource("classpath:user-roles.properties")
 
 public class LoginController {
-	private static final String ROLE_ADMINISTRATOR = "ADMIN";
-	private static final String ROLE_PATIENT = "Patient";
-	private static final String ROLE_DIAGNOSTIC_CENTER = "DCADMIN";
+	@Value("${role.admin}")
+	private String ROLE_ADMINISTRATOR;
+
+	@Value("${role.patient}")
+	private String ROLE_PATIENT;
+
+	@Value("${role.diagnostic_center}")
+	private String ROLE_DIAGNOSTIC_CENTER;
 
 	private String otp;
 
 	private final RegistrationService registrationService;
+
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
 	@Autowired
@@ -47,9 +55,8 @@ public class LoginController {
 	@RequestMapping(value = "/")
 	public String dcScreen() {
 		// This method maps the root URL ("/") to display the login home page
-		String retrievedCatalinaHome = System.getProperty("catalina.home");
-		System.out.println(retrievedCatalinaHome);
 
+		logger.info("Landing screen loaded");
 		return "login/home";// Returns the name of the view template for the login home page
 	}
 
@@ -57,6 +64,7 @@ public class LoginController {
 	public String getForgetPage() {
 		// This method maps the "/forget" URL to display the forget password page
 
+		logger.info("Displaying forget password page");
 		return "login/forgetPage";
 		// Returns the name of the view template for the forget password page
 
@@ -68,6 +76,7 @@ public class LoginController {
 		 * This method maps multiple URLs ("/admin/change", "/dcadmin/change", "/patient/change") to display the change
 		 * password page
 		 */
+		logger.info("Displaying change password page");
 		return "login/changepass";
 		// Returns the name of the view template for the change password page
 	}
@@ -75,7 +84,7 @@ public class LoginController {
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String getRegisterPage() {
 		// This method maps the "/register" URL to display the registration page.
-
+		logger.info("Displaying registration page");
 		return "login/registerPage";// Returns the name of the view template for the registration page.
 	}
 
@@ -86,6 +95,7 @@ public class LoginController {
 		 * 
 		 * Code for sending an email with OTP to the user
 		 */
+		logger.info("Processing forget password request for username: {}", uname);
 		MailSend mailSender = new MailSend(); // Create an instance of the MailSend class to send the email
 		UserPass user = registrationService.getUser(uname); // Retrieve the user information based on the provided
 															// username
@@ -111,6 +121,7 @@ public class LoginController {
 		/*
 		 * This method maps the "/passwordset" URL to handle a POST request for OTP validation and password update.
 		 */
+		logger.info("Validating OTP for username: {}", userName);
 		UserPass user = registrationService.getUser(userName); // Retrieve the user information based on the provided
 																// username
 		if (LocalDateTime.now().isBefore(user.getotptime())) {
@@ -136,6 +147,7 @@ public class LoginController {
 		/*
 		 * This method maps the "/passwordchange" URL to handle a POST request for password change.
 		 */
+		logger.info("Processing password change request for username: {}", userName);
 		UserPass user = registrationService.getUser(userName); // Retrieve the user information based on the provided
 																// username
 		if (user.getPassword().equals(oldPassword)) {
@@ -156,87 +168,109 @@ public class LoginController {
 
 	@RequestMapping(value = "/saveregister", method = RequestMethod.POST)
 	public String saveRegister(@ModelAttribute RegistrationForm registrationForm, Model model) {
-		// Code for registering a new patient
+		try {
+			// Log the registration of a new patient
+			logger.info("Registering a new patient");
 
-		registrationService.registerPatient(registrationForm);
-		return "redirect:/";
+			// Register the new patient using the registration service
+			registrationService.registerPatient(registrationForm);
+
+			// Redirect to the home page after successful registration
+			return "redirect:/";
+		} catch (Exception e) {
+			// An error occurred during the registration process
+			logger.error("An error occurred while registering a new patient", e);
+
+			// Add an error message to the model to display to the user
+			model.addAttribute("error", "An error occurred during registration. Please try again later.");
+
+			// Return the registration form view
+			return "registrationForm";
+		}
 	}
 
 	@RequestMapping(value = "/checkUsernameAvailability", method = RequestMethod.GET)
 	@ResponseBody
 	public String checkUsernameAvailability(@RequestParam String username) {
-		// Code for checking the availability of a username
-		boolean isUsernameAvailable = registrationService.isUsernameAvailable(username);
+		try {
+			// Log the username availability check
+			logger.info("Checking username availability for: {}", username);
 
-		if (isUsernameAvailable) {
-			return "available";
-		} else {
-			return "taken";
+			// Check the availability of the username using the registration service
+			boolean isUsernameAvailable = registrationService.isUsernameAvailable(username);
+
+			if (isUsernameAvailable) {
+				// Username is available
+				return "available";
+			} else {
+				// Username is taken
+				return "taken";
+			}
+		} catch (Exception e) {
+			// An error occurred during the username availability check
+			logger.error("An error occurred while checking username availability for: {}", username, e);
+			return "error";
 		}
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String redirectToDashboard(@RequestParam("uname") String userName, @RequestParam("pass") String password,
-			HttpSession session, Model model) {
-		/*
-		 * Code for validating the user's credentials and redirecting to the corresponding dashboard based on the user's
-		 * role
-		 */
+	public String redirectToDashboard(@ModelAttribute("userpass") UserPass userpass, HttpSession session, Model model) {
+		String userName = userpass.getUsername();
+		String password = userpass.getPassword();
 
-		UserPass user = registrationService.getUser(userName);
-		if (user != null && user.getPassword().equals(password)) {
-			String role = user.getRole();
-			switch (role) {
-			case ROLE_ADMINISTRATOR:
-				// Redirect to administrator dashboard
-				ThreadContext.put("logFile", "adminLogFile");
-				logger.info("Entered into Admin Page Successfully");
-				ThreadContext.remove("logFile");
-				return "redirect:/admin/";
-			case ROLE_PATIENT:
-				PatientModel patientModel = registrationService.getPatientDetails(user.getPatient().getPatn_id());
-				if (patientModel != null) {
+		try {
+			// Log the login request
+			logger.info("Processing login request for username: {}", userName);
 
-					// Create and store patient session
-					PatientSession patientSession = new PatientSession();
-					patientSession.setId(patientModel.getPatn_id());
-					patientSession.setUsername(user.getUsername());
-					patientSession.setName(patientModel.getPatn_name());
-					patientSession.setAge(patientModel.getPatn_age());
-					patientSession.setGender(patientModel.getPatn_gender().charAt(0));
-					patientSession.setAccessPatientId(patientModel.getAccessPatientId());
-					patientSession.setBloodGroup(patientModel.getPatn_bgroup());
-					patientSession.setRegistrationDate(patientModel.getPatn_rdate());
-					patientSession.setLastVisitDate(patientModel.getPatn_lastvisit());
-					patientSession.setEmail(user.getMail());
-					// patientSession.setLastAppointmentId(patientModel.getPatn_lastapp_id());
+			// Retrieve user information from the registration service
+			UserPass user = registrationService.getUser(userName);
 
-					/*
-					 * Set other relevant data in the patient session
-					 * 
-					 * 
-					 * Store patient session in the HttpSession
-					 */
-					ThreadContext.put("logFile", "patientLogFile");
-					logger.info("Entered into Patient Page Successfully");
-					ThreadContext.remove("logFile");
-					session.setAttribute("patientSession", patientSession);
-					/*
-					 * Redirect to patient dashboard
-					 */
+			// Check if the user exists and the password is correct
+			if (user != null && user.getPassword().equals(password)) {
+				String role = user.getRole();
+
+				// Handle login for the Administrator role
+				if (ROLE_ADMINISTRATOR.equals(role)) {
+					// Log the successful login and redirect to the administrator dashboard
+					logger.info("User '{}' logged in as Administrator. Redirecting to administrator dashboard.",
+							userName);
+					return "redirect:/admin/";
+				}
+
+				// Handle login for the Patient role
+				else if (ROLE_PATIENT.equals(role)) {
+					// Retrieve patient details from the registration service
+					PatientModel patientModel = registrationService.getPatientDetails(user.getPatient().getPatn_id());
+
+					// Create the patient session and store it in the HttpSession
+					PatientSession patientSession = registrationService.createPatientSession(user, patientModel);
+					registrationService.storePatientSession(session, patientSession);
+
+					// Log the successful login and redirect to the patient dashboard
+					logger.info("User '{}' logged in as Patient. Redirecting to patient dashboard.", userName);
 					return "redirect:/patient/";
 				}
-			case ROLE_DIAGNOSTIC_CENTER:
-				// Redirect to diagnostic center dashboard
 
-				ThreadContext.put("logFile", "dcadminLogFile");
-				logger.info("Entered into DcAdmin Page Successfully");
-				logger.warn("Warning");
-				ThreadContext.remove("logFile");
-				return "redirect:/dcadmin/";
+				// Handle login for the Diagnostic Center role
+				else if (ROLE_DIAGNOSTIC_CENTER.equals(role)) {
+					// Log the successful login and redirect to the diagnostic center dashboard
+					logger.info(
+							"User '{}' logged in as Diagnostic Center Admin. Redirecting to diagnostic center dashboard.",
+							userName);
+					return "redirect:/dcadmin/";
+				}
 			}
+
+			// Login failed: incorrect username or password
+			logger.warn("Login failed for username: {}. Incorrect username or password entered.", userName);
+			model.addAttribute("error", "Incorrect username or password");
+		} catch (Exception e) {
+			// An error occurred during the login process
+			logger.error("An error occurred during login for username: {}", userName, e);
+			model.addAttribute("error", "An error occurred during login. Please try again later.");
 		}
-		model.addAttribute("error", "Incorrect username or password");
+
+		// Redirect to the home page if login was unsuccessful
 		return "login/home";
 	}
 
@@ -244,6 +278,7 @@ public class LoginController {
 	public String logout(HttpSession session) {
 		// Clear the session
 		session.removeAttribute("patientSession");
+		logger.info("Logging out patient");
 		// Redirect to the login page
 		return "redirect:/";
 	}

@@ -8,7 +8,7 @@ public class TestInputModel {
 
 	private String test_category;
 
-	private int test_price;
+	private Integer test_price;
 
 	private String test_method;
 
@@ -43,7 +43,7 @@ public class TestInputModel {
 		return test_price;
 	}
 
-	public void setTest_price(int test_price) {
+	public void setTest_price(Integer test_price) {
 		this.test_price = test_price;
 	}
 

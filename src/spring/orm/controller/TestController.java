@@ -2,7 +2,8 @@ package spring.orm.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +21,27 @@ import spring.orm.contract.TestDAO;
 import spring.orm.model.TestModel;
 import spring.orm.model.input.TestInputModel;
 import spring.orm.model.output.testsPatientsModel;
+import spring.orm.services.TestServices;
 
 @Controller
 public class TestController {
 
-	@Autowired
 	private TestDAO testDAO;
+
+	private TestServices testServices;
+
+	private static final Logger logger = LoggerFactory.getLogger(TestController.class);
+
+	public TestController(TestDAO testDAO, TestServices testServices) {
+		super();
+		this.testDAO = testDAO;
+		this.testServices = testServices;
+	}
 
 	// Page mapping for "dcadmin/dcpatients"
 	@RequestMapping(value = "dcadmin/dcpatients")
 	public String dcPatientsPage() {
+		logger.info("Entered to the DCPatients page");
 		return "dcadmin/DCPatients";
 	}
 
@@ -37,7 +49,10 @@ public class TestController {
 	@RequestMapping(value = "dcadmin/gettestdetails", method = RequestMethod.GET)
 	public String testDetails(Model model) {
 		// Calls the method gettests in TestDao to get tests
-		List<TestModel> testModel = testDAO.getTests();
+		logger.info("Entered to gettestdetails method");
+		List<TestModel> testModel = testServices.getTests();
+		logger.info("Returns all the tests with details in list");
+		logger.info(testModel.toString());
 		model.addAttribute("tests", testModel);
 		return "dcadmin/testspage";
 
@@ -47,9 +62,12 @@ public class TestController {
 	@RequestMapping(value = "dcadmin/deltest", method = RequestMethod.POST)
 	public @ResponseBody String deleteTest(@RequestParam int test_id, Model model) {
 		// Calls the method deltest in TestDao for delete operation
-		testDAO.deleteTest(test_id);
+		logger.info("Entered to deletetest method");
+		testServices.deleteTest(test_id);
+		logger.info("The record has been deleted");
 		// Calls the method gettests in TestDao to get tests
-		List<TestModel> testModel = testDAO.getTests();
+		List<TestModel> testModel = testServices.getTests();
+		logger.info(testModel.toString());
 		model.addAttribute("tests", testModel);
 		return "dcadmin/testspage";
 	}
@@ -58,9 +76,11 @@ public class TestController {
 	@RequestMapping(value = "dcadmin/savetest", method = RequestMethod.POST)
 	public String saveTest(@ModelAttribute TestInputModel t, Model model) {
 		// Calls the method savetest to save the tests to DB
+		logger.info("Entered the savetest method");
 		testDAO.saveTest(t);
 		// Calls the method gettests in TestDao to get tests
-		List<TestModel> testModel = testDAO.getTests();
+		List<TestModel> testModel = testServices.getTests();
+		logger.info(testModel.toString());
 		model.addAttribute("tests", testModel);
 		return "redirect:./gettestdetails";
 	}
@@ -69,9 +89,11 @@ public class TestController {
 	@RequestMapping(value = "dcadmin/updatetest", method = RequestMethod.POST)
 	public String updateTest(@ModelAttribute TestModel t, Model model) {
 		// Calls the method updatetest to update the edited details
-		testDAO.updateTest(t);
+		logger.info("Entered the Update test method");
+		testServices.updateTest(t);
 		// Calls the method gettests in TestDao to get tests
-		List<TestModel> testModel = testDAO.getTests();
+		List<TestModel> testModel = testServices.getTests();
+		logger.info(testModel.toString());
 		model.addAttribute("tests", testModel);
 		return "redirect:gettestdetails";
 	}
@@ -80,12 +102,11 @@ public class TestController {
 	@RequestMapping(value = "dcadmin/gettest", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
 	public ResponseEntity<String> getSpecialization(@RequestParam int id) {
 		// Calls the method gettestbyid to update the details
-		TestModel tests = testDAO.getTestById(id);
+		TestModel tests = testServices.getTestById(id);
+		logger.info("{}", tests.getTest_id());
 		// Returns a response entity with a JSON representation of the object 's'
 		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(tests));
 	}
-
-	/// Where we are using this call??
 
 	// Request mapping for getting all test-patient details
 	@RequestMapping(value = "dcadmin/getalltestpatientdetails", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
@@ -93,6 +114,7 @@ public class TestController {
 			@RequestParam String date1, @RequestParam String date2, Model model) {
 		// Calls the method to get patients details by testwise and between dates
 		List<testsPatientsModel> testsPatientsModel = testDAO.getAllTestPatientDetails(test, date1, date2);
+		logger.info(testsPatientsModel.toString());
 		return testsPatientsModel;
 	}
 
@@ -100,7 +122,8 @@ public class TestController {
 	@RequestMapping(value = "dcadmin/getalltests", method = RequestMethod.GET)
 	public ResponseEntity<String> getalltests(Model model) {
 		// Calls the method gettests in TestDao to get tests
-		List<TestModel> testModel = testDAO.getTests();
+		List<TestModel> testModel = testServices.getTests();
+		logger.info(testModel.toString());
 		// Returns a response entity with a JSON representation of the object 'tm'
 		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(testModel));
 	}
@@ -110,6 +133,7 @@ public class TestController {
 	public @ResponseBody List<testsPatientsModel> getalltestpatients(Model model) {
 		// Calls the method to get all the patients who booked that test
 		List<testsPatientsModel> testsPatientsList = testDAO.getAllTestPatients();
+		logger.info(testsPatientsList.toString());
 		return testsPatientsList;
 	}
 
@@ -118,6 +142,7 @@ public class TestController {
 	public @ResponseBody List<testsPatientsModel> gettestwisepatients(@RequestParam int test, Model model) {
 		// Calls the method to get the patients according to testwise
 		List<testsPatientsModel> testsPatientsList = testDAO.getTestWisePatients(test);
+		logger.info(testsPatientsList.toString());
 		return testsPatientsList;
 	}
 

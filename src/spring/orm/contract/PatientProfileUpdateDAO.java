@@ -11,6 +11,6 @@ public interface PatientProfileUpdateDAO {
 
 	List<PrescriptionOutputmodel> getallPrescription(int id);
 
-	public List<Integer> getAllappnids(int patn_id);
+	public List<Integer> getAllAppointmentIds(int patn_id);
 
 }

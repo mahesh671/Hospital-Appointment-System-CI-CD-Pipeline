@@ -1,11 +1,14 @@
 package spring.orm.services;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import spring.orm.contract.PatientDAO;
 import spring.orm.contract.UserDAO;
 import spring.orm.model.PatientModel;
+import spring.orm.model.PatientSession;
 import spring.orm.model.UserPass;
 import spring.orm.model.input.RegistrationForm;
 
@@ -19,8 +22,7 @@ public class RegistrationService {
 
 	public void registerPatient(RegistrationForm rf) {
 		/*
-		 * This method is responsible for registering a new patient based on the
-		 * provided RegistrationForm object.
+		 * This method is responsible for registering a new patient based on the provided RegistrationForm object.
 		 */
 		PatientModel patient = new PatientModel();
 		patient.setPatn_name(rf.getName());
@@ -67,5 +69,24 @@ public class RegistrationService {
 		// This method retrieves the PatientModel object based on the provided patient ID.
 
 		return udao.getPatientDetails(patn_id);
+	}
+
+	public PatientSession createPatientSession(UserPass user, PatientModel patientModel) {
+		PatientSession patientSession = new PatientSession();
+		patientSession.setId(patientModel.getPatn_id());
+		patientSession.setUsername(user.getUsername());
+		patientSession.setName(patientModel.getPatn_name());
+		patientSession.setAge(patientModel.getPatn_age());
+		patientSession.setGender(patientModel.getPatn_gender().charAt(0));
+		patientSession.setAccessPatientId(patientModel.getAccessPatientId());
+		patientSession.setBloodGroup(patientModel.getPatn_bgroup());
+		patientSession.setRegistrationDate(patientModel.getPatn_rdate());
+		patientSession.setLastVisitDate(patientModel.getPatn_lastvisit());
+		patientSession.setEmail(user.getMail());
+		return patientSession;
+	}
+
+	public void storePatientSession(HttpSession session, PatientSession patientSession) {
+		session.setAttribute("patientSession", patientSession);
 	}
 }

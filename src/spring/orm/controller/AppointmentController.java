@@ -34,7 +34,7 @@ import spring.orm.model.entity.DoctorTemp;
 import spring.orm.model.input.AppointmentForm;
 import spring.orm.model.input.BookedAppForm;
 import spring.orm.model.input.RescheduleAppointmentModel;
-import spring.orm.model.output.AppoutformFamily;
+import spring.orm.model.output.AppOutFormFamily;
 import spring.orm.model.output.DoctorList;
 import spring.orm.model.output.DoctorOutPutModel;
 import spring.orm.model.output.OutputBookedAppointmnets;
@@ -97,7 +97,7 @@ public class AppointmentController {
 
 		// Retrieve the family appointments for the patient session and add them to the
 		// model
-		List<AppoutformFamily> familyMembers = appointmentService.getFormFamily(patientSession.getId());
+		List<AppOutFormFamily> familyMembers = appointmentService.getFormFamily(patientSession.getId());
 		model.addAttribute("fam", familyMembers);
 		logger.debug("Retrieved family appointments: {}", familyMembers);
 		return "patient/appointment";

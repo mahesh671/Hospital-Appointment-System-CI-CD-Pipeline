@@ -66,7 +66,7 @@
 				form.attr('action', './updatedoc');
 				form.show();
 
-				$('#EditForm').show();
+				$('#EditForm').toggle();
 				$('#add-spec-btn').text('update');
 			}
 		});

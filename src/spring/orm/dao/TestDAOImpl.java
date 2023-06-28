@@ -8,6 +8,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import spring.orm.contract.TestDAO;
@@ -21,27 +23,33 @@ import spring.orm.model.output.testsPatientsModel;
 public class TestDAOImpl implements TestDAO {
 
 	@PersistenceContext
-	private EntityManager em;
+	private EntityManager entityManager;
+
+	private static final Logger logger = LoggerFactory.getLogger(TestDAOImpl.class);
 
 	@Transactional
 	@Override
-	public void saveTest(TestInputModel t) {
+	public void saveTest(TestInputModel testInputModel) {
 		// saves the tests to DB through entity model
-		TestModel s = new TestModel();
-		s.setTest_category(t.getTest_category());
-		s.setTest_fromrange(t.getTest_fromrange());
-		s.setTest_method(t.getTest_method());
-		s.setTest_name(t.getTest_name());
-		s.setTest_price(t.getTest_price());
-		s.setTest_torange(t.getTest_torange());
-		em.persist(s);
+		logger.info(testInputModel.toString());
+		TestModel testModel = new TestModel();
+		testModel.setTest_category(testInputModel.getTest_category());
+		testModel.setTest_fromrange(testInputModel.getTest_fromrange());
+		testModel.setTest_method(testInputModel.getTest_method());
+		testModel.setTest_name(testInputModel.getTest_name());
+		testModel.setTest_price(testInputModel.getTest_price());
+		testModel.setTest_torange(testInputModel.getTest_torange());
+		logger.info("The Saved test details:{}", testModel.toString());
+		entityManager.persist(testModel);
 	}
 
 	@Override
 	public List<patientsoutputmodel> getPatients() {
 		// Retrieve all tests from the database
 		String hql = "SELECT   new spring.orm.model.output.patientsoutputmodel(p.patn_id,p.patn_name) FROM PatientModel p ";
-		List<patientsoutputmodel> data = em.createQuery(hql, patientsoutputmodel.class).getResultList();
+		logger.info("{}", hql);
+		List<patientsoutputmodel> data = entityManager.createQuery(hql, patientsoutputmodel.class).getResultList();
+		logger.info(data.toString());
 		return data;
 	}
 
@@ -49,30 +57,35 @@ public class TestDAOImpl implements TestDAO {
 	@Transactional
 	public TestModel getTestById(int id) {
 		// Retrieve a specific test by its ID
-		return em.find(TestModel.class, id);
+		logger.info(" The test by id :{}", id);
+
+		return entityManager.find(TestModel.class, id);
 	}
 
 	@Override
 	@Transactional
-	public void updateTest(TestModel t) {
+	public void updateTest(TestModel testModel) {
 		// Update an existing test
-		em.merge(t);
+		logger.info(testModel.toString());
+		entityManager.merge(testModel);
 	}
 
 	@Transactional
 	@Override
 	public void deleteTest(int test_id) {
 		// Soft delete a test by marking it as deleted
-		TestModel s = em.find(TestModel.class, test_id);
+		logger.info("delete test_id:{}", test_id);
+		TestModel s = entityManager.find(TestModel.class, test_id);
 		s.setDeleted(true);
-		em.merge(s);
+		entityManager.merge(s);
 	}
 
 	@Transactional
 	@Override
 	public List<TestModel> getTestByCategory(String cat) {
 		// Retrieve tests by category
-		return em.createQuery("select t from TestModel t where t.test_category=:cat", TestModel.class)
+		logger.info("Category:{}", cat);
+		return entityManager.createQuery("select t from TestModel t where t.test_category=:cat", TestModel.class)
 				.setParameter("cat", cat).getResultList();
 	}
 
@@ -80,18 +93,20 @@ public class TestDAOImpl implements TestDAO {
 	@Override
 	public Object getSelectedTestPrice(int test) {
 		// Retrieve the price of a specific test
-		return em.createQuery("select t.test_price from TestModel t where t.test_id=:test").setParameter("test", test)
-				.getSingleResult();
+		logger.info("{}", test);
+		return entityManager.createQuery("select t.test_price from TestModel t where t.test_id=:test")
+				.setParameter("test", test).getSingleResult();
 	}
 
 	@Override
 	public List<testsPatientsModel> getAllTestPatients() {
 		// Retrieve all test-patient details
+
 		String hql = "SELECT new spring.orm.model.output.testsPatientsModel(p.patn_id,p.patn_name,t.test_name,t.test_method,t.test_category,t.test_price,d.dgbl_date) "
 				+ "from PatientModel p,TestModel t,DiagnosticBillModel d,Diagnostictestbill dt "
 				+ "where dt.id.dgbltestId=t.test_id and dt.id.dgblId=d.dgbl_id and d.dgbl_patn_id=p.patn_id ";
-
-		List<testsPatientsModel> data = em.createQuery(hql, testsPatientsModel.class).getResultList();
+		logger.info("Get all test Patients:{}", hql);
+		List<testsPatientsModel> data = entityManager.createQuery(hql, testsPatientsModel.class).getResultList();
 		return data;
 	}
 
@@ -104,19 +119,20 @@ public class TestDAOImpl implements TestDAO {
 		String hql = "SELECT new spring.orm.model.output.testsPatientsModel(p.patn_id, p.patn_name, t.test_name, t.test_method, t.test_category, t.test_price, d.dgbl_date) "
 				+ "from PatientModel p, TestModel t, DiagnosticBillModel d, Diagnostictestbill dt "
 				+ "where dt.id.dgbltestId = t.test_id and dt.id.dgblId = d.dgbl_id and d.dgbl_patn_id = p.patn_id ";
-
+		logger.info("Get testwise Patients:{}", test);
 		if (test >= 0) {
-			System.out.println("-4");
+			logger.info("If test exist:{}", test);
 			hql += " and t.test_id = :test"; // Filter by test ID if a valid ID is provided
 		}
 
 		if (test == -1) {
-			System.out.println("-1");
+			logger.info("If there is no test selected:{}", test);
 			hql += ""; // No additional filter if the test ID is -1
 		}
 
 		// Create the TypedQuery with the constructed HQL query
-		TypedQuery<testsPatientsModel> q = em.createQuery(hql, spring.orm.model.output.testsPatientsModel.class);
+		TypedQuery<testsPatientsModel> q = entityManager.createQuery(hql,
+				spring.orm.model.output.testsPatientsModel.class);
 
 		if (test >= 0) {
 			q.setParameter("test", test); // Set the test parameter if a valid ID is provided
@@ -134,20 +150,25 @@ public class TestDAOImpl implements TestDAO {
 		String hql = "SELECT new spring.orm.model.output.testsPatientsModel(p.patn_id,p.patn_name,t.test_name,t.test_method,t.test_category,t.test_price,d.dgbl_date) "
 				+ "from PatientModel p,TestModel t,DiagnosticBillModel d,Diagnostictestbill dt "
 				+ "where dt.id.dgbltestId=t.test_id and dt.id.dgblId=d.dgbl_id and d.dgbl_patn_id=p.patn_id ";
-		System.out.println(test);
+		logger.info("Get all test Patient Details:{}", hql);
 		if (test >= 0) {
-			System.out.println("-4");
+			// Filter by test ID if a valid ID is provided
+			logger.info("If test exist:{}", test);
 			hql += " and t.test_id = :test";
 		}
 		if (test == -1) {
-			System.out.println("-1");
+			// No additional filter if the test ID is -1
+			logger.info("If there is no test selected:{}", test);
 			hql += "";
 		}
 		if (!date1.equals("") & !date2.equals("")) {
+			// Get the tests by applying the between dates filter
+			logger.info("Between dates:{} {}", date1, date2);
 
 			hql += " and d.dgbl_date>=:date1 and d.dgbl_date<=:date2";
 		}
-		TypedQuery<testsPatientsModel> q = em.createQuery(hql, spring.orm.model.output.testsPatientsModel.class);
+		TypedQuery<testsPatientsModel> q = entityManager.createQuery(hql,
+				spring.orm.model.output.testsPatientsModel.class);
 		if (test >= 0) {
 			q.setParameter("test", test);
 		}
@@ -162,21 +183,22 @@ public class TestDAOImpl implements TestDAO {
 
 	}
 
+	// Retrieve all tests from the database
 	public List<TestModel> getTests() {
-
-		System.out.println("1");
-		List<TestModel> t = em.createQuery("SELECT t FROM TestModel t where isDeleted = false", TestModel.class)
-				.getResultList();
-		System.out.println("Hello" + t);
-		return t;
+		// Create a query to fetch active tests from the database
+		List<TestModel> testModel = entityManager
+				.createQuery("SELECT t FROM TestModel t where isDeleted = false", TestModel.class).getResultList();
+		logger.info(testModel.toString());
+		return testModel;
 	}
 
 	@Override
 	@Transactional
 	public List<testsCategoriesModel> getCategories() {
-		// Retrieve all tests from the database
+		// Retrieve all Categories from the database
 		String hql = "SELECT  DISTINCT  new spring.orm.model.output.testsCategoriesModel(t.test_category) FROM TestModel t where isDeleted = false";
-		List<testsCategoriesModel> data = em.createQuery(hql, testsCategoriesModel.class).getResultList();
+		List<testsCategoriesModel> data = entityManager.createQuery(hql, testsCategoriesModel.class).getResultList();
+		logger.info("Get Categories:{}", data);
 		return data;
 
 	}
