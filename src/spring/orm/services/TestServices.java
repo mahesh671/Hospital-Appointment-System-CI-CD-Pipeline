@@ -11,47 +11,43 @@ import spring.orm.model.TestModel;
 @Service
 public class TestServices {
 	@Autowired
-	private TestDAO tdao;
+	private TestDAO tDAO;
 
-	public List<TestModel> gettests() {
-		//Used to get and display the test
-		return tdao.gettests();
+	public List<TestModel> getTests() {
+		// Used to get and display the test
+		return tDAO.getTests();
 	}
 
-
-
-	public TestModel gettestbyid(int id) {
-		//get the test bt testid
-		return tdao.gettestbyid(id);
+	public TestModel getTestById(int id) {
+		// get the test bt testid
+		return tDAO.getTestById(id);
 	}
 
-	public void updatetest(TestModel t) {
-		//Used to update the test
-		tdao.updatetest(t);
-
-	}
-
-	public void deltest(int test_id) {
-		//Used to delete the test
-		tdao.deltest(test_id);
+	public void updateTest(TestModel t) {
+		// Used to update the test
+		tDAO.updateTest(t);
 
 	}
 
-	
+	public void deleteTest(int test_id) {
+		// Used to delete the test
+		tDAO.deleteTest(test_id);
 
-	public List<String> getTestCat() {
+	}
+
+	public List<String> getTestCategory() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public List<TestModel> gettestbycat(String cat) { 
-		//Gives the test by categorywise in testbillgen
-		return tdao.gettestbycat(cat);
+	public List<TestModel> getTestByCategory(String category) {
+		// Gives the test by categorywise in testbillgen
+		return tDAO.getTestByCategory(category);
 	}
 
-	public Object gettestprice(int test) {
-		//Gives the test price used in testbillgen
-		return tdao.gettestprice(test);
+	public Object getTestByPrice(int test) {
+		// Gives the test price used in testbillgen
+		return tDAO.getSelectedTestPrice(test);
 	}
 
 }

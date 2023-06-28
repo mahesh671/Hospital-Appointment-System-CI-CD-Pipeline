@@ -9,7 +9,7 @@ import spring.orm.model.output.DoctorOutPutModel;
 public interface DoctorsDAO {
 
 	// Retrieves a DoctorTemp object by its ID
-	public DoctorTemp getdoc(int Id);
+	public DoctorTemp getDoctor(int Id);
 
 	// Updates a DoctorTemp object
 	public void updatedoc(DoctorTemp d);

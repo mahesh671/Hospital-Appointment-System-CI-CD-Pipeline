@@ -25,7 +25,7 @@ public class TestDAOImpl implements TestDAO {
 
 	@Transactional
 	@Override
-	public void savetest(TestInputModel t) {
+	public void saveTest(TestInputModel t) {
 		// saves the tests to DB through entity model
 		TestModel s = new TestModel();
 		s.setTest_category(t.getTest_category());
@@ -38,7 +38,7 @@ public class TestDAOImpl implements TestDAO {
 	}
 
 	@Override
-	public List<patientsoutputmodel> getpatients() {
+	public List<patientsoutputmodel> getPatients() {
 		// Retrieve all tests from the database
 		String hql = "SELECT   new spring.orm.model.output.patientsoutputmodel(p.patn_id,p.patn_name) FROM PatientModel p ";
 		List<patientsoutputmodel> data = em.createQuery(hql, patientsoutputmodel.class).getResultList();
@@ -47,21 +47,21 @@ public class TestDAOImpl implements TestDAO {
 
 	@Override
 	@Transactional
-	public TestModel gettestbyid(int id) {
+	public TestModel getTestById(int id) {
 		// Retrieve a specific test by its ID
 		return em.find(TestModel.class, id);
 	}
 
 	@Override
 	@Transactional
-	public void updatetest(TestModel t) {
+	public void updateTest(TestModel t) {
 		// Update an existing test
 		em.merge(t);
 	}
 
 	@Transactional
 	@Override
-	public void deltest(int test_id) {
+	public void deleteTest(int test_id) {
 		// Soft delete a test by marking it as deleted
 		TestModel s = em.find(TestModel.class, test_id);
 		s.setDeleted(true);
@@ -70,7 +70,7 @@ public class TestDAOImpl implements TestDAO {
 
 	@Transactional
 	@Override
-	public List<TestModel> gettestbycat(String cat) {
+	public List<TestModel> getTestByCategory(String cat) {
 		// Retrieve tests by category
 		return em.createQuery("select t from TestModel t where t.test_category=:cat", TestModel.class)
 				.setParameter("cat", cat).getResultList();
@@ -78,14 +78,14 @@ public class TestDAOImpl implements TestDAO {
 
 	@Transactional
 	@Override
-	public Object gettestprice(int test) {
+	public Object getSelectedTestPrice(int test) {
 		// Retrieve the price of a specific test
 		return em.createQuery("select t.test_price from TestModel t where t.test_id=:test").setParameter("test", test)
 				.getSingleResult();
 	}
 
 	@Override
-	public List<testsPatientsModel> getalltestpatients() {
+	public List<testsPatientsModel> getAllTestPatients() {
 		// Retrieve all test-patient details
 		String hql = "SELECT new spring.orm.model.output.testsPatientsModel(p.patn_id,p.patn_name,t.test_name,t.test_method,t.test_category,t.test_price,d.dgbl_date) "
 				+ "from PatientModel p,TestModel t,DiagnosticBillModel d,Diagnostictestbill dt "
@@ -96,7 +96,7 @@ public class TestDAOImpl implements TestDAO {
 	}
 
 	@Override
-	public List<testsPatientsModel> gettestwisepatients(int test) {
+	public List<testsPatientsModel> getTestWisePatients(int test) {
 		// Retrieve test-patient details for a specific test
 		List<testsPatientsModel> data = null;
 
@@ -129,7 +129,7 @@ public class TestDAOImpl implements TestDAO {
 	}
 
 	@Override
-	public List<testsPatientsModel> getalltestpatientdetails(int test, String date1, String date2) {
+	public List<testsPatientsModel> getAllTestPatientDetails(int test, String date1, String date2) {
 		List<testsPatientsModel> data = null;
 		String hql = "SELECT new spring.orm.model.output.testsPatientsModel(p.patn_id,p.patn_name,t.test_name,t.test_method,t.test_category,t.test_price,d.dgbl_date) "
 				+ "from PatientModel p,TestModel t,DiagnosticBillModel d,Diagnostictestbill dt "
@@ -162,7 +162,7 @@ public class TestDAOImpl implements TestDAO {
 
 	}
 
-	public List<TestModel> gettests() {
+	public List<TestModel> getTests() {
 
 		System.out.println("1");
 		List<TestModel> t = em.createQuery("SELECT t FROM TestModel t where isDeleted = false", TestModel.class)
@@ -173,7 +173,7 @@ public class TestDAOImpl implements TestDAO {
 
 	@Override
 	@Transactional
-	public List<testsCategoriesModel> gettestscats() {
+	public List<testsCategoriesModel> getCategories() {
 		// Retrieve all tests from the database
 		String hql = "SELECT  DISTINCT  new spring.orm.model.output.testsCategoriesModel(t.test_category) FROM TestModel t where isDeleted = false";
 		List<testsCategoriesModel> data = em.createQuery(hql, testsCategoriesModel.class).getResultList();

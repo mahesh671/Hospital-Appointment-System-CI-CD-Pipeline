@@ -21,7 +21,7 @@ public class PatientFamilyMembersService {
 	private PatientDAO pdao;
 
 	@Transactional
-	public int addfm(FamilyMembersInput fm, PatientSession patientSession) {
+	public int addFamilyMember(FamilyMembersInput fm, PatientSession patientSession) {
 		// Create a new PatientModel object and set the required information
 		PatientModel pm = new PatientModel();
 		pm.setPatn_name(fm.getPfmbName());
@@ -31,17 +31,17 @@ public class PatientFamilyMembersService {
 		pm.setAccessPatientId(patientSession.getId());
 
 		// Save the PatientModel and get the patient ID
-		int pid = fmdao.savefm(pm);
+		int pid = fmdao.savePatientDetails(pm);
 
 		// Add the family member using the FamilyMembersDao
-		fmdao.addfamily(pm, pid, patientSession.getId(), fm.getPfmbRelation());
+		fmdao.addFamilyByPatientInfo(pm, pid, patientSession.getId(), fm.getPfmbRelation());
 
 		return pm.getPatn_id();
 	}
 
 	public List<FamilyMembersInput> getAllFamilyMembers(Integer id) {
 		// Retrieve all family members for the given ID using the FamilyMembersDao
-		return fmdao.getfamily(id);
+		return fmdao.getFamilyDetailsByPatientId(id);
 	}
 
 }

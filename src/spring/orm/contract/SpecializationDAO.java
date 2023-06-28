@@ -8,11 +8,11 @@ public interface SpecializationDAO {
 
 	public Specialization getSpecialization(String Id);
 
-	public List<Specialization> getAllSpec();
+	public List<Specialization> getAllSpecializations();
 
-	public void delSpec(String id);
+	public void deleteSpecialization(String id);
 
-	void addSpec(Specialization s);
+	void addSpecialization(Specialization s);
 
 	void updateSpec(Specialization s);
 

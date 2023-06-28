@@ -12,38 +12,38 @@ import spring.orm.model.output.PatientlastvisitOutput;
 import spring.orm.model.output.patientPrescriptionOutputmodel;
 
 public interface PatientDAO {
-	public List<Object> getapptestcards(int id);
+	public List<Object> getAppointmentTestsCount(int id);
 
-	public List<PatientModel> getAllPatientModels();
+	public List<PatientModel> getAllPatientInfo();
 
 	public PatientModel getPatientById(int existingPatientid);
 
 	public int addNewPatient(PatientModel p);
 
-	public int savePatient(PatientModel patient);
+	public int savePatientData(PatientModel patient);
 
-	List<Integer> getAllPatientids();
+	List<Integer> getPatientIds();
 
-	public List<OutputPatientTestReports> getPatientReports(int id);
+	public List<OutputPatientTestReports> getPatientReportsById(int id);
 
-	public List<patientPrescriptionOutputmodel> getPrescription(int patn_id);
+	public List<patientPrescriptionOutputmodel> getPatientPrescriptionById(int patn_id);
 
-	public List<ParaGroupOutput> getParaGroupParaout();
+	public List<ParaGroupOutput> getParameterValues();
 
-	public List<PatientModel> getAllFamily(int pat_id);
+	public List<PatientModel> getFamilyDetailsById(int pat_id);
 
-	public List<PatientNameOutputModel> getAllPatientidsNames();
+	public List<PatientNameOutputModel> getAllPatientNames();
 
-	public List<PatientlastvisitOutput> getlastvisit(int p);
+	public List<PatientlastvisitOutput> getLastAppointmentInfoById(int p);
 
-	public List<PatientMedicalProfile> getParaGroup(int p);
+	public List<PatientMedicalProfile> getPatientMedicalProfileById(int p);
 
-	public List<Object> getapptests(int p);
+	public List<Object> getPatientTestsById(int p);
 
-	public List<Object> getapps(int p);
+	public List<Object> getAppointmentsById(int p);
 
-	public List<ParaGroupOutput> getParaGroupParaout(int p);
+	public List<ParaGroupOutput> getParameterValuesChart(int p);
 
-	public void updateLastvisitAndLastAppointment(int pat_id, LocalDate last_visited, int app_id);
+	public void updateLastvisitAndLastAppointmentInfo(int pat_id, LocalDate last_visited, int app_id);
 
 }

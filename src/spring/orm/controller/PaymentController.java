@@ -55,10 +55,9 @@ public class PaymentController {
 		int amt = Integer.parseInt(amount) * 100;
 		options.put("amount", amt); // Amount in paise (e.g., 1000 paise = Rs 10)
 		options.put("currency", "INR");
-		// billid = billid + System.currentTimeMillis();
-		// options.put("receipt", billid);
+
 		Order order = razorpayClient.Orders.create(options);
-		// httpSession.setAttribute("ticketNumber", billid);
+
 		System.out.println(order);
 		return order.toString();
 	}

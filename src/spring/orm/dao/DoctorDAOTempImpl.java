@@ -55,7 +55,7 @@ public class DoctorDAOTempImpl implements DoctorsDAO {
 	}
 
 	@Transactional
-	public DoctorTemp getdoc(int Id) {
+	public DoctorTemp getDoctor(int Id) {
 		/*
 		 * This method retrieves a specific doctor based on the provided ID from the
 		 * database.

@@ -15,51 +15,51 @@ import spring.orm.model.Specialization;
 public class SpecializationDAOImpl implements SpecializationDAO {
 
 	@PersistenceContext
-	private EntityManager em;
+	private EntityManager entityManager;
 
 	@Transactional
 	@Override
 	public Specialization getSpecialization(String Id) {
 		// Retrieve a specialization by its ID
-		return em.find(Specialization.class, Id);
+		return entityManager.find(Specialization.class, Id);
 	}
 
 	@Override
-	public List<Specialization> getAllSpec() {
+	public List<Specialization> getAllSpecializations() {
 		// Retrieve all specializations that are not marked as deleted
-		return em.createQuery("select s from Specialization s where isDeleted = false", Specialization.class)
+		return entityManager.createQuery("select s from Specialization s where isDeleted = false", Specialization.class)
 				.getResultList();
 	}
 
 	@Transactional
 	@Override
-	public void delSpec(String id) {
+	public void deleteSpecialization(String id) {
 		// Delete a specialization by setting its 'isDeleted' flag to true
-		Specialization s = em.find(Specialization.class, id);
-		s.setDeleted(true);
-		em.merge(s);
+		Specialization specialization = entityManager.find(Specialization.class, id);
+		specialization.setDeleted(true);
+		entityManager.merge(specialization);
 	}
 
 	@Transactional
 	@Override
-	public void addSpec(Specialization s) {
+	public void addSpecialization(Specialization specialization) {
 		// Add a specialization to the database
-		if (em.find(Specialization.class, s.getId()) == null) {
-			//If the specialization is new then add
-			em.persist(s);
+		if (entityManager.find(Specialization.class, specialization.getId()) == null) {
+			// If the specialization is new then add
+			entityManager.persist(specialization);
 		} else {
-			//If the specialization is soft deleted then change the status
-			Specialization alreadyexisted = em.find(Specialization.class, s.getId());
+			// If the specialization is soft deleted then change the status
+			Specialization alreadyexisted = entityManager.find(Specialization.class, specialization.getId());
 			alreadyexisted.setDeleted(false);
-			em.merge(alreadyexisted);
+			entityManager.merge(alreadyexisted);
 		}
 	}
 
 	@Transactional
 	@Override
-	public void updateSpec(Specialization s) {
+	public void updateSpec(Specialization specialization) {
 		// Update a specialization in the database
-		em.merge(s);
+		entityManager.merge(specialization);
 
 	}
 

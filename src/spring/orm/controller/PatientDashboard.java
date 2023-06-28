@@ -23,16 +23,16 @@ import spring.orm.services.PatientServices;
 public class PatientDashboard {
 
 	@Autowired
-	private PatientServices ps;
+	private PatientServices patientservice;
 
 	// Display all the appointments and test details
 	@RequestMapping(value = "/getapptests", method = RequestMethod.GET)
-	public ResponseEntity<String> getapptests(@SessionAttribute("patientSession") PatientSession patientSession) {
+	public ResponseEntity<String> getTests(@SessionAttribute("patientSession") PatientSession patientSession) {
 		// Extract the patient ID from the session attribute
 		int patientId = patientSession.getId();
 
 		// Retrieve the appointments tests details for the patient using the patient ID
-		List<Object> appointmentTests = ps.getapptests(patientId);
+		List<Object> appointmentTests = patientservice.getTestsDetails(patientId);
 
 		// Return the response with the appointment tests in JSON format
 		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(appointmentTests));
@@ -40,12 +40,13 @@ public class PatientDashboard {
 
 	// Get all Appointment Details
 	@RequestMapping(value = "/getapps", method = RequestMethod.GET)
-	public ResponseEntity<String> getapps(@SessionAttribute("patientSession") PatientSession patientSession) {
+	public ResponseEntity<String> getAppointmentsDetails(
+			@SessionAttribute("patientSession") PatientSession patientSession) {
 		// Extract the patient ID from the session attribute
 		int patientId = patientSession.getId();
 
 		// Retrieve the appointments details for the patient using the patient ID
-		List<Object> appointments = ps.getapps(patientId);
+		List<Object> appointments = patientservice.getAppointmentsDetails(patientId);
 
 		// Return the response with the appointments in JSON format
 		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(appointments));
@@ -53,12 +54,12 @@ public class PatientDashboard {
 
 	// Get all Parameters data for respective patient
 	@RequestMapping(value = "/getOutParaGroup", method = RequestMethod.GET)
-	public ResponseEntity<String> getParaGroup(@SessionAttribute("patientSession") PatientSession patientSession) {
+	public ResponseEntity<String> getParameterValues(@SessionAttribute("patientSession") PatientSession patientSession) {
 		// Extract the patient ID from the session attribute
 		int patientId = patientSession.getId();
 
 		// Retrieve the parameter groups for the patient using the patient ID
-		List<ParaGroupOutput> paraGroups = ps.getParaGroupParaout(patientId);
+		List<ParaGroupOutput> paraGroups = patientservice.getParamterValues(patientId);
 
 		// Return the response with the parameter groups in JSON format
 		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(paraGroups));
@@ -71,20 +72,20 @@ public class PatientDashboard {
 		int patientId = patientSession.getId();
 
 		// Retrieve the last visit information for the patient using the patient ID
-		List<PatientlastvisitOutput> lastVisits = ps.getlastvisit(patientId);
+		List<PatientlastvisitOutput> lastVisits = patientservice.getPatientLastVisit(patientId);
 
 		// Return the last visit information
 		return lastVisits;
 	}
 
 	@RequestMapping(value = "/getapptestcards", method = RequestMethod.GET)
-	public @ResponseBody List<Object> getapptestcards(
+	public @ResponseBody List<Object> getAppointmentTestsCount(
 			@SessionAttribute("patientSession") PatientSession patientSession) {
 		// Extract the patient ID from the session attribute
 		int patientId = patientSession.getId();
 
 		// Retrieve the appointments and test details for the patient using the patient ID
-		List<Object> testCards = ps.getapptestcards(patientId);
+		List<Object> testCards = patientservice.getAppointmentTestCounts(patientId);
 
 		// Return the test cards
 		return testCards;

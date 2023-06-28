@@ -48,7 +48,7 @@ public class DiagnosticBillDAOImpl implements DiagnosticBillDAO {
 	}
 
 	@Transactional
-	public void booktestt(BillInputModel bi) {
+	public void bookDcTest(BillInputModel bi) {
 
 		System.out.println("inside ne");
 
@@ -71,7 +71,7 @@ public class DiagnosticBillDAOImpl implements DiagnosticBillDAO {
 	}
 
 	@Transactional
-	public List<Object> gettotalbills(int patient) {
+	public List<Object> getTotalBills(int patient) {
 
 		List<Object> tests1 = new ArrayList<>();
 		List<Object> tests2 = new ArrayList<>();
@@ -111,7 +111,7 @@ public class DiagnosticBillDAOImpl implements DiagnosticBillDAO {
 	}
 
 	@Transactional
-	public int storedb(int patient) {
+	public int storeToDatabase(int patient) {
 		int patn_id = patient;
 		int billid = 0;
 		String type = (String) em.createQuery("select t.type from TestBookStatus t  where t.id.tb_patn_id=:patn_id")

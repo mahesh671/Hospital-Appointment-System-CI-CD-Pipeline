@@ -51,6 +51,6 @@
 			</table>
 		</div>
 </body>
-<script type="text/javascript" src="./js/patresdisplay.js"></script>
+<script type="text/javascript" src="./js/patpresdisplay.js"></script>
 
 </html>

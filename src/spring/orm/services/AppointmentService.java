@@ -22,7 +22,7 @@ import spring.orm.model.input.AppointmentForm;
 import spring.orm.model.input.RescheduleAppointmentModel;
 import spring.orm.model.output.AppoutformFamily;
 import spring.orm.model.output.MailAppOutputModel;
-import spring.orm.model.output.RescheduleAppOutput;
+import spring.orm.model.output.RescheduleAppointmentOutput;
 
 @Service
 public class AppointmentService {
@@ -56,16 +56,16 @@ public class AppointmentService {
 		DateTimeFormatter sqlformat = DateTimeFormatter.ofPattern("HH:mm:ss");
 		System.out.println(LocalTime.parse(app.getSlots(), DateTimeFormatter.ofPattern("hh:mm a")).format(sqlformat));
 		int app_id = apdao.bookAppointment(patdao.getPatientById(app.getExistingPatientid()),
-				docdao.getdoc(app.getDoctor()),
+				docdao.getDoctor(app.getDoctor()),
 				app.getAppointmentDate().toString() + " "
 						+ LocalTime.parse(app.getSlots(), DateTimeFormatter.ofPattern("hh:mm a")).format(sqlformat),
 				app.getAppnrefer(), app.getAppnfee());
 		return app_id;
 	}
 
-	public RescheduleAppOutput getAppointmentByIdOutput(int app_id) {
+	public RescheduleAppointmentOutput getAppointmentByIdOutput(int app_id) {
 		// Get appointment details by ID for rescheduling
-		RescheduleAppOutput r = new RescheduleAppOutput();
+		RescheduleAppointmentOutput r = new RescheduleAppointmentOutput();
 		AppointmentEntity a = apdao.getAppointmentById(app_id);
 		r.setApp_id(a.getAppn_id());
 		r.setSlot(a.getAppn_sch_date().toLocalDateTime().toLocalTime());
@@ -89,7 +89,7 @@ public class AppointmentService {
 		patdao.addNewPatient(p);
 		DateTimeFormatter sqlformat = DateTimeFormatter.ofPattern("HH:mm:ss");
 		System.out.println("in docdao appointment");
-		int app_id = apdao.bookAppointment(p, docdao.getdoc(app.getDoctor()),
+		int app_id = apdao.bookAppointment(p, docdao.getDoctor(app.getDoctor()),
 				app.getAppointmentDate().toString() + " "
 						+ LocalTime.parse(app.getSlots(), DateTimeFormatter.ofPattern("hh:mm a")).format(sqlformat),
 				app.getAppnrefer(), app.getAppnfee());
@@ -141,7 +141,7 @@ public class AppointmentService {
 				LocalTime.parse(appointment.getSlots(), DateTimeFormatter.ofPattern("hh:mm a")).format(sqlFormat));
 
 		int appointmentId = apdao.bookAppointment(patdao.getPatientById(patientId),
-				docdao.getdoc(appointment.getDoctor()),
+				docdao.getDoctor(appointment.getDoctor()),
 				appointment.getAppointmentDate().toString() + " " + LocalTime
 						.parse(appointment.getSlots(), DateTimeFormatter.ofPattern("hh:mm a")).format(sqlFormat),
 				appointment.getAppnrefer(), appointment.getAppnfee());
@@ -158,7 +158,7 @@ public class AppointmentService {
 	public List<AppoutformFamily> getFormFamily(int id) {
 		// Get family members for form filling
 		List<AppoutformFamily> r = new ArrayList<>();
-		for (PatientModel p : patdao.getAllFamily(id)) {
+		for (PatientModel p : patdao.getFamilyDetailsById(id)) {
 			AppoutformFamily f = new AppoutformFamily();
 			f.setFam_patn_name(p.getPatn_name());
 			f.setFam_patni_id(p.getPatn_id());

@@ -7,10 +7,10 @@ import spring.orm.model.input.FamilyMembersInput;
 
 public interface FamilyMembersDAO {
 
-	int savefm(PatientModel pm);
+	int savePatientDetails(PatientModel pm);
 
-	void addfamily(PatientModel pm, int pid, Integer id,String relation);
+	void addFamilyByPatientInfo(PatientModel pm, int pid, Integer id,String relation);
 
-	List<FamilyMembersInput> getfamily(Integer id);
+	List<FamilyMembersInput> getFamilyDetailsByPatientId(Integer id);
 
 }

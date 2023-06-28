@@ -23,35 +23,45 @@ import spring.orm.model.output.patientPrescriptionOutputmodel;
 @Controller
 public class PostConsultUpdateController {
 
-	@Autowired
-	private PatientDAO pdao;
+	private PatientDAO patientDAO;
+
+	private PatientProfileUpdateDAO profileUpdateDAO;
 
 	@Autowired
-	private PatientProfileUpdateDAO pcudao;
+	public PostConsultUpdateController(PatientDAO patientDAO, PatientProfileUpdateDAO profileUpdateDAO) {
+		super();
+		this.patientDAO = patientDAO;
+		this.profileUpdateDAO = profileUpdateDAO;
+	}
 
 	@RequestMapping(value = "patient/getParaGroup", method = RequestMethod.GET)
-	public ResponseEntity<String> getParaGroup(@SessionAttribute("patientSession") PatientSession patientSession) {
+	public ResponseEntity<String> getPatientPrescription(
+			@SessionAttribute("patientSession") PatientSession patientSession) {
 		int p = patientSession.getId();
-		List<PatientMedicalProfile> lo = pdao.getParaGroup(p);
-		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(lo));
+		List<PatientMedicalProfile> patientProfile = patientDAO.getPatientMedicalProfileById(p);
+		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(patientProfile));
 		// return "patient/myprofile";
 	}
 
 	@RequestMapping(value = "patient/getPrescription", method = RequestMethod.GET)
 	public ResponseEntity<String> getPrescription(@SessionAttribute("patientSession") PatientSession patientSession) {
 		int p = patientSession.getId();
-		List<patientPrescriptionOutputmodel> lo = pdao.getPrescription(p);
+		List<patientPrescriptionOutputmodel> lo = patientDAO.getPatientPrescriptionById(p);
 		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(lo));
 		// return "patient/myprofile";
 	}
 
 	@RequestMapping(value = "patient/getallPrescription", method = RequestMethod.GET)
-	public String getallPrescription(Model model, @SessionAttribute("patientSession") PatientSession patientSession) {
+	public String getAllPrescription(Model model, @SessionAttribute("patientSession") PatientSession patientSession) {
 		int p = patientSession.getId();// to maintain same session id when logged in
-		List<PrescriptionOutputmodel> lm = pcudao.getallPrescription(p); // merged PatientMedicalProfile & DiagnosticBillModel attributes
-		model.addAttribute("pres", lm);
-		System.out.println(lm.toString());
-		return "patient/patpresdisplay"; //reflects at patients page , which displays in the format of table, it also includes prescription image
+		List<PrescriptionOutputmodel> prescriptionList = profileUpdateDAO.getallPrescription(p); // merged
+																									// PatientMedicalProfile
+																									// &
+		// DiagnosticBillModel attributes
+		model.addAttribute("pres", prescriptionList);
+		System.out.println(prescriptionList.toString());
+		return "patient/patpresdisplay"; // reflects at patients page , which displays in the format of table, it also
+											// includes prescription image
 	}
 
 }

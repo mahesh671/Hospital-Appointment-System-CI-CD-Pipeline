@@ -21,54 +21,58 @@ import spring.orm.model.output.OutputTestNameProfit;
 public class DCImpDAO implements DCDAO {
 
 	@PersistenceContext
-	EntityManager em;
+	EntityManager entityManager;
 
 	@Override
-	public List<OutputTestNameProfit> fetchTestNameProfit() {
+	public List<OutputTestNameProfit> fetchTestNameWiseProfit() {
 		// Retrieve test name and total profit using HQL
 		String hql = "SELECT new spring.orm.model.output.OutputTestNameProfit( t.test_name, SUM(t.test_price)) FROM PatientDiagnosticTests pdt JOIN pdt.pk.tm t GROUP BY t.test_name";
 
-		List<OutputTestNameProfit> data = em.createQuery(hql, spring.orm.model.output.OutputTestNameProfit.class)
-				.getResultList();
+		List<OutputTestNameProfit> testNameProfitData = entityManager
+				.createQuery(hql, spring.orm.model.output.OutputTestNameProfit.class).getResultList();
 
-		return data;
+		return testNameProfitData;
 	}
 
 	@Override
-	public List<OutputTestMethodProfit> fetchTestMethodProfit() {
+	public List<OutputTestMethodProfit> fetchTestMethodWiseProfit() {
 		// Retrieve test method and total profit using HQL
 		String hql = "SELECT new spring.orm.model.output.OutputTestMethodProfit( t.test_method, SUM(t.test_price)) FROM PatientDiagnosticTests pdt JOIN pdt.pk.tm t GROUP BY t.test_method";
 
-		List<OutputTestMethodProfit> data = em.createQuery(hql, spring.orm.model.output.OutputTestMethodProfit.class)
-				.getResultList();
+		List<OutputTestMethodProfit> testMethodProfitData = entityManager
+				.createQuery(hql, spring.orm.model.output.OutputTestMethodProfit.class).getResultList();
 
-		return data;
+		return testMethodProfitData;
 	}
 
-	public List<OutputTestCategoryProfit> fetchTestCategoryProfit() {
+	public List<OutputTestCategoryProfit> fetchTestCategoryWiseProfit() {
 		// Retrieve test category and total profit using HQL
 		String hql = "SELECT new spring.orm.model.output.OutputTestCategoryProfit( t.test_category, SUM(t.test_price)) FROM PatientDiagnosticTests pdt JOIN pdt.pk.tm t GROUP BY t.test_category";
 
-		List<OutputTestCategoryProfit> data = em.createQuery(hql).getResultList();
+		List<OutputTestCategoryProfit> testCategoryProfitData = entityManager.createQuery(hql).getResultList();
 
-		return data;
+		return testCategoryProfitData;
 	}
 
-	public List<OutputTestNameProfit> fetchTestNameProfitDate(String from, String to) {
+	public List<OutputTestNameProfit> fetchTestNameDateWiseProfit(String from, String to) {
 		// Retrieve test name and total profit within a specific date range using HQL
 		String hql = "SELECT new spring.orm.model.output.OutputTestNameProfit(t.test_name, SUM(t.test_price)) "
 				+ "FROM PatientDiagnosticTests pdt " + "JOIN pdt.pk.pd pd " + "JOIN pdt.pk.tm t "
 				+ "WHERE pd.dgbl_date BETWEEN :startDate AND :endDate " + "GROUP BY t.test_name";
+
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate a = LocalDate.parse(from);
 		LocalDate b = LocalDate.parse(to);
-		List<OutputTestNameProfit> data = em.createQuery(hql, spring.orm.model.output.OutputTestNameProfit.class)
-				.setParameter("startDate", a).setParameter("endDate", b).getResultList();
-		return data;
+
+		List<OutputTestNameProfit> testNameProfitData = entityManager
+				.createQuery(hql, spring.orm.model.output.OutputTestNameProfit.class).setParameter("startDate", a)
+				.setParameter("endDate", b).getResultList();
+
+		return testNameProfitData;
 	}
 
 	@Override
-	public List<OutputTestMethodProfit> fetchTestMethodProfitDate(String from, String to) {
+	public List<OutputTestMethodProfit> fetchTestMethodDateWiseProfit(String from, String to) {
 		// Retrieve test method and total profit within a specific date range using HQL
 		String hql = "SELECT new spring.orm.model.output.OutputTestMethodProfit(t.test_method, SUM(t.test_price)) "
 				+ "FROM PatientDiagnosticTests pdt " + "JOIN pdt.pk.pd pd " + "JOIN pdt.pk.tm t "
@@ -77,13 +81,14 @@ public class DCImpDAO implements DCDAO {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate a = LocalDate.parse(from);
 		LocalDate b = LocalDate.parse(to);
-		List<OutputTestMethodProfit> data = em.createQuery(hql, spring.orm.model.output.OutputTestMethodProfit.class)
-				.setParameter("startDate", a).setParameter("endDate", b).getResultList();
-		return data;
+		List<OutputTestMethodProfit> testMethodProfitData = entityManager
+				.createQuery(hql, spring.orm.model.output.OutputTestMethodProfit.class).setParameter("startDate", a)
+				.setParameter("endDate", b).getResultList();
+		return testMethodProfitData;
 	}
 
 	@Override
-	public List<OutputTestCategoryProfit> fetchTestCategoryProfitDate(String from, String to) {
+	public List<OutputTestCategoryProfit> fetchTestCategoryDateWiseProfit(String from, String to) {
 		// Retrieve test category and total profit within a specific date range using HQL
 		String hql = "SELECT new spring.orm.model.output.OutputTestCategoryProfit(t.test_method, SUM(t.test_price)) "
 				+ "FROM PatientDiagnosticTests pdt " + "JOIN pdt.pk.pd pd " + "JOIN pdt.pk.tm t "
@@ -93,31 +98,32 @@ public class DCImpDAO implements DCDAO {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate a = LocalDate.parse(from);
 		LocalDate b = LocalDate.parse(to);
-		List<OutputTestCategoryProfit> data = em
+
+		List<OutputTestCategoryProfit> testCategoryProfitData = entityManager
 				.createQuery(hql, spring.orm.model.output.OutputTestCategoryProfit.class).setParameter("startDate", a)
 				.setParameter("endDate", b).getResultList();
-		return data;
+		return testCategoryProfitData;
 	}
 
 	@Override
-	public List<OutputReportData> fetchPatientInfo(int pid) {
+	public List<OutputReportData> fetchPatientReportsInfo(int pid) {
 		System.out.println("hello?");
 		String hql = "SELECT new spring.orm.model.output.OutputReportData(p.patn_id, pd.dgbl_id, p.patn_name, p.patn_gender, pd.dgbl_amount) "
 				+ "FROM PatientDiagnosis pd " + "JOIN pd.pm p " + "WHERE pd.dgbl_id NOT IN "
 				+ "(SELECT pdr.compositeKey.dgbl_id FROM PatientDiagnonisticReports pdr) " + "AND p.patn_id = :val";
 		// Retrieve specfic patient information for generating reports
-		List<OutputReportData> data = em.createQuery(hql, spring.orm.model.output.OutputReportData.class)
+		List<OutputReportData> data = entityManager.createQuery(hql, spring.orm.model.output.OutputReportData.class)
 				.setParameter("val", pid).getResultList();
 
 		return data;
 	}
 
-	private int maxIndex(int id) {
+	private int getMaxIndex(int id) {
 		// Retrieve the maximum index value for a patient's diagnostic report and increment by 1 to get next uploaded
 		// report index
 		String hql = "SELECT MAX(d.compositeKey.dgdr_index) from PatientDiagnonisticReports d where d.compositeKey.dgbl_id=:val";
 
-		Integer maxIndex = (Integer) em.createQuery(hql).setParameter("val", id).getSingleResult();
+		Integer maxIndex = (Integer) entityManager.createQuery(hql).setParameter("val", id).getSingleResult();
 
 		return maxIndex != null ? maxIndex + 1 : 1;
 
@@ -127,30 +133,30 @@ public class DCImpDAO implements DCDAO {
 		// Retrieve the name of a patient using their ID
 		String hql = "select p.patn_name from PatientModel p where p.patn_id=:val";
 
-		String name = (String) em.createQuery(hql).setParameter("val", pid).getSingleResult();
+		String name = (String) entityManager.createQuery(hql).setParameter("val", pid).getSingleResult();
 
 		return name;
 	}
 
-	public List<Integer> fetchPatientReports() {
+	public List<Integer> fetchPatientIds() {
 		// Retrieve the IDs of patients who have pending diagnostic reports
 		String hql = "SELECT  distinct dbm.dgbl_patn_id FROM DiagnosticBillModel dbm where dbm.dgbl_id not in (select pd.compositeKey.dgbl_id from PatientDiagnonisticReports pd)";
 
-		List<Integer> pids = em.createQuery(hql, Integer.class).getResultList();
+		List<Integer> patientIds = entityManager.createQuery(hql, Integer.class).getResultList();
 
-		return pids;
+		return patientIds;
 	}
 
 	@Transactional
 	public String saveReportInfo(int id, byte[] content) {
 		// Save patient diagnostic report information
-		int idx = maxIndex(id);
+		int idx = getMaxIndex(id);
 		System.out.println(idx + "idx");
 
 		// creates entity model to save the data using hibernate
 		PatientDiagnonisticReports data = new PatientDiagnonisticReports(id, idx, content);
 
-		em.persist(data);
+		entityManager.persist(data);
 
 		return "success";
 	}

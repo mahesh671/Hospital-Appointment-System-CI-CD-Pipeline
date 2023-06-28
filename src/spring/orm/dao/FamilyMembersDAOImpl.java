@@ -19,20 +19,20 @@ import spring.orm.model.input.FamilyMembersInput;
 public class FamilyMembersDAOImpl implements FamilyMembersDAO {
 
 	@PersistenceContext
-	private EntityManager em;
+	private EntityManager entityManager;
 
 	@Override
-	public int savefm(PatientModel pm) {
+	public int savePatientDetails(PatientModel pm) {
 		// Save the patient model to the database and return the generated patient ID
 		System.out.println(pm);
-		em.persist(pm);
+		entityManager.persist(pm);
 
 		return pm.getPatn_id();
 	}
 
 	@Override
 	@Transactional
-	public void addfamily(PatientModel pm, int pid, Integer id, String relation) {
+	public void addFamilyByPatientInfo(PatientModel pm, int pid, Integer id, String relation) {
 		// Add a family member to the database for the given patient ID, access ID, and relation
 		FamilyMembers fm = new FamilyMembers();
 		fm.setPatnAccessPatnId(id);
@@ -41,18 +41,18 @@ public class FamilyMembersDAOImpl implements FamilyMembersDAO {
 		fm.setPfmbAge(pm.getPatn_age());
 		fm.setPfmbRelation(relation);
 		System.out.println(id);
-		em.persist(fm);
+		entityManager.persist(fm);
 	}
 
 	SessionFactory sessionFactory;
 
 	@Override
-	public List<FamilyMembersInput> getfamily(Integer id) {
+	public List<FamilyMembersInput> getFamilyDetailsByPatientId(Integer pid) {
 		// Retrieve the family members for the given access ID
 		String hql = "SELECT new spring.orm.model.input.FamilyMembersInput(f.pfmbName, f.pfmbRelation, f.pfmbAge, p.patn_gender, p.patn_bgroup) "
 				+ "FROM PatientModel p JOIN FamilyMembers f ON p.patn_id = f.pfmbPatnId WHERE p.accessPatientId = :accessId";
-		TypedQuery<FamilyMembersInput> query = em.createQuery(hql, FamilyMembersInput.class);
-		query.setParameter("accessId", id);
+		TypedQuery<FamilyMembersInput> query = entityManager.createQuery(hql, FamilyMembersInput.class);
+		query.setParameter("accessId", pid);
 		List<FamilyMembersInput> familyMembersList = query.getResultList();
 
 		// Convert the FamilyMembers entity objects to FamilyMembersInput models

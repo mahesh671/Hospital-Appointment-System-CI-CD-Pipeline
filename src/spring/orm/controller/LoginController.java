@@ -30,7 +30,7 @@ public class LoginController {
 	
 	private String otp;
 
-	private final RegistrationService rs;
+	private final RegistrationService registrationService;
 
 	@Autowired
 	public LoginController(RegistrationService rs) {
@@ -38,12 +38,12 @@ public class LoginController {
 		 * Constructor for the LoginController class that takes a RegistrationService
 		 * object as a parameter
 		 */
-		this.rs = rs;
+		this.registrationService = rs;
 		// Assign the passed RegistrationService object to the 'rs' instance variable
 	}
 
 	@RequestMapping(value = "/")
-	public String dcscreen() {
+	public String dcScreen() {
 		// This method maps the root URL ("/") to display the login home page
 
 		return "login/home";// Returns the name of the view template for the login home page
@@ -84,7 +84,7 @@ public class LoginController {
 		 * Code for sending an email with OTP to the user
 		 */
 		MailSend mailSender = new MailSend(); // Create an instance of the MailSend class to send the email
-		UserPass user = rs.getUser(uname); // Retrieve the user information based on the provided username
+		UserPass user = registrationService.getUser(uname); // Retrieve the user information based on the provided username
 		String userEmail = user.getMail(); // Get the email address of the user
 		otp = mailSender.generateOTP(); // Generate an OTP (one-time password)
 		System.out.println(user.getMail() + " " + user.getUsername()); // Print the user's email and username for
@@ -95,27 +95,27 @@ public class LoginController {
 																		// minutes from the current time
 		user.setOtp(otp); // Set the generated OTP for the user
 		user.setotptime(expiretime); // Set the expiration time of the OTP for the user
-		rs.updateUser(user); // Update the user information in the registration service
+		registrationService.updateUser(user); // Update the user information in the registration service
 		m.addAttribute("user", user); // Add the user object to the model attribute for further use in the view
 
 		return "login/reset"; // Return the name of the view template for the password reset page
 	}
 
 	@RequestMapping(value = "/passwordset", method = RequestMethod.POST)
-	public String otpValidate(@RequestParam String lcpass, @RequestParam String lotp, @RequestParam String uname) {
+	public String otpValidate(@RequestParam String newPassword, @RequestParam String enteredOTP, @RequestParam String userName) {
 		/*
 		 * This method maps the "/passwordset" URL to handle a POST request for OTP
 		 * validation and password update.
 		 */
-		UserPass user = rs.getUser(uname); // Retrieve the user information based on the provided username
+		UserPass user = registrationService.getUser(userName); // Retrieve the user information based on the provided username
 		if (LocalDateTime.now().isBefore(user.getotptime())) {
 			// Check if the current time is before the OTP expiration time
 
-			if (user.getOtp().equals(lotp)) {
+			if (user.getOtp().equals(enteredOTP)) {
 				// Validate if the entered OTP matches the stored OTP for the user
 
-				user.setPassword(lcpass); // Update the user's password with the new password
-				rs.updateUser(user); // Update the user information in the registration service
+				user.setPassword(newPassword); // Update the user's password with the new password
+				registrationService.updateUser(user); // Update the user information in the registration service
 			}
 
 			return "login/success"; // Return the name of the view template for the password reset success page
@@ -125,17 +125,17 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = {"admin/passwordchange","admin/passwordchange","admin/passwordchange"} ,method = RequestMethod.POST)
-	public String passwordChange(@RequestParam String lcpass, @RequestParam String opass, @RequestParam String uname) {
+	public String passwordChange(@RequestParam String newPassword, @RequestParam String oldPassword, @RequestParam String userName) {
 		/*
 		 * This method maps the "/passwordchange" URL to handle a POST request for
 		 * password change.
 		 */
-		UserPass user = rs.getUser(uname); // Retrieve the user information based on the provided username
-		if (user.getPassword().equals(opass)) {
+		UserPass user = registrationService.getUser(userName); // Retrieve the user information based on the provided username
+		if (user.getPassword().equals(oldPassword)) {
 			// Check if the entered old password matches the stored password for the user
 
-			user.setPassword(lcpass); // Update the user's password with the new password
-			rs.updateUser(user); // Update the user information in the registration service
+			user.setPassword(newPassword); // Update the user's password with the new password
+			registrationService.updateUser(user); // Update the user information in the registration service
 
 			return "login/success"; // Return the name of the view template for the password change success page
 		} else {
@@ -148,10 +148,10 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = "/saveregister", method = RequestMethod.POST)
-	public String saveRegister(@ModelAttribute RegistrationForm rf, Model model) {
+	public String saveRegister(@ModelAttribute RegistrationForm registrationForm, Model model) {
 		// Code for registering a new patient
 
-		rs.registerPatient(rf);
+		registrationService.registerPatient(registrationForm);
 		return "redirect:/";
 	}
 
@@ -159,7 +159,7 @@ public class LoginController {
 	@ResponseBody
 	public String checkUsernameAvailability(@RequestParam String username) {
 		// Code for checking the availability of a username
-		boolean isUsernameAvailable = rs.isUsernameAvailable(username);
+		boolean isUsernameAvailable = registrationService.isUsernameAvailable(username);
 
 		if (isUsernameAvailable) {
 			return "available";
@@ -169,21 +169,21 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String redirectToDashboard(@RequestParam("uname") String uname, @RequestParam("pass") String pass,
+	public String redirectToDashboard(@RequestParam("uname") String userName, @RequestParam("pass") String password,
 			HttpSession session, Model model) {
 		/* Code for validating the user's credentials and redirecting to the
 		 corresponding dashboard based on the user's role
 		*/ 
 
-		UserPass user = rs.getUser(uname);
-		if (user != null && user.getPassword().equals(pass)) {
+		UserPass user = registrationService.getUser(userName);
+		if (user != null && user.getPassword().equals(password)) {
 			String role = user.getRole();
 			switch (role) {
 			case ROLE_ADMINISTRATOR:
 				// Redirect to administrator dashboard
 				return "redirect:/admin/";
 			case ROLE_PATIENT:
-				PatientModel patientModel = rs.getPatientDetails(user.getPatient().getPatn_id());
+				PatientModel patientModel = registrationService.getPatientDetails(user.getPatient().getPatn_id());
 				if (patientModel != null) {
 
 					// Create and store patient session

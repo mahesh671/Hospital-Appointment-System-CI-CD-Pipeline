@@ -38,7 +38,7 @@ public interface AppointmentDAO {
     public void reschduleAppointment(RescheduleAppointmentModel rm);
     // Method to reschedule an appointment.
 
-    public List<OutputBookedAppointmnets> fetchBookedAppData(BookedAppForm baf, Integer p_id);
+    public List<OutputBookedAppointmnets> fetchBookedAppointmentData(BookedAppForm baf, Integer p_id);
     // Method to fetch booked appointment data.
 
     public int bookAppointment(AppointmentForm appointment, int patientId);
@@ -47,7 +47,7 @@ public interface AppointmentDAO {
     public List<AppointmentEntity> getAppointmentsByPatientId(int patn_id);
     // Method to retrieve appointments by patient ID.
 
-    public List<AdminAppOutModel> getTopapp();
+    public List<AdminAppOutModel> getTopAppointments();
     // Method to get top appointments.
 
     public List<AdminProfitAppOut> getTopprof();

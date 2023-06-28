@@ -32,36 +32,28 @@ import spring.orm.services.TestServices;
 import spring.orm.util.MailSend;
 
 @Controller
-public class TestBillGenController {
+public class TestBookBillGenController {
 
-	TestServices ts;
-	@Autowired
-	DiagnosticBillDAO dbs;
-	@Autowired
-	TestDAO td;
-	@Autowired
-	HttpSession httpSession;
-	@Autowired
-	private PatientDAO pdao;
+	private TestServices testService;
 
-	// @RequestMapping("/dcadmin/booktest")
-	// public String GetCat(Model model) {
-	//
-	// List<testsCategoriesModel> lc = td.gettests1();
-	// List<PatientNameOutputModel> lp = pdao.getAllPatientidsNames();
-	//
-	// System.out.println("*********************" + lc);
-	// System.out.println("*********************" + lp);
-	// Gson gson = new Gson();
-	// String json = gson.toJson(lc);
-	// Gson gson1 = new Gson();
-	// String json1 = gson1.toJson(lp);
-	// model.addAttribute("cats", json);
-	// model.addAttribute("pats", json1);
-	//
-	// return "dcadmin/booktest";
-	//
-	// }
+	private DiagnosticBillDAO daignosticBillDAO;
+
+	private TestDAO testDAO;
+
+	private HttpSession httpSession;
+
+	private PatientDAO patientDAO;
+
+	@Autowired
+	public TestBookBillGenController(TestServices testService, DiagnosticBillDAO daignosticBillDAO, TestDAO testDAO,
+			HttpSession httpSession, PatientDAO patientDAO) {
+		super();
+		this.testService = testService;
+		this.daignosticBillDAO = daignosticBillDAO;
+		this.testDAO = testDAO;
+		this.httpSession = httpSession;
+		this.patientDAO = patientDAO;
+	}
 
 	@RequestMapping("/dcadmin/booktest")
 	public String GetCat(Model model) {
@@ -71,8 +63,7 @@ public class TestBillGenController {
 	@GetMapping("/dcadmin/gettestcat")
 	public @ResponseBody ResponseEntity<String> GetCategories(Model model) {
 
-		List<testsCategoriesModel> lc = td.gettestscats();
-		// List<PatientNameOutputModel> lp = pdao.getAllPatientidsNames();
+		List<testsCategoriesModel> lc = testDAO.getCategories();
 
 		System.out.println("*********************" + lc);
 
@@ -81,10 +72,9 @@ public class TestBillGenController {
 	}
 
 	@GetMapping("/dcadmin/getpatients")
-	public @ResponseBody ResponseEntity<String> getpatients(Model model) {
+	public @ResponseBody ResponseEntity<String> getPatients(Model model) {
 
-		List<patientsoutputmodel> lc = td.getpatients();
-		// List<PatientNameOutputModel> lp = pdao.getAllPatientidsNames();
+		List<patientsoutputmodel> lc = testDAO.getPatients();
 
 		System.out.println("*********************" + lc);
 
@@ -94,9 +84,9 @@ public class TestBillGenController {
 	// Get list of test Categories and patients from the respective DAOs - TestDAO and PatientDAO
 
 	@RequestMapping(value = "/dcadmin/gettestbycat", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> GettestbyCat(@RequestParam String cat, Model model) {
+	public ResponseEntity<String> getTestByCategory(@RequestParam String cat, Model model) {
 
-		List<TestModel> test = td.gettestbycat(cat);
+		List<TestModel> test = testDAO.getTestByCategory(cat);
 
 		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(test));
 
@@ -105,17 +95,16 @@ public class TestBillGenController {
 	// This method is responsible for booking a test and storing the information provided in the BillInputModel object
 	// to database.
 	@RequestMapping(value = "/dcadmin/bookdctest", method = RequestMethod.POST)
-	public void booktestt(Model model, @ModelAttribute BillInputModel bi) {
+	public void BookTest(Model model, @ModelAttribute BillInputModel bi) {
 
-		dbs.booktestt(bi);
+		daignosticBillDAO.bookDcTest(bi);
 
 	}
 
 	@RequestMapping(value = "/dcadmin/gettestprice", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> Gettestprice(@RequestParam int test, Model model) {
+	public ResponseEntity<String> getTestPrice(@RequestParam int test, Model model) {
 		System.out.println("inside  price testcat");
-		Object price = td.gettestprice(test);
-		// System.out.println(test.get(1));
+		Object price = testDAO.getSelectedTestPrice(test);
 
 		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(price));
 
@@ -125,9 +114,9 @@ public class TestBillGenController {
 	// The method receives the test ID as a request parameter and the Model object for rendering the view.
 
 	@RequestMapping(value = "/dcadmin/storedb", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> storedb(Model model, @RequestParam int patient) {
+	public ResponseEntity<String> storeToDatabase(Model model, @RequestParam int patient) {
 		System.out.println("inside  price testcat");
-		int billid = dbs.storedb(patient);
+		int billid = daignosticBillDAO.storeToDatabase(patient);
 
 		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(billid));
 	}
@@ -136,9 +125,9 @@ public class TestBillGenController {
 	// specified patient.
 
 	@RequestMapping(value = "/dcadmin/totalbills", method = RequestMethod.GET)
-	public ResponseEntity<String> totalbills(@RequestParam int patient, Model model) {
+	public ResponseEntity<String> totalBills(@RequestParam int patient, Model model) {
 		System.out.println("in book");
-		List<Object> lb = dbs.gettotalbills(patient);
+		List<Object> lb = daignosticBillDAO.getTotalBills(patient);
 
 		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(lb));
 
@@ -146,9 +135,8 @@ public class TestBillGenController {
 
 	// Calls the sendEmail1() method from the MailSend class to send the email with the provided parameters.
 	@RequestMapping(value = "/dcadmin/mailsend2", method = RequestMethod.POST)
-	public @ResponseBody void mailsend(HttpServletRequest request, HttpServletResponse response,
+	public @ResponseBody void mailSend(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam String email, @RequestParam String content) {
-		System.out.println("in mail1");
 
 		try {
 			MailSend.sendEmailTestBooking(request, response, email, content);

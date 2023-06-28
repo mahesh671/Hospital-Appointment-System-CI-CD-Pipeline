@@ -114,8 +114,8 @@ public class DoctorOutputService {
 
 	@Transactional
 	// Update doctor information based on the provided data
-	public int updateDoc(DoctorUpdateModel d, CommonsMultipartFile docphoto) {
-		DoctorTemp dt = doctdao.getdoc(d.getDoc_id());
+	public int updateDoctor(DoctorUpdateModel d, CommonsMultipartFile docphoto) {
+		DoctorTemp dt = doctdao.getDoctor(d.getDoc_id());
 		
 		//user may update a single field so we tried to check each conditions to update
 		if (d.getDocspec() != null) {

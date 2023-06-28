@@ -8,13 +8,13 @@ import spring.orm.model.output.OutputPatientTestReports;
 
 public interface DiagnosticBillDAO {
 
-	public void booktestt(BillInputModel bi);
+	public void bookDcTest(BillInputModel bi);
 
 	public List<DiagnosticBillModel> getdbilldetails();
 
-	public List<Object> gettotalbills(int patient);
+	public List<Object> getTotalBills(int patient);
 
-	public int storedb(int patient);
+	public int storeToDatabase(int patient);
 
 	public List<OutputPatientTestReports> gettestdate(String date1, String date2, int i);
 

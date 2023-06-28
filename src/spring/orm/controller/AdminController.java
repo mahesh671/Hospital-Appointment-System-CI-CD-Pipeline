@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -35,33 +34,43 @@ import spring.orm.services.UpdateProfileService;
 @RequestMapping("/admin")
 public class AdminController {
 
-	@Autowired
-	private SpecializationDAO specdao;
+	private SpecializationDAO specializationDAO;
 
-	@Autowired
-	private AppointmentDAO apdao;
-	@Autowired
-	private DoctorsDAO docdao;
-	@Autowired
+	private AppointmentDAO appointmentDAO;
+
+	private DoctorsDAO doctorDAO;
+
 	private HttpSession httpSession;
-	@Autowired
-	private UpdateProfileService ups;
-	@Autowired
-	private PatientDAO pdao;
-	@Autowired
-	private AdminDAO ad;
 
-	@Autowired
-	private PatientProfileUpdateDAO pcudao;
+	private UpdateProfileService updateProfileService;
+
+	private PatientDAO patientDAO;
+
+	private AdminDAO adminDAO;
+
+	public AdminController(SpecializationDAO specdao, AppointmentDAO apdao, DoctorsDAO docdao, HttpSession httpSession,
+			UpdateProfileService ups, PatientDAO pdao, AdminDAO ad, PatientProfileUpdateDAO pcudao) {
+		super();
+		this.specializationDAO = specdao;
+		this.appointmentDAO = apdao;
+		this.doctorDAO = docdao;
+		this.httpSession = httpSession;
+		this.updateProfileService = ups;
+		this.patientDAO = pdao;
+		this.adminDAO = ad;
+		this.patientProfileUpdateDAO = pcudao;
+	}
+
+	private PatientProfileUpdateDAO patientProfileUpdateDAO;
 
 	// TODO Auto-generated constructor stub
 	@RequestMapping(value = "/adminprofitdata", method = RequestMethod.GET)
 	public String doctorProfitData(Model model) {
-		List<OutputDoctorProfit> tndata = ad.fetchDoctorProfit();
-		List<OutputSpecializationProfit> tmdata = ad.fetchSpecializationProfit();
+		List<OutputDoctorProfit> doctorProfitList = adminDAO.fetchDoctorProfit();
+		List<OutputSpecializationProfit> specializationProfitList = adminDAO.fetchSpecializationProfit();
 
-		model.addAttribute("tndata", tndata);
-		model.addAttribute("tmdata", tmdata);
+		model.addAttribute("tndata", doctorProfitList);
+		model.addAttribute("tmdata", specializationProfitList);
 
 		return "admin/adminProfitData";
 	}
@@ -72,31 +81,32 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/adminDateWiseProfitdata", method = RequestMethod.GET)
-	public String TestDateWiseProfitData(@ModelAttribute AdminFilter fill, Model model) {
+	public String testDateWiseProfitData(@ModelAttribute AdminFilter fill, Model model) {
 
 		System.out.println(fill.getFrom() + " " + fill.getTo());
 
-		List<OutputDoctorProfit> tndata = ad.fetchDoctorProfit(fill.getFrom(), fill.getTo());
-		List<OutputSpecializationProfit> tmdata = ad.fetchSpecializationProfit(fill.getFrom(), fill.getTo());
+		List<OutputDoctorProfit> doctorProfitList = adminDAO.fetchDoctorProfit(fill.getFrom(), fill.getTo());
+		List<OutputSpecializationProfit> specializationProfitList = adminDAO.fetchSpecializationProfit(fill.getFrom(),
+				fill.getTo());
 
-		model.addAttribute("tndata", tndata);
-		model.addAttribute("tmdata", tmdata);
+		model.addAttribute("tndata", doctorProfitList);
+		model.addAttribute("tmdata", specializationProfitList);
 
 		return "admin/adminProfitDataWiseData";
 	}
 
 	@RequestMapping(value = "/adminreportspage")
-	public String adminreports(Model model) {
+	public String adminReports(Model model) {
 
 		return "admin/adminreports";
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String basePage(Model m) {
-		m.addAttribute("dcount", docdao.findCount());
-		m.addAttribute("App", apdao.getTopapp());
-		m.addAttribute("prof", apdao.getTopprof());
-		m.addAttribute("cards", apdao.getDashreport());
+		m.addAttribute("dcount", doctorDAO.findCount());
+		m.addAttribute("App", appointmentDAO.getTopAppointments());
+		m.addAttribute("prof", appointmentDAO.getTopprof());
+		m.addAttribute("cards", appointmentDAO.getDashreport());
 
 		return "admin/dashboard";
 	}
@@ -104,46 +114,39 @@ public class AdminController {
 	@RequestMapping(value = "/specialization", method = RequestMethod.GET)
 	public String getSpecialization(Model m) {
 		System.out.println("special");
-		List<Specialization> slist = specdao.getAllSpec();
+		List<Specialization> slist = specializationDAO.getAllSpecializations();
 		m.addAttribute("slist", slist);
 		return "admin/specialization";
 	}
 
-	//
-	// @RequestMapping(value = "/appointment")
-	// public String getNewAppoint(Model m) {
-	// m.addAttribute("speclist",specdao.getAllSpec());
-	// return "admin/appointment";
-	// }
-
 	@RequestMapping(value = "/getpatientprofile", method = RequestMethod.POST, produces = "application/json")
 
-	public String getpatientprofile(@ModelAttribute ProfileUpdateForm ppu,
+	public String getPatientProfile(@ModelAttribute ProfileUpdateForm profileUpdateForm,
 			@RequestParam CommonsMultipartFile reportsInput) {
-		System.out.println(ppu.toString());
-		ups.UpdateProfile(ppu, reportsInput);
-		apdao.updateAppStatusComp(ppu.getAppnid());
-		AppointmentEntity a = apdao.getAppointmentById(ppu.getAppnid());
-		pdao.updateLastvisitAndLastAppointment(ppu.getPatientId(), a.getAppn_sch_date().toLocalDateTime().toLocalDate(),
-				ppu.getAppnid());
+		System.out.println(profileUpdateForm.toString());
+		updateProfileService.updateProfile(profileUpdateForm, reportsInput);
+		appointmentDAO.updateAppStatusComp(profileUpdateForm.getAppnid());
+		AppointmentEntity a = appointmentDAO.getAppointmentById(profileUpdateForm.getAppnid());
+		patientDAO.updateLastvisitAndLastAppointmentInfo(profileUpdateForm.getPatientId(),
+				a.getAppn_sch_date().toLocalDateTime().toLocalDate(), profileUpdateForm.getAppnid());
 
 		return "admin/postredirect";
 	}
 
 	@RequestMapping(value = "/getpatientid", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<String> getpatientid(Model m) {
+	public ResponseEntity<String> getPatientId(Model m) {
 
-		List<Integer> pidlist = pdao.getAllPatientids();
+		List<Integer> patientIDList = patientDAO.getPatientIds();
 
-		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(pidlist));
+		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(patientIDList));
 	}
 
 	@RequestMapping(value = "/getpatientbyid", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity<String> getpatientbyid(@RequestParam int patientId, Model m) {
+	public ResponseEntity<String> getPatientById(@RequestParam int patientId, Model m) {
 		System.out.println("speciaty");
-		List<Integer> pidlist = pcudao.getAllappnids(patientId);
+		List<Integer> patientIdList = patientProfileUpdateDAO.getAllappnids(patientId);
 
-		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(pidlist));
+		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(patientIdList));
 	}
 
 }

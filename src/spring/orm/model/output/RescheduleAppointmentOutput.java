@@ -7,7 +7,7 @@ import java.time.LocalTime;
 import spring.orm.model.PatientModel;
 import spring.orm.model.entity.DoctorTemp;
 
-public class RescheduleAppOutput {
+public class RescheduleAppointmentOutput {
 	private int app_id;
 	private PatientModel patient;
 	private Date app_sch_date;
@@ -43,7 +43,7 @@ public class RescheduleAppOutput {
 	public void setSlot(LocalTime slot) {
 		this.slot = slot;
 	}
-	public RescheduleAppOutput(int app_id, PatientModel patient, Date app_sch_date, DoctorTemp doctor, LocalTime slot) {
+	public RescheduleAppointmentOutput(int app_id, PatientModel patient, Date app_sch_date, DoctorTemp doctor, LocalTime slot) {
 		super();
 		this.app_id = app_id;
 		this.patient = patient;
@@ -51,7 +51,7 @@ public class RescheduleAppOutput {
 		this.doctor = doctor;
 		this.slot = slot;
 	}
-	public RescheduleAppOutput() {
+	public RescheduleAppointmentOutput() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

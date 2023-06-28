@@ -13,23 +13,23 @@ import spring.orm.model.input.ProfileUpdateForm;
 public class UpdateProfileService {
 
 	@Autowired
-	private PatientProfileUpdateDAO ppd;
+	private PatientProfileUpdateDAO patientProfileUpdate;
 
-	public void UpdateProfile(ProfileUpdateForm ppu, CommonsMultipartFile reportsInput) {
+	public void updateProfile(ProfileUpdateForm profileUpdateForm, CommonsMultipartFile reportsInput) {
 		// TODO Auto-generated method stub
-		PatientMedicalProfile pmp = new PatientMedicalProfile();
-		PatientConsultationUpdateId pcu = new PatientConsultationUpdateId(ppu.getPatientId(), ppu.getAppnid());
-		int pid = pcu.getPatn_id();
-		int appnid = pcu.getAppn_id();
+		PatientMedicalProfile patinetMedicalProfile = new PatientMedicalProfile();
+		PatientConsultationUpdateId patientConsultationUpdate = new PatientConsultationUpdateId(profileUpdateForm.getPatientId(), profileUpdateForm.getAppnid());
+		int pid = patientConsultationUpdate.getPatn_id();
+		int appnid = patientConsultationUpdate.getAppn_id();
 
-		pcu.setAppn_id(appnid);
-		pcu.setPatn_id(pid);
-		pmp.setId(pcu);
-		pmp.setPatn_parameter(ppu.getParameter());
-		pmp.setPatnParGroup(ppu.getPatgroup());
-		pmp.setPatn_prescription(reportsInput.getBytes());
-		pmp.setPatn_value(ppu.getValue());
-		ppd.save(pmp);
+		patientConsultationUpdate.setAppn_id(appnid);
+		patientConsultationUpdate.setPatn_id(pid);
+		patinetMedicalProfile.setId(patientConsultationUpdate);
+		patinetMedicalProfile.setPatn_parameter(profileUpdateForm.getParameter());
+		patinetMedicalProfile.setPatnParGroup(profileUpdateForm.getPatgroup());
+		patinetMedicalProfile.setPatn_prescription(reportsInput.getBytes());
+		patinetMedicalProfile.setPatn_value(profileUpdateForm.getValue());
+		patientProfileUpdate.save(patinetMedicalProfile);
 
 	}
 }

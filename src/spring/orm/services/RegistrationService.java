@@ -29,7 +29,7 @@ public class RegistrationService {
 
 		// Perform additional logic if needed
 
-		int id = patientDAO.savePatient(patient);
+		int id = patientDAO.savePatientData(patient);
 		UserPass user = new UserPass();
 		user.setUsername(rf.getUname());
 		user.setPassword(rf.getPass());

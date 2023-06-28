@@ -15,7 +15,7 @@ public class ReportServices {
 	DCDAO dc;
 
 	// Uploads the image file into db based on report id
-	public String fileUploadMethod(CommonsMultipartFile file, int id) {
+	public String fileUpload(CommonsMultipartFile file, int id) {
 		byte[] filepath = null;
 		if (!file.isEmpty()) {
 			try {
@@ -36,6 +36,7 @@ public class ReportServices {
 
 	}
 
+	// saves the file to database
 	public void saveFileDetails(int id, byte[] filepath) {
 
 		// Save the file details for the given ID and file path using the DCDao contract
@@ -43,6 +44,7 @@ public class ReportServices {
 
 	}
 
+	// checks whether file is an Image file or not
 	public boolean isImageFile(CommonsMultipartFile file) {
 
 		// Define the allowed image file extensions

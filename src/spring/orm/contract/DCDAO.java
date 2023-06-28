@@ -9,24 +9,24 @@ import spring.orm.model.output.OutputTestNameProfit;
 
 public interface DCDAO {
 
-	List<OutputTestNameProfit> fetchTestNameProfit();
+	List<OutputTestNameProfit> fetchTestNameWiseProfit();
 
-	List<OutputTestMethodProfit> fetchTestMethodProfit();
+	List<OutputTestMethodProfit> fetchTestMethodWiseProfit();
 
-	List<OutputTestCategoryProfit> fetchTestCategoryProfit();
+	List<OutputTestCategoryProfit> fetchTestCategoryWiseProfit();
 
-	List<OutputTestNameProfit> fetchTestNameProfitDate(String from, String to);
+	List<OutputTestNameProfit> fetchTestNameDateWiseProfit(String from, String to);
 
-	List<OutputTestMethodProfit> fetchTestMethodProfitDate(String from, String to);
+	List<OutputTestMethodProfit> fetchTestMethodDateWiseProfit(String from, String to);
 
-	List<OutputTestCategoryProfit> fetchTestCategoryProfitDate(String from, String to);
+	List<OutputTestCategoryProfit> fetchTestCategoryDateWiseProfit(String from, String to);
 
-	public List<OutputReportData> fetchPatientInfo(int pid);
+	public List<OutputReportData> fetchPatientReportsInfo(int pid);
 
 	public String saveReportInfo(int id, byte[] b);
 
 	public String fetchPatientName(int pid);
 
-	public List<Integer> fetchPatientReports();
+	public List<Integer> fetchPatientIds();
 
 }

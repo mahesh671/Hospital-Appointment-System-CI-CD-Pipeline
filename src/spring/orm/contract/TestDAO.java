@@ -10,28 +10,28 @@ import spring.orm.model.output.testsPatientsModel;
 
 public interface TestDAO {
 
-	public void savetest(TestInputModel s);
+	public void saveTest(TestInputModel s);
 
-	public List<TestModel> gettests();
+	public List<TestModel> getTests();
 
-	public TestModel gettestbyid(int id);
+	public TestModel getTestById(int id);
 
-	public void deltest(int test_id);
+	public void deleteTest(int test_id);
 
-	public List<TestModel> gettestbycat(String cat);
+	public List<TestModel> getTestByCategory(String cat);
 
-	public Object gettestprice(int tests);
+	public Object getSelectedTestPrice(int tests);
 
-	public void updatetest(TestModel t);
+	public void updateTest(TestModel t);
 
-	public List<testsPatientsModel> getalltestpatients();
+	public List<testsPatientsModel> getAllTestPatients();
 
-	public List<testsPatientsModel> gettestwisepatients(int test);
+	public List<testsPatientsModel> getTestWisePatients(int test);
 
-	List<testsPatientsModel> getalltestpatientdetails(int test, String date1, String date2);
+	List<testsPatientsModel> getAllTestPatientDetails(int test, String date1, String date2);
 
-	List<patientsoutputmodel> getpatients();
+	List<patientsoutputmodel> getPatients();
 
-	public List<testsCategoriesModel> gettestscats();
+	public List<testsCategoriesModel> getCategories();
 
 }
