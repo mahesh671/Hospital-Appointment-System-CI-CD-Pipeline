@@ -82,9 +82,10 @@ body {
 .signup-form a:hover {
 	text-decoration: none;
 }
+
 form {
-  flex-direction: column;
-  justify-content: center;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .signup-form form a {
@@ -136,13 +137,15 @@ form {
 				<h2>Sign In</h2>
 				<div class="form-group">
 					<label for="username">Username</label> <input type="text"
-						name="uname" class="form-control" id="uname"
+						name="username" class="form-control" id="uname"
 						placeholder="Username" required="required">
+
 				</div>
 				<div class="form-group">
-					<label for="password">Password</label> <input type="password"
-						name="pass" class="form-control" id="pass" placeholder="Password"
-						required="required">
+					<label for="password">Password</label><input type="password"
+						name="password" class="form-control" id="pass"
+						placeholder="Password" required="required">
+
 				</div>
 				<div class="form-group">
 					<span id="login-error" style="color: red;"></span>

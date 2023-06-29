@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 import spring.orm.contract.AppointmentDAO;
 import spring.orm.contract.DoctorsDAO;
 import spring.orm.contract.PatientDAO;
-import spring.orm.controller.AppointmentController;
+import spring.orm.customexceptions.SlotAlreadyBookedException;
 import spring.orm.model.PatientModel;
 import spring.orm.model.entity.AppointmentEntity;
 import spring.orm.model.input.AppointmentForm;
@@ -65,7 +65,7 @@ public class AppointmentService {
 		return appointmentlist;
 	}
 
-	public int bookAppointment(AppointmentForm app) {
+	public int bookAppointment(AppointmentForm app) throws SlotAlreadyBookedException {
 		// Book an appointment
 		logger.info("Booking an appointment");
 		DateTimeFormatter sqlformat = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -108,7 +108,7 @@ public class AppointmentService {
 		return rescheduleAppointment;
 	}
 
-	public int bookAppointmentWithNewPatient(AppointmentForm appointmentForm) {
+	public int bookAppointmentWithNewPatient(AppointmentForm appointmentForm) throws SlotAlreadyBookedException {
 		// Book an appointment with a new patient
 		PatientModel patient = new PatientModel();
 		patient.setPatn_name(appointmentForm.getNewPatientName());
@@ -188,20 +188,20 @@ public class AppointmentService {
 
 	@Transactional
 	public void reschduleAppointment(RescheduleAppointmentModel rm) {
-		 logger.info("Rescheduling appointment");
-	        
-	        // Reschedule the appointment using the provided RescheduleAppointmentModel
-	        appointmentDAO.reschduleAppointment(rm);
-	        
-	        // Log rescheduling confirmation
-	        logger.info("Appointment rescheduled");
+		logger.info("Rescheduling appointment");
+
+		// Reschedule the appointment using the provided RescheduleAppointmentModel
+		appointmentDAO.reschduleAppointment(rm);
+
+		// Log rescheduling confirmation
+		logger.info("Appointment rescheduled");
 	}
 
-	public int bookAppointment(AppointmentForm appointment, int patientId) {
+	public int bookAppointment(AppointmentForm appointment, int patientId) throws SlotAlreadyBookedException {
 		// Book an appointment with a specified patient ID
 		DateTimeFormatter sqlFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
 		logger.info("Booking an appointment with a specified patient ID");
-        
+
 		System.out.println(
 				LocalTime.parse(appointment.getSlots(), DateTimeFormatter.ofPattern("hh:mm a")).format(sqlFormat));
 
@@ -211,7 +211,7 @@ public class AppointmentService {
 						.parse(appointment.getSlots(), DateTimeFormatter.ofPattern("hh:mm a")).format(sqlFormat),
 				appointment.getAppnrefer(), appointment.getAppnfee());
 		logger.info("Booked appointment ID: {}", appointmentId);
-        
+
 		return appointmentId;
 	}
 
@@ -235,26 +235,26 @@ public class AppointmentService {
 	}
 
 	public void sendBookingMail(HttpServletRequest request, HttpServletResponse response, int app_id) {
-    logger.info("Sending booking email");
-        
-        // Get the user's email address
-        String userMail = getAppointmentByID(app_id).getMail();
-        
-        if (!userMail.equals("")) {
-            try {
-                // Send the booking email
-                MailSend.sendBookingEmail(request, response, getAppointmentByID(app_id), userMail);
-                
-                // Log successful email sending
-                logger.info("Booking email sent to: {}", userMail);
-            } catch (Exception e) {
-                // Log the exception
-                logger.error("Error sending booking email", e);
-            }
-        } else {
-            // Log that the user's email is empty
-            logger.warn("User's email address is empty");
-        }
-    
+		logger.info("Sending booking email");
+
+		// Get the user's email address
+		String userMail = getAppointmentByID(app_id).getMail();
+
+		if (!userMail.equals("")) {
+			try {
+				// Send the booking email
+				MailSend.sendBookingEmail(request, response, getAppointmentByID(app_id), userMail);
+
+				// Log successful email sending
+				logger.info("Booking email sent to: {}", userMail);
+			} catch (Exception e) {
+				// Log the exception
+				logger.error("Error sending booking email", e);
+			}
+		} else {
+			// Log that the user's email is empty
+			logger.warn("User's email address is empty");
+		}
+
 	}
 }

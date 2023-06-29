@@ -28,6 +28,7 @@ import spring.orm.contract.AppointmentDAO;
 import spring.orm.contract.DoctorsDAO;
 import spring.orm.contract.PatientDAO;
 import spring.orm.contract.SpecializationDAO;
+import spring.orm.customexceptions.SlotAlreadyBookedException;
 import spring.orm.model.PatientSession;
 import spring.orm.model.Specialization;
 import spring.orm.model.entity.DoctorTemp;
@@ -185,19 +186,23 @@ public class AppointmentController {
 	public @ResponseBody void newAppointmentBooking(@ModelAttribute AppointmentForm appointment,
 			HttpServletRequest request, HttpServletResponse response) {
 
-		BookingType bookingType = BookingType.valueOf(appointment.getBookingType());
-		if (bookingType == BookingType.NEW_PATIENT) {
+		try {
+			BookingType bookingType = BookingType.valueOf(appointment.getBookingType());
+			if (bookingType == BookingType.NEW_PATIENT) {
 
-			// Book an appointment with a new patient
-			int app_id = appointmentService.bookAppointmentWithNewPatient(appointment);
-			logger.info("New appointment booked with a new patient. Appointment ID: " + app_id);
+				// Book an appointment with a new patient
+				int app_id = appointmentService.bookAppointmentWithNewPatient(appointment);
+				logger.info("New appointment booked with a new patient. Appointment ID: " + app_id);
 
-		} else {
+			} else {
 
-			int app_id = appointmentService.bookAppointment(appointment);
-			appointmentService.sendBookingMail(request, response, app_id);
-			// Book an appointment
-			logger.info("New appointment booked. Appointment ID: " + app_id);
+				int app_id = appointmentService.bookAppointment(appointment);
+				appointmentService.sendBookingMail(request, response, app_id);
+				// Book an appointment
+				logger.info("New appointment booked. Appointment ID: " + app_id);
+			}
+		} catch (SlotAlreadyBookedException s) {
+
 		}
 
 	}
@@ -208,23 +213,27 @@ public class AppointmentController {
 			@ModelAttribute AppointmentForm appointment, HttpServletRequest request, HttpServletResponse response) {
 		int patientId = patientSession.getId();
 		Integer app_id;
-		BookingType bookingType = BookingType.valueOf(appointment.getBookingType());
-		if (bookingType == BookingType.SELF) {
+		try {
+			BookingType bookingType = BookingType.valueOf(appointment.getBookingType());
+			if (bookingType == BookingType.SELF) {
 
-			appointment.setExistingPatientid(String.valueOf(patientSession.getId()));
-			// Book an appointment with an existing patient (self)
-			app_id = appointmentService.bookAppointment(appointment);
-			logger.info("New appointment booked with an existing patient (self). Appointment ID: " + app_id);
+				appointment.setExistingPatientid(String.valueOf(patientSession.getId()));
+				// Book an appointment with an existing patient (self)
+				app_id = appointmentService.bookAppointment(appointment);
+				logger.info("New appointment booked with an existing patient (self). Appointment ID: " + app_id);
 
-		} else {
-			logger.info("New appointment booked. Appointment details: " + appointment);
-			System.out.println(appointment);
-			// Book an appointment
-			app_id = appointmentService.bookAppointment(appointment);
+			} else {
+				logger.info("New appointment booked. Appointment details: " + appointment);
+				System.out.println(appointment);
+				// Book an appointment
+				app_id = appointmentService.bookAppointment(appointment);
 
+			}
+			String userMail = patientSession.getEmail();
+			appointmentService.sendBookingMail(request, response, app_id);
+		} catch (SlotAlreadyBookedException s) {
+			s.printStackTrace();
 		}
-		String userMail = patientSession.getEmail();
-		appointmentService.sendBookingMail(request, response, app_id);
 
 	}
 

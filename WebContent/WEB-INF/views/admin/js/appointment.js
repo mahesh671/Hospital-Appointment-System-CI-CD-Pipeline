@@ -1,5 +1,4 @@
-
-		$(document)
+	$(document)
 				.ready(
 						function() {
 							$('#doctor')
@@ -35,7 +34,7 @@
 																						+ doc.doctExp);
 																$("#doc_fee")
 																		.text(
-																				"Base Fee: "
+																				"Base Fee "
 																						+ doc.doctCfee);
 																$("#doc_img")
 																		.attr(
@@ -92,7 +91,6 @@
 												var specialization = $(
 														'#specialization')
 														.val();
-												// Perform an AJAX request to fetch doctors based on specialization
 												$
 														.ajax({
 															url : './fetchBySpecialization',
@@ -139,16 +137,27 @@
 											});
 						});
 
+		
 		// Function to toggle display of family members dropdown based on booking type
 		$(document).ready(function() {
+
 			$('input[name="bookingType"]').change(function() {
 				var bookingType = $(this).val();
-				if (bookingType === 'family') {
+				if (bookingType === 'FAMILY') {
 					$('#familyMembersGroup').show();
+					$('#existingPatientid').val('');
 				} else {
 					$('#familyMembersGroup').hide();
+					$('#existingPatientid').val('');
 				}
 			});
+		});
+
+		$('#familyMembers').change(function() {
+			console.log("hello");
+
+			$('#existingPatientid').val($('#familyMembers').val());
+
 		});
 
 		// Function to preview the booking details in the modal
@@ -159,6 +168,7 @@
 			var slot = $('#slots option:selected').text();
 			var bookingType = $('input[name="bookingType"]:checked').val();
 			var familyMembers = $('#familyMembers option:selected').text();
+			var appnfee = $('#appnfee').val();
 
 			var bookingDetails = '<p><strong>Specialization:</strong> '
 					+ specialization + '</p>';
@@ -167,12 +177,12 @@
 			bookingDetails += '<p><strong>Doctor:</strong> ' + doctor + '</p>';
 			bookingDetails += '<p><strong>Slot:</strong> ' + slot + '</p>';
 
-			if (bookingType === 'NEW PATIENT') {
-				bookingDetails += '<p><strong>Booking Type:</strong> NEW PATIENT</p>';
+			if (bookingType === 'FAMILY') {
+				bookingDetails += '<p><strong>Booking Type:</strong> Family</p>';
 				bookingDetails += '<p><strong>Family Member:</strong> '
 						+ familyMembers + '</p>';
 			} else {
-				bookingDetails += '<p><strong>Booking Type:</strong> Existing Patient</p>';
+				bookingDetails += '<p><strong>Booking Type:</strong> Self</p>';
 			}
 			bookingDetails += '<p><strong>Booking Fee:</strong>'
 					+ $('#appnfee').val() + '</p>';
@@ -183,33 +193,10 @@
 
 		// Function to confirm the booking and submit the form
 		function confirmBooking() {
-
-			console.log("called");
 			$('#appointmentForm').submit();
 		}
+
 	
-		// Get references to the radio buttons and form sections
-		const existingBookingRadio = document.getElementById("existingBooking");
-		const newBookingRadio = document.getElementById("newBooking");
-		const existingPatientForm = document
-				.getElementById("existingPatientForm");
-		const newPatientForm = document.getElementById("newPatientForm");
-
-		// Function to show the existing patient form
-		function showExistingPatientForm() {
-			existingPatientForm.style.display = "block";
-			newPatientForm.style.display = "none";
-		}
-
-		// Function to show the new patient form
-		function showNewPatientForm() {
-			existingPatientForm.style.display = "none";
-			newPatientForm.style.display = "block";
-		}
-
-		// Add event listeners to the radio buttons
-		existingBookingRadio.addEventListener("click", showExistingPatientForm);
-		newBookingRadio.addEventListener("click", showNewPatientForm);
 		function payment() {
 			var amount = $('#appnfee').val()
 
@@ -290,7 +277,7 @@
 															.log(response.error.metadata.payment_id);
 													alert("Failed");
 
-													window.location.href = "./";
+													window.location.href = "home";
 												});
 
 								rzp1.open();
@@ -299,6 +286,10 @@
 						error : function(xhr, status, error) {
 							// Handle the error response here
 							console.log(xhr.responseText);
+							var paymentError = '<h3><strong> Payment Error </strong></h3>';
+							paymentError += '<p>Payment Failed : ' + xhr.responseText + '</p>';
+							$('#bookingDetails4').html(paymentError);
+							$('#previewModal4').modal('show');
 						}
 					});
 		}
@@ -326,4 +317,3 @@
 				});
 			});
 		});
-	

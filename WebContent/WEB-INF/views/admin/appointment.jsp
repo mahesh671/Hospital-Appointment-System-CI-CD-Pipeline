@@ -73,14 +73,14 @@
 							<label for="bookingType">Booking Type:</label><br>
 							<div class="form-check form-check-inline">
 								<input class="form-check-input" type="radio" name="bookingType"
-									id="existingBooking" value="existing_Patient" checked>
+									id="existingBooking" value="existing Patient" checked>
 								<label class="form-check-label" for="existingBooking">Existing
 									Patient</label>
 							</div>
 
 							<div class="form-check form-check-inline">
 								<input class="form-check-input" type="radio" name="bookingType"
-									id="newBooking" value="NEW_PATIENT"> <label
+									id="newBooking" value="NEW PATIENT"> <label
 									class="form-check-label" for="newBooking">New Patient</label>
 							</div>
 							<input type="numeric" value="" hidden id="appnfee" name="appnfee">
@@ -187,6 +187,25 @@
 					</div>
 				</div>
 			</div>
+				<div class="modal fade" id="previewModal4" tabindex="-1"
+					role="dialog" aria-labelledby="previewModalLabel"
+					aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="previewModalLabel">Payment Failed</h5>
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body" id="bookingDetails4">
+								<!-- Dynamically populated with booking details -->
+							</div>
+							
+						</div>
+					</div>
+				</div>
 		</div>
 	</div>
 

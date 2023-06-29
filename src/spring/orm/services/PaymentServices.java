@@ -29,7 +29,7 @@ public class PaymentServices {
 			throws RazorpayException, JSONException {
 		logger.info("Inside Services make Test Payment Method");
 		logger.info("billid" + " " + billid + " " + "amount" + " " + amount + " " + "currency" + " " + currency);
-		RazorpayClient razorpayClient = new RazorpayClient("rzp_test_wTvwL7iaSRljth", "AvneRMjZuce3P1NzgAM18omy");
+		RazorpayClient razorpayClient = new RazorpayClient("rzp_test_wTvwL5iaSRljth", "AvneRMjZuce3P1NzgAM18omy");
 		JSONObject options = new JSONObject();
 		int amt = Integer.parseInt(amount) * 100;
 		options.put("amount", amt); // Amount in paise (e.g., 1000 paise = Rs 10)
@@ -47,7 +47,7 @@ public class PaymentServices {
 			throws RazorpayException, JSONException {
 		logger.info("Inside Services make Appointment Payment Method");
 		logger.info("amount" + " " + amount + " " + "currency" + " " + currency);
-		RazorpayClient razorpayClient = new RazorpayClient("rzp_test_wTvwL7iaSRljth", "AvneRMjZuce3P1NzgAM18omy");
+		RazorpayClient razorpayClient = new RazorpayClient("rzp_test_wTvwL5iaSRljth", "AvneRMjZuce3P1NzgAM18omy");
 		JSONObject options = new JSONObject();
 		int amt = Integer.parseInt(amount) * 100;
 		options.put("amount", amt); // Amount in paise (e.g., 1000 paise = Rs 10)
