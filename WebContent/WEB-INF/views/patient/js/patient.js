@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	showBufferingLayer();
 	// Retrieve the JSON data from the "tests" model attribute
 	$.ajax({
 		url: "./getapptestcards", // Specify the URL of the controller method
@@ -13,14 +14,17 @@ $(document).ready(function() {
 			toapp.textContent = data[0];
 
 			totest.textContent = data[1];
-
+			hideBufferingLayer();
 
 		},
 
 		error: function(xhr, status, error) {
 			console.error("Error: " + error);
+			hideBufferingLayer();
 		}
+
 	});
+
 
 
 	$.ajax({
@@ -171,13 +175,31 @@ $(document).ready(function() {
 			lastVisitDateElement.textContent = 'Last Visit: ' + data[0].patn_lastvisit.dayOfMonth + "-" + data[0].patn_lastvisit.month + "-" + data[0].patn_lastvisit.year;
 			var date = new Date(data[0].appn_sch_date);
 			console.log(data[0].appn_sch_date);
-			
+
 			nextVisitDateElement.textContent = 'Next Appointment: ' + date.toLocaleString();
 		},
 		error: function(xhr, status, error) {
 			console.error("Error: " + error);
 		}
 	});
+		});
+// Show buffering layer
+function showBufferingLayer() {
+	document.getElementById('buffering-layer').style.display = 'flex';
+}
+
+// Hide buffering layer
+function hideBufferingLayer() {
+	document.getElementById('buffering-layer').style.display = 'none';
+} 
+
+// Example usage: Simulate delay before hiding buffering layer
+        setTimeout(hideBufferingLayer, 3000);
 
 
-});
+
+
+
+
+
+

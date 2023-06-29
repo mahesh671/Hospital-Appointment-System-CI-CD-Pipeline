@@ -12,6 +12,10 @@
 
 </head>
 <body>
+ <!-- Buffering layer -->
+    <div class="overlay" id="buffering-layer">
+        <div class="spinner"></div>
+    </div>
 
 	<jsp:include page="nav.jsp" />
 

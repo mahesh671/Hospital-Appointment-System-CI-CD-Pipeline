@@ -29,6 +29,7 @@ import spring.orm.model.output.AppOutFormFamily;
 import spring.orm.model.output.MailAppOutputModel;
 import spring.orm.model.output.RescheduleAppointmentOutput;
 import spring.orm.util.MailSend;
+import spring.orm.util.MailSendHelper;
 
 @Component
 public class AppointmentService {
@@ -243,8 +244,10 @@ public class AppointmentService {
 		if (!userMail.equals("")) {
 			try {
 				// Send the booking email
-				MailSend.sendBookingEmail(request, response, getAppointmentByID(app_id), userMail);
+//				MailSend.sendBookingEmail(request, response, getAppointmentByID(app_id), userMail);
+				MailSendHelper.sendBookingEmail(request, response, getAppointmentByID(app_id), userMail);
 
+				
 				// Log successful email sending
 				logger.info("Booking email sent to: {}", userMail);
 			} catch (Exception e) {

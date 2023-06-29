@@ -7,11 +7,46 @@
 <title>DAS</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
  <link rel="stylesheet" type="text/css" href="./css/patient.css">
+    <style>
+        /* Overlay styles */
+        .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 9999;
+        }
 
+        /* Loading spinner styles */
+        .spinner {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          border: 5px solid #fff;
+          border-top-color: #888; /* Change color as needed */
+          animation: spin 1s infinite linear;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+    </style>
 <jsp:include page="scripts.jsp" />
 </head>
 
 <body>
+ <!-- Buffering layer -->
+    <div class="overlay" id="buffering-layer">
+        <div class="spinner"></div>
+    </div>
+
+
 	<jsp:include page="nav.jsp" />
 	<div align="center">
 		<div class="container">

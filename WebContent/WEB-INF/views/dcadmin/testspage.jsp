@@ -6,6 +6,36 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<style>
+        /* Overlay styles */
+        .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 9999;
+        }
+
+        /* Loading spinner styles */
+        .spinner {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          border: 5px solid #fff;
+          border-top-color: #888; /* Change color as needed */
+          animation: spin 1s infinite linear;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+    </style>
 
 
 <title>Home</title>
@@ -15,6 +45,10 @@
 </head>
 
 <body>
+ <!-- Buffering layer -->
+    <div class="overlay" id="buffering-layer">
+        <div class="spinner"></div>
+    </div>
 
 	<jsp:include page="nav.jsp" />
 	<%
@@ -198,6 +232,16 @@
 	</div>  -->
 </body>
 <script>
+
+// Show buffering layer
+function showBufferingLayer() {
+    document.getElementById('buffering-layer').style.display = 'flex';
+}
+
+// Hide buffering layer
+function hideBufferingLayer() {
+    document.getElementById('buffering-layer').style.display = 'none';
+}
 	function onclickspec() {
 
 		$('#id').val('');
@@ -212,6 +256,7 @@
 	}
 
 	function gettest(specid) {
+		  showBufferingLayer();
 		$.ajax({
 			url : "./gettest",
 			method : "post",
@@ -242,6 +287,7 @@
 				$('#add-spec-btn').text('update');
 			}
 		});
+        hideBufferingLayer();
 
 	}
 
@@ -281,6 +327,7 @@
 			}
 		});
 	}
+	setTimeout(hideBufferingLayer, 3000);
 </script>
 
 
