@@ -1,7 +1,7 @@
 package spring.orm.controller;
 
 enum BookingType {
-	NEW_PATIENT("NEW PATIENT"), REGULAR("Regular"), SELF("SELF"), existing_Patient("existing Patient");
+	NEW_PATIENT("NEW_PATIENT"), REGULAR("Regular"), SELF("SELF"), existing_Patient("existing_Patient");
 	;
 
 	private final String value;

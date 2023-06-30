@@ -28,7 +28,6 @@ import spring.orm.model.input.RescheduleAppointmentModel;
 import spring.orm.model.output.AppOutFormFamily;
 import spring.orm.model.output.MailAppOutputModel;
 import spring.orm.model.output.RescheduleAppointmentOutput;
-import spring.orm.util.MailSend;
 import spring.orm.util.MailSendHelper;
 
 @Component
@@ -39,13 +38,15 @@ public class AppointmentService {
 	private DoctorsDAO doctorDAO;
 
 	private PatientDAO patientDAO;
+	private PaymentServices ps;
 	private static final Logger logger = LoggerFactory.getLogger(AppointmentService.class);
 
 	@Autowired
-	public AppointmentService(AppointmentDAO apdao, DoctorsDAO docdao, PatientDAO patdao) {
+	public AppointmentService(AppointmentDAO apdao, DoctorsDAO docdao, PatientDAO patdao, PaymentServices ps) {
 		this.appointmentDAO = apdao;
 		this.doctorDAO = docdao;
 		this.patientDAO = patdao;
+		this.ps = ps;
 	}
 
 	public List<AppointmentEntity> getAllAppointments() {
@@ -66,13 +67,15 @@ public class AppointmentService {
 		return appointmentlist;
 	}
 
-	public int bookAppointment(AppointmentForm app) throws SlotAlreadyBookedException {
+	public int bookAppointment(AppointmentForm app) throws Exception {
 		// Book an appointment
 		logger.info("Booking an appointment");
+		int app_id = -1;
 		DateTimeFormatter sqlformat = DateTimeFormatter.ofPattern("HH:mm:ss");
 		logger.info("Appointment time: {}",
 				LocalTime.parse(app.getSlots(), DateTimeFormatter.ofPattern("hh:mm a")).format(sqlformat));
-		int app_id = appointmentDAO.bookAppointment(patientDAO.getPatientById(app.getExistingPatientid()),
+
+		app_id = appointmentDAO.bookAppointment(patientDAO.getPatientById(app.getExistingPatientid()),
 				doctorDAO.getDoctor(app.getDoctor()),
 				app.getAppointmentDate().toString() + " "
 						+ LocalTime.parse(app.getSlots(), DateTimeFormatter.ofPattern("hh:mm a")).format(sqlformat),
@@ -244,10 +247,8 @@ public class AppointmentService {
 		if (!userMail.equals("")) {
 			try {
 				// Send the booking email
-//				MailSend.sendBookingEmail(request, response, getAppointmentByID(app_id), userMail);
 				MailSendHelper.sendBookingEmail(request, response, getAppointmentByID(app_id), userMail);
 
-				
 				// Log successful email sending
 				logger.info("Booking email sent to: {}", userMail);
 			} catch (Exception e) {

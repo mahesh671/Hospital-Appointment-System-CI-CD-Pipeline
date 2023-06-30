@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +24,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.google.gson.Gson;
+import com.razorpay.RazorpayException;
 
 import spring.orm.contract.AppointmentDAO;
 import spring.orm.contract.DoctorsDAO;
 import spring.orm.contract.PatientDAO;
 import spring.orm.contract.SpecializationDAO;
-import spring.orm.customexceptions.SlotAlreadyBookedException;
 import spring.orm.model.PatientSession;
 import spring.orm.model.Specialization;
 import spring.orm.model.entity.DoctorTemp;
@@ -42,6 +43,7 @@ import spring.orm.model.output.OutputBookedAppointmnets;
 import spring.orm.model.output.RescheduleAppointmentOutput;
 import spring.orm.services.AppointmentService;
 import spring.orm.services.DoctorOutputService;
+import spring.orm.services.PaymentServices;
 
 @Controller
 @RequestMapping
@@ -58,11 +60,13 @@ public class AppointmentController {
 	private AppointmentDAO appointmentDAO;
 
 	private AppointmentService appointmentService;
+	private PaymentServices ps;
 	private static final Logger logger = LoggerFactory.getLogger(AppointmentController.class);
 
 	@Autowired
 	public AppointmentController(SpecializationDAO specializationDAO, DoctorOutputService doctorservice,
-			PatientDAO patientDAO, DoctorsDAO doctorsDAO, AppointmentDAO appointmentDAO, AppointmentService a) {
+			PatientDAO patientDAO, DoctorsDAO doctorsDAO, AppointmentDAO appointmentDAO, PaymentServices ps,
+			AppointmentService a) {
 
 		this.appointmentDAO = appointmentDAO;
 		this.appointmentService = a;
@@ -70,6 +74,7 @@ public class AppointmentController {
 		this.doctorservice = doctorservice;
 		this.patientDAO = patientDAO;
 		this.specializationDAO = specializationDAO;
+		this.ps = ps;
 	}
 
 	@RequestMapping(value = "admin/newappointment")
@@ -183,8 +188,8 @@ public class AppointmentController {
 	}
 
 	@RequestMapping(value = "admin/newappointment/create", method = RequestMethod.POST)
-	public @ResponseBody void newAppointmentBooking(@ModelAttribute AppointmentForm appointment,
-			HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody ResponseEntity<String> newAppointmentBooking(@ModelAttribute AppointmentForm appointment,
+			HttpServletRequest request, HttpServletResponse response) throws JSONException, RazorpayException {
 
 		try {
 			BookingType bookingType = BookingType.valueOf(appointment.getBookingType());
@@ -201,16 +206,22 @@ public class AppointmentController {
 				// Book an appointment
 				logger.info("New appointment booked. Appointment ID: " + app_id);
 			}
-		} catch (SlotAlreadyBookedException s) {
+		} catch (Exception e) {
+
+			String s1 = ps.makeRefund(appointment);
+			System.out.println("Slot Already Booked");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(s1);
 
 		}
+		return null;
 
 	}
 
 	@RequestMapping(value = "patient/newappointment/create", method = RequestMethod.POST)
-	public @ResponseBody void newAppointmentPatientBooking(
+	public @ResponseBody ResponseEntity<String> newAppointmentPatientBooking(
 			@SessionAttribute("patientSession") PatientSession patientSession,
-			@ModelAttribute AppointmentForm appointment, HttpServletRequest request, HttpServletResponse response) {
+			@ModelAttribute AppointmentForm appointment, HttpServletRequest request, HttpServletResponse response)
+			throws JSONException, RazorpayException {
 		int patientId = patientSession.getId();
 		Integer app_id;
 		try {
@@ -231,10 +242,12 @@ public class AppointmentController {
 			}
 			String userMail = patientSession.getEmail();
 			appointmentService.sendBookingMail(request, response, app_id);
-		} catch (SlotAlreadyBookedException s) {
-			s.printStackTrace();
+		} catch (Exception e) {
+			String s1 = ps.makeRefund(appointment);
+			System.out.println("Slot Already Booked");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(s1);
 		}
-
+		return null;
 	}
 
 	@RequestMapping(value = { "admin/cancel/{app_id}", "patient/cancel/{app_id}" })

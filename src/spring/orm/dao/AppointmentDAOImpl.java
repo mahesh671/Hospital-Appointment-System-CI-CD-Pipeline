@@ -16,6 +16,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,6 +46,8 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 
 	private DoctorsDAO doctorDAO;
 
+	private static final Logger logger = LoggerFactory.getLogger(AppointmentDAOImpl.class);
+
 	@Autowired
 	public AppointmentDAOImpl(PatientDAO patdao, DoctorsDAO doctdao) {
 		this.doctorDAO = doctdao;
@@ -55,6 +59,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 	public List<Object[]> fetchUpcomingAppointmentData() {
 		// This method fetches upcoming appointment data and returns a list of Object
 		// arrays.
+		logger.info("User Requested tto fetch the upcoming appointments data");
 
 		String hql = "SELECT a.appn_id, d.name, p.patn_name, a.appn_sch_date " + "FROM Appointmentmodel a "
 				+ "JOIN a.doctor d " + "JOIN a.pm p " + "WHERE a.appn_sch_date > :date";
@@ -84,7 +89,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 
 	public List<Object[]> fetchBookingAppointmentDataDateWise(String from, String to) {
 		// This method retrieves appointment data based on a date range.
-
+		logger.info("User Requested to fetch the appointments data based on date wise from{} and to{}", from, to);
 		String hql = "select a.appn_id, d.name, p.patn_name, a.appn_sch_date, a.appn_status "
 				+ "from Appointmentmodel a " + "join a.doctor d" + "join a.pm p"
 				+ "where date_trunc('day', a.appn_sch_date) between :startDate and :endDate";
@@ -121,6 +126,8 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 	public List<AppointmentEntity> getAllAppointments() {
 		// This method retrieves all appointment entities from the database.
 
+		logger.info("User Requested tto fetch the all appointments data");
+
 		return entityManager.createQuery("select a from AppointmentEntity a", AppointmentEntity.class).getResultList();
 		/*
 		 * Execute a JPQL query to select all appointment entities from the database and return the result list.
@@ -130,6 +137,8 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 	@Override
 	@Transactional
 	public boolean isSlotBooked(int doctor_id, String date, String time) {
+
+		logger.info("isSlotBooked methos is called to know the slot avilabilty");
 		/*
 		 * This method checks if a time slot is booked for a given doctor on a specific date and time.
 		 */
@@ -170,7 +179,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 		/*
 		 * This method is used to book an appointment and takes the necessary parameters.
 		 */
-
+		logger.info("User Requested book the appointment");
 		AppointmentEntity appointment = new AppointmentEntity(); // Create a new instance of AppointmentEntity.
 
 		appointment.setDoctor(doctor); // Set the doctor for the appointment.
@@ -192,22 +201,20 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 		appointment.setAppn_payreference(payref); // Set the payment reference for the appointment.
 
 		appointment.setAppn_status("YETO"); // Set the status of the appointment to "YETO" (indicating it is not yet
-		// confirmed).
-
 		String jpql = "SELECT COUNT(a) FROM AppointmentEntity a WHERE a.appn_sch_date = :timestamp";
 		Query query = entityManager.createQuery(jpql);
 		query.setParameter("timestamp", appointment.getAppn_sch_date());
 		if ((Long) query.getSingleResult() > 0) {
+			logger.error("Raised Slot Alreday Booked error due to already the slot is booked");
 			throw new SlotAlreadyBookedException("The slot is already booked.", payref, appointment);
 		}
-
-		entityManager.persist(appointment); // Persist the appointment entity to the database.
-
+		entityManager.persist(appointment);
 		return appointment.getAppn_id(); // Return the appointment ID.
 	}
 
 	@Override
 	public AppointmentEntity getAppointmentById(int app_id) {
+		logger.info("User Requested to get the particular appointment ID");
 		return entityManager.find(AppointmentEntity.class, app_id);
 	}
 
@@ -217,6 +224,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 		/*
 		 * This method is used to cancel an appointment based on the provided appointment ID.
 		 */
+		logger.info("user requested to cancel the appointment of id{} ", appointment_id);
 		AppointmentEntity appointment = entityManager.find(AppointmentEntity.class, appointment_id);
 		/*
 		 * Retrieve the AppointmentEntity object from the EntityManager based on the provided appointment ID and assign
@@ -231,6 +239,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 		 * Merge the changes made to the AppointmentEntity object back into the persistence context to update it in the
 		 * database.
 		 */
+		logger.info("appointment canceled");
 	}
 
 	@Override
@@ -238,6 +247,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 		/*
 		 * This method is used to reschedule an appointment based on the provided RescheduleAppointmentModel object.
 		 */
+		logger.info("request to reschedule the appointment");
 		AppointmentEntity appointment = entityManager.find(AppointmentEntity.class,
 				rescheduleAppointmentmodel.getAppointmentId());
 		/*
@@ -248,7 +258,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 		/*
 		 * Create a DateTimeFormatter object with the pattern "HH:mm:ss" to format the time in SQL format.
 		 */
-		System.out.println("in docdao appointment");
+
 		/*
 		 * Print a message to indicate that the code is in the "docdao appointment" section for debugging or logging
 		 * purposes.
@@ -262,6 +272,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
 		 */
 		entityManager.merge(appointment);
 		// Merge the updated appointment entity back into the EntityManager.
+		logger.info("appointment is REscheduled");
 
 	}
 
