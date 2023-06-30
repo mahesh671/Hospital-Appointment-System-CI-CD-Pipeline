@@ -61,7 +61,7 @@ public class FamilyMembersDAOImpl implements FamilyMembersDAO {
 		logger.info("Entered into getFamilyDetailsByPatientId pid: " + pid);
 
 		// Query that retrieve the family members for the given access ID
-		String hql = "SELECT new spring.orm.model.input.FamilyMembersInput(f.pfmbName, f.pfmbRelation, f.pfmbAge, p.patn_gender, p.patn_bgroup) "
+		String hql = "SELECT new spring.orm.model.input.FamilyMembersInput(f.pfmbPatnId,f.pfmbName, f.pfmbRelation, f.pfmbAge, p.patn_gender, p.patn_bgroup) "
 				+ "FROM PatientModel p JOIN FamilyMembers f ON p.patn_id = f.pfmbPatnId WHERE p.accessPatientId = :accessId";
 
 		// returns a query object
@@ -76,6 +76,87 @@ public class FamilyMembersDAOImpl implements FamilyMembersDAO {
 		logger.info("returns the family member data list to the calling method");
 
 		return familyMembersList;
+	}
+
+	// method that fetches the family member details across the database
+	public FamilyMembersInput getFamilyMemberByPatientId(int pid, int fpid) {
+		logger.info("Entered into getFamilyMemberByPatientId pid: " + pid);
+
+		// query to retrieve family member information
+		String hql = "SELECT new spring.orm.model.input.FamilyMembersInput(f.pfmbPatnId,f.pfmbName,f.pfmbRelation,f.pfmbAge, p.patn_gender, p.patn_bgroup) "
+				+ "FROM PatientModel p JOIN FamilyMembers f ON p.patn_id = f.pfmbPatnId WHERE p.accessPatientId = :accessId and f.pfmbPatnId=:val";
+
+		logger.info("fetching the family member information from the database");
+		return entityManager.createQuery(hql, FamilyMembersInput.class).setParameter("accessId", pid)
+				.setParameter("val", fpid).getSingleResult();
+
+	}
+
+	// method that fetches the family member data from database
+	public FamilyMembers getFamilyMember(int pfmid) {
+		logger.info("Enter into getFamilyMember");
+
+		logger.info("fetching the family member data");
+		return entityManager.find(FamilyMembers.class, pfmid);
+
+	}
+
+	// method that saves the changes made in family member information
+	@Transactional
+	public void saveChanges(FamilyMembersInput fam) {
+		logger.info("Entered into saveChanges");
+		int fpid = fam.getPfmbPatnId();
+
+		// fetching member info from patient table
+		PatientModel patientFamilyData = entityManager.find(PatientModel.class, fam.getPfmbPatnId());
+
+		// fetching the member info from family table
+		FamilyMembers familyMemberData = entityManager.find(FamilyMembers.class, fam.getPfmbPatnId());
+
+		// changing the values in patient table
+		patientFamilyData.setPatn_name(fam.getPfmbName());
+		patientFamilyData.setPatn_age(fam.getPfmbAge());
+		patientFamilyData.setPatn_gender(fam.getPfmbGender());
+		patientFamilyData.setPatn_bgroup(fam.getPfmbbgroup());
+
+		// changing the values in family member table
+		familyMemberData.setPfmbName(fam.getPfmbName());
+		familyMemberData.setPfmbAge(fam.getPfmbAge());
+		familyMemberData.setPfmbRelation(fam.getPfmbRelation());
+
+		// saves the patient model
+		entityManager.merge(patientFamilyData);
+
+		// saves the family member model
+		entityManager.merge(familyMemberData);
+
+		logger.info("saved the changes");
+
+	}
+
+	// method that deletes the family member from database (soft delete)
+	@Transactional
+	public void deleteFamilyMember(int fpid) {
+		logger.info("Entered into deleteFamilyMember");
+
+		// fetching member info from patient table
+		PatientModel patientFamilyData = entityManager.find(PatientModel.class, fpid);
+
+		// fetching the member info from family table
+		FamilyMembers familyMemberData = entityManager.find(FamilyMembers.class, fpid);
+
+		// making the access id null
+		patientFamilyData.setAccessPatientId(null);
+		// making the access id null
+		familyMemberData.setPatnAccessPatnId(null);
+
+		// saves the patient model
+		entityManager.merge(patientFamilyData);
+
+		// saves the family member model
+		entityManager.merge(familyMemberData);
+
+		logger.info("saved the changes");
 	}
 
 }

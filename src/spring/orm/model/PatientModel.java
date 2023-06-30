@@ -36,7 +36,6 @@ public class PatientModel {
 	@ManyToOne
 	@JoinColumn(name = "patn_access_patn_id", insertable = false, updatable = false)
 	private PatientModel accessPatient;
-	
 
 	@Column(name = "patn_rdate")
 	private LocalDate patn_rdate;
@@ -134,13 +133,15 @@ public class PatientModel {
 		this.patn_lastvisit = patn_lastvisit;
 	}
 
-	public int getPatn_lastapp_id() {
+	public Integer getPatn_lastapp_id() {
+
 		return patn_lastapp_id;
 	}
 
 	public void setPatn_lastapp_id(int patn_lastapp_id) {
 		this.patn_lastapp_id = patn_lastapp_id;
 	}
+
 	public PatientModel getAccessPatient() {
 		return accessPatient;
 	}
@@ -148,6 +149,7 @@ public class PatientModel {
 	public void setAccessPatient(PatientModel accessPatient) {
 		this.accessPatient = accessPatient;
 	}
+
 	@Override
 	public String toString() {
 		return "PatientModel [patn_id=" + patn_id + ", patn_name=" + patn_name + ", patn_age=" + patn_age

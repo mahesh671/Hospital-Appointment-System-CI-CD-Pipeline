@@ -7,7 +7,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>DAS</title>
-<jsp:include page="scripts.jsp" /> 
+<jsp:include page="scripts.jsp" />
 <link rel="stylesheet" type="text/css" href="./css/myfamily.css">
 
 </head>
@@ -27,8 +27,8 @@
 						<th>Gender</th>
 						<th>Blood Group</th>
 						<th>Relation</th>
-						<!-- 		<th>Action</th>
- -->
+						<th>Action</th>
+
 					</tr>
 				</thead>
 				<tbody>
@@ -40,76 +40,78 @@
 							<td>${member.pfmbbgroup}</td>
 							<td>${member.pfmbRelation}</td>
 							<!-- Add your buttons or actions here -->
-							<!-- <td><input type="button" value="Edit"
-								class="btn btn-success edit-button"> <input
-								type="button" value="Delete" class="btn btn-danger"></td>
-						</tr> -->
+							<td><input type="button" value="Edit"
+								class="btn btn-success edit-button"
+								onclick="edit('${member.pfmbPatnId}')"> 
+								<input type="button" value="Delete" class="btn btn-danger"
+								onclick="deleteMember('${member.pfmbPatnId}')"></td>
+						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
+		</div>
+	</div>
 
-
-			<div class="container">
-				<div class="row">
-					<div class="col-md-6">
-						<h4>Add Family Members</h4>
-						<form id="addForm">
-							<div class="form-group">
-								<label for="pfmbName">Name:</label> <input type="text"
-									id="pfmbName" name="pfmbName" class="form-control" required>
-							</div>
-							<div class="form-group">
-								<label for="pfmbRelation">Relation:</label> <input type="text"
-									id="pfmbRelation" name="pfmbRelation" class="form-control"
-									required>
-							</div>
-							<div class="form-group">
-								<label for="pfmbAge">Age:</label> <input type="number"
-									id="pfmbAge" name="pfmbAge" class="form-control" required>
-							</div>
-							<div class="form-group">
-								<label for="pfmbGender">Gender:</label> <select id="pfmbGender"
-									name="pfmbGender" class="form-control" required>
-									<option value="Male">Male</option>
-									<option value="Female">Female</option>
-									<option value="Other">Other</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label for="pfmbbgroup">Blood Group:</label> <select
-									id="pfmbbgroup" name="pfmbbgroup" class="form-control" required>
-									<option value="">Select</option>
-									<option value="A+">A+</option>
-									<option value="A-">A-</option>
-									<option value="B+">B+</option>
-									<option value="B-">B-</option>
-									<option value="AB+">AB+</option>
-									<option value="AB-">AB-</option>
-									<option value="O+">O+</option>
-									<option value="O-">O-</option>
-								</select>
-							</div>
-							<button type="submit" class="btn btn-primary">Add Member</button>
-						</form>
+	<div class="container" align="center" id="myform">
+		<div class="row">
+			<div class="col-md-6">
+				<h4>Add Family Members</h4>
+				<form id="addForm">
+					<div class="form-group">
+						<label for="pfmbName">Name:</label> <input type="text"
+							id="pfmbName" name="pfmbName" class="form-control" required>
 					</div>
-				</div>
-			</div>
-
-
-			<div id="editFormSection" style="display: none;">
-				<h4>Edit Family Member</h4>
-				<form id="editForm" method="post">
-					<input id="editId" name="editId" type="text" hidden> <label
-						for="editName">Name:</label> <input type="text" id="editName"
-						name="editName"><br> <label for="editRelation">Relation:</label>
-					<input type="text" id="editRelation" name="editRelation"><br>
-					<label for="editAge">Age:</label> <input type="number" id="editAge"
-						name="editAge"><br>
-					<button type="submit" id="update">Update</button>
+					<div class="form-group">
+						<label for="pfmbRelation">Relation:</label> <input type="text"
+							id="pfmbRelation" name="pfmbRelation" class="form-control"
+							required>
+					</div>
+					<div class="form-group">
+						<label for="pfmbAge">Age:</label> <input type="number"
+							id="pfmbAge" name="pfmbAge" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label for="pfmbGender">Gender:</label> <select id="pfmbGender"
+							name="pfmbGender" class="form-control" required>
+							<option value="Male">Male</option>
+							<option value="Female">Female</option>
+							<option value="Other">Other</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="pfmbbgroup">Blood Group:</label> <select
+							id="pfmbbgroup" name="pfmbbgroup" class="form-control" required>
+							<option value="">Select</option>
+							<option value="A+">A+</option>
+							<option value="A-">A-</option>
+							<option value="B+">B+</option>
+							<option value="B-">B-</option>
+							<option value="AB+">AB+</option>
+							<option value="AB-">AB-</option>
+							<option value="O+">O+</option>
+							<option value="O-">O-</option>
+						</select>
+					</div>
+					<button type="submit" class="btn btn-primary">Add Member</button>
 				</form>
 			</div>
 		</div>
 	</div>
+
+
+	<div id="editFormSection" style="display: none;">
+		<h4>Edit Family Member</h4>
+		<form id="editForm" method="post">
+			<input id="editId" name="editId" type="text" hidden> <label
+				for="editName">Name:</label> <input type="text" id="editName"
+				name="editName"><br> <label for="editRelation">Relation:</label>
+			<input type="text" id="editRelation" name="editRelation"><br>
+			<label for="editAge">Age:</label> <input type="number" id="editAge"
+				name="editAge"><br>
+			<button type="submit" id="update">Update</button>
+		</form>
+	</div>
+
 	<div id="editFormSection" style="display: none;">
 		<h4>Edit Family Member</h4>
 		<form id="editForm" method="post">

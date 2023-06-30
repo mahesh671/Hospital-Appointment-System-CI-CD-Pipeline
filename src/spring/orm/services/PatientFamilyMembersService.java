@@ -32,37 +32,56 @@ public class PatientFamilyMembersService {
 
 	// Method that saves the family member into the database
 	@Transactional
-	public int addFamilyMember(FamilyMembersInput fm, PatientSession patientSession) {
+	public int addFamilyMember(FamilyMembersInput familyMember, PatientSession patientSession) {
 
 		logger.info("Entered into addFamilyMember");
 
 		// Create a new PatientModel object and set the required information
-		PatientModel pm = new PatientModel();
-		pm.setPatn_name(fm.getPfmbName());
-		pm.setPatn_age(fm.getPfmbAge());
-		pm.setPatn_gender(fm.getPfmbGender());
-		pm.setPatn_bgroup(fm.getPfmbbgroup());
-		pm.setAccessPatientId(patientSession.getId());
+		PatientModel patientModel = new PatientModel();
+		patientModel.setPatn_name(familyMember.getPfmbName());
+		patientModel.setPatn_age(familyMember.getPfmbAge());
+		patientModel.setPatn_gender(familyMember.getPfmbGender());
+		patientModel.setPatn_bgroup(familyMember.getPfmbbgroup());
+		patientModel.setAccessPatientId(patientSession.getId());
 		logger.info("Created a new PatientModel object and set the required information");
 
 		// Save the PatientModel and get the patient ID
-		int pid = familyMemberDao.savePatientDetails(pm);
+		int pid = familyMemberDao.savePatientDetails(patientModel);
 		logger.info("Saved the PatientModel and get the patient ID");
 
 		// Add the family member using the FamilyMembersDao
-		familyMemberDao.addFamilyByPatientInfo(pm, pid, patientSession.getId(), fm.getPfmbRelation());
+		familyMemberDao.addFamilyByPatientInfo(patientModel, pid, patientSession.getId(), familyMember.getPfmbRelation());
 		logger.info("Saved the family member information into the database");
 
-		return pm.getPatn_id();
+		return patientModel.getPatn_id();
 	}
 
 	// method to fetch all family members for the given ID using the FamilyMembersDao
-	public List<FamilyMembersInput> getAllFamilyMembers(Integer id) {
+	public List<FamilyMembersInput> getAllFamilyMembers(Integer patientId) {
 		logger.info("Entered into getAllFamilyMembers");
 
 		logger.info("Retrieving all family members data for the given ID using the FamilyMembersDao");
 		// Retrieve all family members for the given ID using the FamilyMembersDao
-		return familyMemberDao.getFamilyDetailsByPatientId(id);
+		return familyMemberDao.getFamilyDetailsByPatientId(patientId);
+	}
+
+	// method that fetches family member information
+	public FamilyMembersInput getFamilyMemberInfo(int patientId, int familyMemberid) {
+		logger.info("Entered into getFamilyMemberInfo");
+
+		return familyMemberDao.getFamilyMemberByPatientId(patientId, familyMemberid);
+	}
+
+	// method that saves the family member details
+	public void saveFamilyMemberInfo(FamilyMembersInput familyMember) {
+		logger.info("Entered into saveFamilyMemberInfo");
+		familyMemberDao.saveChanges(familyMember);
+	}
+
+	// method that deletes the family member
+	public void deleteFamilyMember(int patientId) {
+		logger.info("Entered into deleteFamilyMember");
+		familyMemberDao.deleteFamilyMember(patientId);
 	}
 
 }

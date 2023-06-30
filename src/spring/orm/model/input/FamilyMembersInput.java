@@ -1,11 +1,20 @@
 package spring.orm.model.input;
 
 public class FamilyMembersInput {
+	private int pfmbPatnId;
 	private String pfmbName;
 	private String pfmbRelation;
 	private Integer pfmbAge;
 	private String pfmbGender;
 	private String pfmbbgroup;
+
+	public int getPfmbPatnId() {
+		return pfmbPatnId;
+	}
+
+	public void setPfmbPatnId(int pfmbPatnId) {
+		this.pfmbPatnId = pfmbPatnId;
+	}
 
 	public String getPfmbName() {
 		return pfmbName;
@@ -58,9 +67,10 @@ public class FamilyMembersInput {
 		// TODO Auto-generated constructor stub
 	}
 
-	public FamilyMembersInput(String pfmbName, String pfmbRelation, Integer pfmbAge, String pfmbGender,
+	public FamilyMembersInput(int pfmbPatnId, String pfmbName, String pfmbRelation, Integer pfmbAge, String pfmbGender,
 			String pfmbbgroup) {
 		super();
+		this.pfmbPatnId = pfmbPatnId;
 		this.pfmbName = pfmbName;
 		this.pfmbRelation = pfmbRelation;
 		this.pfmbAge = pfmbAge;

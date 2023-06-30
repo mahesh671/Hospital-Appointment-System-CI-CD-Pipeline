@@ -125,3 +125,17 @@ $("#editForm").submit(function(e) {
         }
     });
 }); 
+
+//handiles family member changes
+
+function edit(id){
+	
+	window.location.href='./editFamily?id='+id;
+	
+}
+
+//handles the family member deletion
+function deleteMember(id){
+	
+	window.location.href='./deleteFamilyMember?id='+id;
+}

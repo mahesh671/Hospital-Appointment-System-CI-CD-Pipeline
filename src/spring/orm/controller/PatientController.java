@@ -20,55 +20,32 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import com.google.gson.Gson;
 
 import spring.orm.contract.DiagnosticBillDAO;
-import spring.orm.contract.DocScheduleDAO;
-import spring.orm.contract.DoctorsDAO;
 import spring.orm.contract.PatientDAO;
-import spring.orm.contract.SpecializationDAO;
-import spring.orm.contract.TestDAO;
-import spring.orm.contract.UserDAO;
+import spring.orm.model.PatientModel;
 import spring.orm.model.PatientSession;
 import spring.orm.model.input.FamilyMembersInput;
+import spring.orm.model.input.ProfileInputModel;
 import spring.orm.model.output.OutputPatientTestReports;
-import spring.orm.services.DoctorOutputService;
 import spring.orm.services.PatientFamilyMembersService;
 
 @Controller
 @RequestMapping("/patient")
 public class PatientController {
-	@Autowired
-	private SpecializationDAO specDAO;
-
-	private DoctorsDAO doctorDAO;
 
 	private PatientDAO patientDAO;
 
-	private UserDAO userDAO;
-
-	private TestDAO testDAO;
-
 	private DiagnosticBillDAO diagnosticBillDAO;
-
-	private DoctorOutputService doctorServiceDAO;
-
-	private DocScheduleDAO doctorScheduleDAO;
 
 	private PatientFamilyMembersService patientFamilyMemberService;
 
 	private static final Logger logger = LoggerFactory.getLogger(PatientController.class);
 
 	@Autowired
-	public PatientController(SpecializationDAO specDAO, DoctorsDAO doctorDAO, PatientDAO patientDAO, UserDAO userDAO,
-			TestDAO testDAO, DiagnosticBillDAO diagnosticBillDAO, DoctorOutputService doctorServiceDAO,
-			DocScheduleDAO doctorScheduleDAO, PatientFamilyMembersService patientFamilyMemberService) {
+	public PatientController(PatientDAO patientDAO, DiagnosticBillDAO diagnosticBillDAO,
+			PatientFamilyMembersService patientFamilyMemberService) {
 		super();
-		this.specDAO = specDAO;
-		this.doctorDAO = doctorDAO;
 		this.patientDAO = patientDAO;
-		this.userDAO = userDAO;
-		this.testDAO = testDAO;
 		this.diagnosticBillDAO = diagnosticBillDAO;
-		this.doctorServiceDAO = doctorServiceDAO;
-		this.doctorScheduleDAO = doctorScheduleDAO;
 		this.patientFamilyMemberService = patientFamilyMemberService;
 	}
 
@@ -78,7 +55,6 @@ public class PatientController {
 		logger.info("Entered into viewPatientScreen");
 
 		logger.info("Fetching the Patient Screen");
-
 		return "patient/patient";
 	}
 
@@ -89,8 +65,14 @@ public class PatientController {
 		logger.info("Entered into viewProfile");
 		// Retrieve patient ID from the HttpSession
 
-		int patientId = patientSession.getId();
-		// Use the patient ID as needed
+		int pid = patientSession.getId();
+		logger.info("fetched the patient id");
+
+		PatientModel patientModel = patientDAO.getPatientById(pid);
+		logger.info("fetched the patient information through patient id");
+
+		model.addAttribute("patient", patientModel);
+		logger.info("Inserte the data into the model");
 
 		logger.info("Fetching the Patient Profile Screen");
 		return "patient/profile";
@@ -152,12 +134,80 @@ public class PatientController {
 		logger.info("Entered into saveFamilyMember");
 
 		// Saving the family member information into database and getting his/her patient id
-		int pfmbid = patientFamilyMemberService.addFamilyMember(familyMember, patientSession);
+		int patientFamilyMemberId = patientFamilyMemberService.addFamilyMember(familyMember, patientSession);
 		logger.info("Saved the family member information into database");
 
 		logger.info("Fetching the myfamily Screen");
 		return "patient/myfamily";
 
+	}
+
+	@RequestMapping(value = "/saveSettings", method = RequestMethod.POST)
+	public String saveSettings(@ModelAttribute ProfileInputModel patientFamilyInputModel,
+			@SessionAttribute("patientSession") PatientSession patientSession, Model model) {
+		logger.info("Entered into saveSettings");
+		int pid = patientSession.getId();
+		logger.info("fetched the patient id");
+
+		PatientModel patientModel = patientDAO.getPatientById(pid);
+		logger.info("fetched the patient information through patient id");
+
+		model.addAttribute("patient", patientModel);
+		logger.info("Inserte the data into the model");
+		patientDAO.updatePatientData(patientFamilyInputModel, patientSession);
+		return "patient/profile";
+	}
+
+	@RequestMapping(value = "/editFamily", method = RequestMethod.GET)
+	public String editPatientFamilyMember(@RequestParam int id,
+			@SessionAttribute("patientSession") PatientSession patientSession, Model model) {
+		logger.info("Entered into editPatientFamilyMember");
+
+		FamilyMembersInput familyData = patientFamilyMemberService.getFamilyMemberInfo(patientSession.getId(), id);
+		logger.info("fetched the family data");
+
+		model.addAttribute("family", familyData);
+		logger.info("inserted the data to the model");
+
+		logger.info("fetching the profile page");
+		return "patient/myprofile";
+
+	}
+
+	@RequestMapping(value = "/saveFamilyMember", method = RequestMethod.POST)
+	public String savePatientFamilyMember(@ModelAttribute FamilyMembersInput fam, Model model,
+			@SessionAttribute("patientSession") PatientSession patientSession) {
+		logger.info("Entered into savePatientFamilyMember");
+		patientFamilyMemberService.saveFamilyMemberInfo(fam);
+
+		List<FamilyMembersInput> members = patientFamilyMemberService.getAllFamilyMembers(patientSession.getId());
+		logger.info("fetched the family mmbers data of the patient");
+
+		// inserts the patient family members data into the model
+		model.addAttribute("members", members);
+		logger.info("Inserted the family mmbers data of the patient into the model");
+
+		logger.info("Fetching the myfamily Screen");
+
+		return "patient/myfamily";
+	}
+
+	@RequestMapping(value = "/deleteFamilyMember", method = RequestMethod.GET)
+	public String deleteFamilyMember(@RequestParam int id, Model model,
+			@SessionAttribute("patientSession") PatientSession patientSession) {
+		logger.info("Entered into deleteFamilyMember");
+		patientFamilyMemberService.deleteFamilyMember(id);
+
+		List<FamilyMembersInput> members = patientFamilyMemberService.getAllFamilyMembers(patientSession.getId());
+		logger.info("fetched the family mmbers data of the patient");
+
+		// inserts the patient family members data into the model
+		model.addAttribute("members", members);
+		logger.info("Inserted the family mmbers data of the patient into the model");
+
+		logger.info("Fetching the myfamily Screen");
+
+		return "patient/myfamily";
 	}
 
 }

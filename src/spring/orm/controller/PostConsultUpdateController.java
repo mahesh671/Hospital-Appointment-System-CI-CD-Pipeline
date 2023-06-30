@@ -42,20 +42,18 @@ public class PostConsultUpdateController {
 
 	private AppointmentDAO appointmentDAO;
 
-	private PatientProfileUpdateDAO patientProfileUpdateDAO;
 	private static final Logger logger = LoggerFactory.getLogger(AppointmentController.class);
 
 	@Autowired
 	public PostConsultUpdateController(PatientDAO patientDAO, PatientProfileUpdateDAO profileUpdateDAO,
-			HttpSession httpSession, UpdateProfileService updateProfileService, AppointmentDAO appointmentDAO,
-			PatientProfileUpdateDAO patientProfileUpdateDAO) {
+			HttpSession httpSession, UpdateProfileService updateProfileService, AppointmentDAO appointmentDAO) {
 		super();
 		this.patientDAO = patientDAO;
 		this.profileUpdateDAO = profileUpdateDAO;
 		this.httpSession = httpSession;
 		this.updateProfileService = updateProfileService;
 		this.appointmentDAO = appointmentDAO;
-		this.patientProfileUpdateDAO = patientProfileUpdateDAO;
+
 	}
 
 	@RequestMapping(value = "patient/getallPrescription", method = RequestMethod.GET)
@@ -103,9 +101,10 @@ public class PostConsultUpdateController {
 	@RequestMapping(value = "admin/getpatientbyid", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<String> getPatientById(@RequestParam int patientId, Model m) {
 		logger.info("To get Patient details by using ID in Admin's patient profile update page");
-		List<Integer> patientIdList = patientProfileUpdateDAO.getAllAppointmentIds(patientId); // Appointment IDs list are
-																						// displayed by mapping patient
-																						// IDs
+		List<Integer> patientIdList = profileUpdateDAO.getAllAppointmentIds(patientId); // Appointment IDs list
+																						// are
+		// displayed by mapping patient
+		// IDs
 		logger.info("This Appointment IDs are returned for a particular selected patient in dropdown : {}",
 				patientIdList);
 		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(patientIdList));

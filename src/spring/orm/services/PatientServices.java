@@ -76,4 +76,5 @@ public class PatientServices {
 		logger.info("Services Method to display appointments and tests counts  in dashboard is called");
 		return patientDAO.getAppointmentTestsCount(p);
 	}
+
 }

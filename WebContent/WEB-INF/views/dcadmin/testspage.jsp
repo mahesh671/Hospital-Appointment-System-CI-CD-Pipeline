@@ -103,9 +103,24 @@
 						%>
 					</tbody>
 				</table>
+				<br><br><br>
 			</div>
 		</div>
+ <div class="center">
+            <%-- Generate pagination links based on the total number of pages --%>
+            <% int totalPages = (int) request.getAttribute("totalPages"); %>
+            <% int currentPage = (int) request.getAttribute("currentPage"); %>
+            <% for (int i = 1; i <= totalPages; i++) { %>
+                <% if (i == currentPage) { %>
+                    <strong><%= i %></strong>
+                <% } else { %>
+                    <a href="?page=<%= i %>" class="page-link"><%= i %></a>
+                <% } %>
+            <% } %>
+            <br><br>
+           
 
+        </div>
 
 		<div align="center">
 			<button type="button" class="btn btn-primary" id="show-btn"

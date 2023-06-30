@@ -47,13 +47,26 @@ public class TestController {
 
 	// Request mapping for getting test details
 	@RequestMapping(value = "dcadmin/gettestdetails", method = RequestMethod.GET)
-	public String testDetails(Model model) {
+	public String testDetails(@RequestParam(name = "page", defaultValue = "1") int page, Model model) {
 		// Calls the method gettests in TestDao to get tests
+		int pageSize = 3; // Number of records to display per page
 		logger.info("Entered to gettestdetails method");
 		List<TestModel> testModel = testServices.getTests();
+		int size = testModel.size();
+		int totalPages = (int) Math.ceil(size / (double) pageSize);
+
+		// Calculate the start and end indexes for the current page
+		int startIndex = (page - 1) * pageSize;
+		int endIndex = Math.min(startIndex + pageSize, size);
+
+		List<TestModel> candidatesOnPage = testModel.subList(startIndex, endIndex);
+
+		model.addAttribute("tests", candidatesOnPage);
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("currentPage", page);
 		logger.info("Returns all the tests with details in list");
 		logger.info(testModel.toString());
-		model.addAttribute("tests", testModel);
+		// model.addAttribute("tests", testModel);
 		return "dcadmin/testspage";
 
 	}

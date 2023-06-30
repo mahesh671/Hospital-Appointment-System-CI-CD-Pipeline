@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<%@ page import="java.util.*, spring.orm.model.*"%>
+<%@ page import="java.lang.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,95 +7,59 @@
 <jsp:include page="scripts.jsp" />
 </head>
 <body>
+	<div>
+		<jsp:include page="nav.jsp" />
+		<div class="shadow p-3  bg-white rounded">
+			<h4 class="">Patient Settings</h4>
+			<form action="./saveFamilyMember" method="post">
+			
+			    <div class="form-group" style="display:none;">
+					<label for="patId" class="form-label">Patient Name</label> <input
+						type="text" name="pfmbPatnId" id="pfmbPatnId" class="form-control"
+						value="${family.pfmbPatnId}">
+				</div>
+			    
 
-	<jsp:include page="nav.jsp" />
-	<div align="center">
-		<div class="container">
-			<h1>My Profile</h1>
-			<div class="row">
-				<div class="col-md-6">
-					<h4>Add Family Members</h4>
-					<form id="addForm">
-						<input id="index" name="index" type="text" hidden>
-						<div class="form-group">
-							<label for="name">Name:</label>
-							<input type="text" class="form-control" id="name" name="name">
-						</div>
-						<div class="form-group">
-							<label for="relation">Relation:</label>
-							<input type="text" class="form-control" id="relation" name="relation">
-						</div>
-						<div class="form-group">
-							<label for="age">Age:</label>
-							<input type="number" class="form-control" id="age" name="age">
-						</div>
-						<button type="submit" class="btn btn-primary">Add Member</button>
-					</form>
+				<div class="form-group">
+					<label for="patnName" class="form-label">Patient Name</label> <input
+						type="text" name="pfmbName" id="pfmbName" class="form-control"
+						value="${family.pfmbName}">
 				</div>
 
-			</div>
-			<h2 class="mt-4">Family Members</h2>
-			<table class="table mt-4">
-				<tr>
-                    <th>Index</th>
-                    <th>Name</th>
-                    <th>Relation</th>
-                    <th>Age</th>
-                    <th>Action</th>
-                </tr>
-				<tbody>
-					<tr>
-						<td>1</td>
-						<td>Family Member 1</td>
-						<td>Relation 1</td>
-						<td>20</td>
-						<td>
-							<button type="button" class="btn btn-danger"
-								onclick="editMember(1)">Edit</button>
-							<button type="button" class="btn btn-danger"
-								onclick="confirmDelete(1)">Delete</button>
-						</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>Family Member 2</td>
-						<td>Relation 2</td>
-						<td>60</td>
-						<td>
-							<button type="button" class="btn btn-danger"
-								onclick="editMember(2)">Edit</button>
-							<button type="button" class="btn btn-danger"
-								onclick="confirmDelete(2)">Delete</button>
-						</td>
-					</tr>
-					<!-- Add more rows for family members -->
-				</tbody>
-			</table>
+				<div class="form-group">
+					<label for="patnAge" class="form-label">Age</label> <input
+						type="number" name="pfmbAge" id="pfmbAge" class="form-control"
+						value="${family.pfmbAge}">
+				</div>
 
-			<div id="editFormSection" style="display: none;">
-				<h4>Edit Family Member</h4>
-				<form id="editForm">
-					<input id="editIndex" name="index" type="text" hidden>
-					<div class="form-group">
-						<label for="editName">Name:</label>
-						<input type="text" class="form-control" id="editName"
-							name="name">
-					</div>
-					<div class="form-group">
-						<label for="editRelation">Relation:</label>
-						<input type="text" class="form-control" id="editRelation"
-							name="relation">
-					</div>
-					<div class="form-group">
-						<label for="editAge">Age:</label>
-						<input type="number" class="form-control" id="editAge" name="age">
-					</div>
-					<button type="submit" class="btn btn-primary" id="update">Update</button>
-				</form>
-			</div>
+				<div class="form-group">
+					<label for="patnGender" class="form-label">Gender</label> <select
+						name="pfmbGender" id="pfmbGender" class="form-control">
+						<option value="Male"
+							${family.pfmbGender.toString() == 'Male' ? 'selected' : ''}>Male</option>
+						<option value="Female"
+							${family.pfmbGender.toString() == 'Female' ? 'selected' : ''}>Female</option>
+					</select>
+				</div>
+				
+				<div class="form-group">
+					<label for="patnBrelation" class="form-label">Relation</label> <input
+						type="text" name="pfmbRelation" id="pfmbRelation" class="form-control"
+						value="${family.pfmbRelation}">
+				</div>
 
+
+
+				<div class="form-group">
+					<label for="patnBgroup" class="form-label">Blood Group</label> <input
+						type="text" name="pfmbbgroup" id="pfmbbgroup" class="form-control"
+						value="${family.pfmbbgroup}">
+				</div>
+
+
+				<button type="submit" class="btn btn-primary btn-block">Save</button>
+			</form>
 		</div>
 	</div>
 </body>
-<script type="text/javascript" src="./js/myprofile.js"></script>
 </html>

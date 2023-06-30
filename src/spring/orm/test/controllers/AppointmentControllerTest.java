@@ -1,86 +1,98 @@
 package spring.orm.test.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.ui.Model;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import spring.orm.contract.AppointmentDAO;
+import spring.orm.contract.DoctorsDAO;
+import spring.orm.contract.PatientDAO;
+import spring.orm.contract.SpecializationDAO;
+import spring.orm.controller.AppointmentController;
+import spring.orm.model.PatientSession;
+import spring.orm.model.Specialization;
+import spring.orm.model.output.AppOutFormFamily;
+import spring.orm.services.AppointmentService;
+import spring.orm.services.DoctorOutputService;
+import spring.orm.services.PaymentServices;
+
 public class AppointmentControllerTest {
+	@Mock
+	private SpecializationDAO specializationDAO;
 
-	@Test
-	public void AppointmentControllerTest() {
-		throw new RuntimeException("Test not implemented");
+	@Mock
+	private DoctorOutputService doctorservice;
+
+	@Mock
+	private PatientDAO patientDAO;
+
+	@Mock
+	private DoctorsDAO doctorDAO;
+
+	@Mock
+	private AppointmentDAO appointmentDAO;
+
+	@Mock
+	private AppointmentService appointmentService;
+
+	@Mock
+	private PaymentServices ps;
+
+	@InjectMocks
+	private AppointmentController appointmentController;
+
+	@Mock
+	private Model model;
+
+	@BeforeClass
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
-	public void cancelAppointmentTest() {
-		throw new RuntimeException("Test not implemented");
+	public void testGetNewAppointment() {
+		List<Specialization> specializationList = new ArrayList<>();
+		Mockito.when(specializationDAO.getAllSpecializations()).thenReturn(specializationList);
+
+		String result = appointmentController.getNewAppointment(model);
+
+		Mockito.verify(specializationDAO).getAllSpecializations();
+		Mockito.verify(model).addAttribute("speclist", specializationList);
+		Mockito.verify(model).addAttribute("patlist", patientDAO.getAllPatientInfo());
+
+		assert result.equals("admin/appointment");
 	}
 
 	@Test
-	public void fetchBySpecializationTest() {
-		throw new RuntimeException("Test not implemented");
+	public void testGetNewPatientAppointment() {
+		PatientSession patientSession = new PatientSession();
+		List<Specialization> specializationList = new ArrayList<>();
+		List<AppOutFormFamily> familyMembers = new ArrayList<>();
+
+		Mockito.when(specializationDAO.getAllSpecializations()).thenReturn(specializationList);
+		int validId = 1;
+		Mockito.when(patientSession.getId()).thenReturn(validId);
+		Mockito.when(appointmentService.getFormFamily(patientSession.getId())).thenReturn(familyMembers);
+
+		String result = appointmentController.getNewPatientAppointment(patientSession, model);
+
+		Mockito.verify(specializationDAO).getAllSpecializations();
+
+		Mockito.verify(appointmentService).getFormFamily(patientSession.getId());
+		Mockito.verify(model).addAttribute("speclist", specializationList);
+		Mockito.verify(model).addAttribute("fam", familyMembers);
+
+		assert result.equals("patient/appointment");
 	}
 
-	@Test
-	public void fetchDoctorTest() {
-		throw new RuntimeException("Test not implemented");
-	}
+	// Add more test methods for other controller methods
 
-	@Test
-	public void fetchTimeSlotsTest() {
-		throw new RuntimeException("Test not implemented");
-	}
-
-	@Test
-	public void getBookAppDataTest() {
-		throw new RuntimeException("Test not implemented");
-	}
-
-	@Test
-	public void getBookedAppFormTest() {
-		throw new RuntimeException("Test not implemented");
-	}
-
-	@Test
-	public void getNewAppointmentTest() {
-		throw new RuntimeException("Test not implemented");
-	}
-
-	@Test
-	public void getNewPatientAppointmentTest() {
-		throw new RuntimeException("Test not implemented");
-	}
-
-	@Test
-	public void getPatientBookedAppointmentsTest() {
-		throw new RuntimeException("Test not implemented");
-	}
-
-	@Test
-	public void getpatientBookAppDataTest() {
-		throw new RuntimeException("Test not implemented");
-	}
-
-	@Test
-	public void newAppointmentBookingTest() {
-		throw new RuntimeException("Test not implemented");
-	}
-
-	@Test
-	public void newAppointmentPatientBookingTest() {
-		throw new RuntimeException("Test not implemented");
-	}
-
-	@Test
-	public void rescheduleAppointmentTestintModel() {
-		throw new RuntimeException("Test not implemented");
-	}
-
-	@Test
-	public void rescheduleAppointmentTestRescheduleAppointmentModel() {
-		throw new RuntimeException("Test not implemented");
-	}
-
-	@Test
-	public void reschedulePatAppointmentTest() {
-		throw new RuntimeException("Test not implemented");
-	}
+	// ...
 }

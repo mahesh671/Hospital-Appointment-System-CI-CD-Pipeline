@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import spring.orm.model.PatientModel;
+import spring.orm.model.PatientSession;
 import spring.orm.model.entity.PatientMedicalProfile;
+import spring.orm.model.input.ProfileInputModel;
 import spring.orm.model.output.OutputPatientTestReports;
 import spring.orm.model.output.ParaGroupOutput;
 import spring.orm.model.output.PatientNameOutputModel;
@@ -45,5 +47,9 @@ public interface PatientDAO {
 	public List<ParaGroupOutput> getParameterValuesChart(int p);
 
 	public void updateLastvisitAndLastAppointmentInfo(int pat_id, LocalDate last_visited, int app_id);
+
+	public String getContactNumber(int pid);
+
+	public void updatePatientData(ProfileInputModel pim, PatientSession ps);
 
 }

@@ -2,6 +2,7 @@ package spring.orm.controller;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ import spring.orm.customexceptions.InvalidWeekdayException;
 import spring.orm.model.entity.DoctorTemp;
 import spring.orm.model.input.DoctorInput;
 import spring.orm.model.input.DoctorUpdateModel;
+import spring.orm.model.output.DoctorOutPutModel;
 import spring.orm.services.DoctorOutputService;
 
 @Controller
@@ -80,18 +82,35 @@ public class DoctorController {
 	}
 
 	@RequestMapping(value = "admin/doctors", method = RequestMethod.GET)
-	public String getDoctorpage(Model m) {
+	public String getDoctorpage(@RequestParam(name = "page", defaultValue = "1") int page, Model m) {
 		/*
 		 * This method maps the "/admin/doctors" URL to handle a GET request for displaying the doctor page.
 		 */
+		int pageSize = 3; // Number of records to display per page
 		try {
-			m.addAttribute("docsche", doctorDAO.getallDocSchedule());
+
+			List<DoctorOutPutModel> DoctorList = doctorDAO.getallDocSchedule();
+			int size = DoctorList.size();
+			int totalPages = (int) Math.ceil(size / (double) pageSize);
+
+			// Calculate the start and end indexes for the current page
+			int startIndex = (page - 1) * pageSize;
+			int endIndex = Math.min(startIndex + pageSize, size);
+
+			List<DoctorOutPutModel> candidatesOnPage = DoctorList.subList(startIndex, endIndex);
+
+			m.addAttribute("docsche", candidatesOnPage);
+			m.addAttribute("totalPages", totalPages);
+			m.addAttribute("currentPage", page);
 			m.addAttribute("speclist", specializationDAO.getAllSpecializations());
+
+			// Invoke the logger statement
 			logger.info("Doctor page loaded successfully");
+
 			return "admin/doctor"; // Return the name of the view template for the doctor page
 		} catch (Exception e) {
 			logger.error("Error occurred while loading doctor page", e);
-			m.addAttribute("error", "An error occurred while loading doctor page.");
+			m.addAttribute("error", "An error occurred while loading the doctor page.");
 			return "admin/error"; // Return the name of the error view template
 		}
 	}

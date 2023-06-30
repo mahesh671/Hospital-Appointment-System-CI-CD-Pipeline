@@ -18,3 +18,7 @@
 .custom-scroll::-webkit-scrollbar-thumb {
 	background-color: transparent;
 }
+.page-link {
+    display: inline-block;
+    margin-right: 10px; /* Adjust this value to add spacing between the links */
+  }

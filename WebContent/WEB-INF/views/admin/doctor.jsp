@@ -19,7 +19,7 @@
 	<div align="center">
 		<h2>Doctors List</h2>
 		<div
-			class=" custom-scroll overflow-auto shadow p-3 m-3  bg-white rounded"
+			
 			style="max-height: 300px;">
 			<table class="table  table-bordered table-shadow mt-4 ">
 				<thead style="position: sticky; top: 0; background-color: white; z-index: 1;">
@@ -67,7 +67,23 @@
 
 				</tbody>
 			</table>
-		</div>
+			
+		</div><br><br><br>
+		 <div class="center">
+            <%-- Generate pagination links based on the total number of pages --%>
+            <% int totalPages = (int) request.getAttribute("totalPages"); %>
+            <% int currentPage = (int) request.getAttribute("currentPage"); %>
+            <% for (int i = 1; i <= totalPages; i++) { %>
+                <% if (i == currentPage) { %>
+                    <strong><%= i %></strong>
+                <% } else { %>
+                    <a href="?page=<%= i %>" class="page-link"><%= i %></a>
+                <% } %>
+            <% } %>
+            <br><br>
+           
+
+        </div>
 		<br>
 		<div class="form-container">
 			<button type="button" class="btn btn-primary" id="show-btn-doc"
