@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import spring.orm.contract.TestDAO;
 import spring.orm.model.TestModel;
+import spring.orm.model.output.testsCategoriesModel;
 
 @Service
 public class TestServices {
@@ -43,10 +44,11 @@ public class TestServices {
 
 	}
 
-	public List<String> getTestCategory() {
+	public List<testsCategoriesModel> getTestCategory() {
 		// TODO Auto-generated method stub
 		logger.info("Retrieving test categories...");
-		return null;
+		return testDAO.getCategories();
+
 	}
 
 	public List<TestModel> getTestByCategory(String category) {

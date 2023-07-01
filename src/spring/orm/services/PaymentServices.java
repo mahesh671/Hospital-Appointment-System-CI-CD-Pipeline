@@ -121,17 +121,15 @@ public class PaymentServices {
 		refundRequest.put("speed", "optimum"); // Speed of refund: instant, immediate, or optimum
 		refundRequest.put("amount", appointment.getAppnfee()); // Refund amount, can be partial or full
 
-		String paymentId = appointment.getAppnrefer();
-
 		// Perform refund
 		Refund refund = razorpay.Refunds.create(refundRequest);
 
-		logger.info("Refund ID: " + refund.get("id"));
+		logger.info("Refund ID: " + refund.get("payment_id"));
 		logger.info("Refund Status: " + refund.get("status"));
 		logger.info("Refund Amount: " + refund.get("amount"));
 
 		// Add more log statements or return the refund details as needed
-
+		System.out.println(refund.toString());
 		return refund.toString(); // Return refund details as a string (you can customize the format)
 	}
 

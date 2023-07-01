@@ -50,7 +50,7 @@ public class PatientServices {
 	public List<ParaGroupOutput> getParamterValues(int p) {
 		// TODO: Implement the logic to retrieve parameter groups with their parameters
 		logger.info("Services Method to display parameter values for chart in dashboard is called");
-		return patientDAO.getParameterValues();
+		return patientDAO.getParameterValues(p);
 	}
 
 	/**

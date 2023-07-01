@@ -55,11 +55,11 @@ function toggleAllBoxes() {
 <body>
 <h2 align='center'>Default test</h2><table border='1' align="center">
 <tr>
-<td>Tests passed/Failed/Skipped:</td><td>3/1/0</td>
+<td>Tests passed/Failed/Skipped:</td><td>1/1/0</td>
 </tr><tr>
-<td>Started on:</td><td>Fri Jun 30 15:49:32 IST 2023</td>
+<td>Started on:</td><td>Sat Jul 01 17:46:05 IST 2023</td>
 </tr>
-<tr><td>Total time:</td><td>0 seconds (656 ms)</td>
+<tr><td>Total time:</td><td>0 seconds (84 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -76,11 +76,10 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='spring.orm.test.controllers.PostConsultUpdateControllerTest.testGetPatientProfile()'><b>testGetPatientProfile</b><br>Test class: spring.orm.test.controllers.PostConsultUpdateControllerTest</td>
-<td><div><pre>java.lang.NullPointerException: Cannot invoke &quot;java.lang.Integer.intValue()&quot; because &quot;this.appnId&quot; is null
-	at spring.orm.model.input.ProfileUpdateForm.getAppnid(ProfileUpdateForm.java:25)
-	at spring.orm.controller.PostConsultUpdateController.getPatientProfile(PostConsultUpdateController.java:84)
-	at spring.orm.test.controllers.PostConsultUpdateControllerTest.testGetPatientProfile(PostConsultUpdateControllerTest.java:128)
+<td title='spring.orm.test.dao.PatientProfileUpdateDAOImplTest.testGetAllPrescription()'><b>testGetAllPrescription</b><br>Test class: spring.orm.test.dao.PatientProfileUpdateDAOImplTest</td>
+<td><div><pre>java.lang.NullPointerException: Cannot invoke &quot;javax.persistence.TypedQuery.setParameter(String, Object)&quot; because the return value of &quot;javax.persistence.EntityManager.createQuery(String, java.lang.Class)&quot; is null
+	at spring.orm.dao.PatientProfileUpdateDAOImpl.getallPrescription(PatientProfileUpdateDAOImpl.java:55)
+	at spring.orm.test.dao.PatientProfileUpdateDAOImplTest.testGetAllPrescription(PatientProfileUpdateDAOImplTest.java:89)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -109,11 +108,10 @@ function toggleAllBoxes() {
 	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
 	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
 	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
-</pre></div><a href='#' onClick='toggleBox("stack-trace455036946", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace455036946'><pre>java.lang.NullPointerException: Cannot invoke &quot;java.lang.Integer.intValue()&quot; because &quot;this.appnId&quot; is null
-	at spring.orm.model.input.ProfileUpdateForm.getAppnid(ProfileUpdateForm.java:25)
-	at spring.orm.controller.PostConsultUpdateController.getPatientProfile(PostConsultUpdateController.java:84)
-	at spring.orm.test.controllers.PostConsultUpdateControllerTest.testGetPatientProfile(PostConsultUpdateControllerTest.java:128)
+</pre></div><a href='#' onClick='toggleBox("stack-trace936931778", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace936931778'><pre>java.lang.NullPointerException: Cannot invoke &quot;javax.persistence.TypedQuery.setParameter(String, Object)&quot; because the return value of &quot;javax.persistence.EntityManager.createQuery(String, java.lang.Class)&quot; is null
+	at spring.orm.dao.PatientProfileUpdateDAOImpl.getallPrescription(PatientProfileUpdateDAOImpl.java:55)
+	at spring.orm.test.dao.PatientProfileUpdateDAOImplTest.testGetAllPrescription(PatientProfileUpdateDAOImplTest.java:89)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -144,7 +142,7 @@ function toggleAllBoxes() {
 	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
 </pre></div></td>
 <td>0</td>
-<td>spring.orm.test.controllers.PostConsultUpdateControllerTest@13518f37</td></tr>
+<td>spring.orm.test.dao.PatientProfileUpdateDAOImplTest@6e495b48</td></tr>
 </table><p>
 <table width='100%' border='1' class='invocation-passed'>
 <tr><td colspan='4' align='center'><b>PASSED TESTS</b></td></tr>
@@ -155,20 +153,10 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='spring.orm.test.controllers.PostConsultUpdateControllerTest.testGetPatientById()'><b>testGetPatientById</b><br>Test class: spring.orm.test.controllers.PostConsultUpdateControllerTest</td>
+<td title='spring.orm.test.dao.PatientProfileUpdateDAOImplTest.testSave()'><b>testSave</b><br>Test class: spring.orm.test.dao.PatientProfileUpdateDAOImplTest</td>
 <td></td>
 <td>0</td>
-<td>spring.orm.test.controllers.PostConsultUpdateControllerTest@13518f37</td></tr>
-<tr>
-<td title='spring.orm.test.controllers.PostConsultUpdateControllerTest.testGetPatientId()'><b>testGetPatientId</b><br>Test class: spring.orm.test.controllers.PostConsultUpdateControllerTest</td>
-<td></td>
-<td>0</td>
-<td>spring.orm.test.controllers.PostConsultUpdateControllerTest@13518f37</td></tr>
-<tr>
-<td title='spring.orm.test.controllers.PostConsultUpdateControllerTest.testGetAllPrescription()'><b>testGetAllPrescription</b><br>Test class: spring.orm.test.controllers.PostConsultUpdateControllerTest</td>
-<td></td>
-<td>0</td>
-<td>spring.orm.test.controllers.PostConsultUpdateControllerTest@13518f37</td></tr>
+<td>spring.orm.test.dao.PatientProfileUpdateDAOImplTest@6e495b48</td></tr>
 </table><p>
 </body>
 </html>

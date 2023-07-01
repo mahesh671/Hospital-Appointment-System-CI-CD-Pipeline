@@ -7,7 +7,7 @@ import spring.orm.model.output.PrescriptionOutputmodel;
 
 public interface PatientProfileUpdateDAO {
 
-	void save(PatientMedicalProfile pmp);
+	boolean save(PatientMedicalProfile pmp);
 
 	List<PrescriptionOutputmodel> getallPrescription(int id);
 

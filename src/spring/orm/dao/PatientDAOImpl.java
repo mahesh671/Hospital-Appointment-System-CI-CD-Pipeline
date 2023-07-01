@@ -164,7 +164,7 @@ public class PatientDAOImpl implements PatientDAO {
 	// method that fetches all the ParameterValues
 	@Override
 	@Transactional
-	public List<ParaGroupOutput> getParameterValues() {
+	public List<ParaGroupOutput> getParameterValues(int pid) {
 		logger.info("Entered into getParameterValues");
 
 		// Retrieve the patient's medical profile with parameter groups
@@ -172,7 +172,7 @@ public class PatientDAOImpl implements PatientDAO {
 				+ "FROM PatientMedicalProfile pp, AppointmentEntity a WHERE pp.id.patn_id = a.pm.patn_id AND pp.id.patn_id = :p ";
 
 		List<ParaGroupOutput> paraGroupList = entityManager.createQuery(hql, spring.orm.model.output.ParaGroupOutput.class)
-				.setParameter("p", 4).getResultList();
+				.setParameter("p", pid).getResultList();
 
 		logger.info("fetched all the ParameterValues of the patient");
 

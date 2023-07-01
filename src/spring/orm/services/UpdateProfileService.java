@@ -25,6 +25,7 @@ public class UpdateProfileService {
 		PatientMedicalProfile patinetMedicalProfile = new PatientMedicalProfile();
 		PatientConsultationUpdateId patientConsultationUpdate = new PatientConsultationUpdateId(
 				profileUpdateForm.getPatientId(), profileUpdateForm.getAppnid());
+
 		int pid = patientConsultationUpdate.getPatn_id();
 		int appnid = patientConsultationUpdate.getAppn_id();
 		logger.info("patiend id", pid);

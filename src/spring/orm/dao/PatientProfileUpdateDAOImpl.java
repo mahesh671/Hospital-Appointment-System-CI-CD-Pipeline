@@ -26,14 +26,15 @@ public class PatientProfileUpdateDAOImpl implements PatientProfileUpdateDAO {
 
 	@Transactional
 	@Override
-	public void save(PatientMedicalProfile patientMedicalProfile) {
+	public boolean save(PatientMedicalProfile patientMedicalProfile) {
 		// TODO Auto-generated method stub
 		logger.info("PatientMedicalProfile in dcadmin");
 		entitymanager.persist(patientMedicalProfile);
+		return true;
 	}
 
 	@Override
-	
+
 	@Transactional
 	public List<PrescriptionOutputmodel> getallPrescription(int id) {
 
@@ -41,15 +42,16 @@ public class PatientProfileUpdateDAOImpl implements PatientProfileUpdateDAO {
 				+ "from PatientMedicalProfile p,AppointmentEntity a where (p.id.patn_id in(select f.pfmbPatnId from FamilyMembers f where f.patnAccessPatnId=:p) or p.id.patn_id=:p ) and a.pm.patn_id=p.id.patn_id";
 		System.out.println(hql); // to show the following attributes , including family members
 
-		List<PrescriptionOutputmodel> prescriptionOutputList = entitymanager.createQuery(hql, spring.orm.model.output.PrescriptionOutputmodel.class) // this
-																														// output
-																														// model
-																														// consists
-																														// of
-																														// patientmedicalprofile
-																														// and
-																														// DiagnosticBill
-																														// attributes
+		List<PrescriptionOutputmodel> prescriptionOutputList = entitymanager
+				.createQuery(hql, spring.orm.model.output.PrescriptionOutputmodel.class) // this
+				// output
+				// model
+				// consists
+				// of
+				// patientmedicalprofile
+				// and
+				// DiagnosticBill
+				// attributes
 				.setParameter("p", id).getResultList();
 		logger.info("prescription details in patients screen along with prescription image");
 		return prescriptionOutputList;
@@ -58,8 +60,9 @@ public class PatientProfileUpdateDAOImpl implements PatientProfileUpdateDAO {
 	@Override
 	public List<Integer> getAllAppointmentIds(int patn_id) {
 		// TODO Auto-generated method stub
-		//List<Integer> lp3 = new ArrayList<>();
-		List<Integer> listPointer2 = new ArrayList<>(Collections.nCopies(10000, null)); //10000 null values in ArrayList will be initialized
+		// List<Integer> lp3 = new ArrayList<>();
+		List<Integer> listPointer2 = new ArrayList<>(Collections.nCopies(10000, null)); // 10000 null values in
+																						// ArrayList will be initialized
 		listPointer2 = entitymanager.createQuery("select a.appn_id "
 				+ "from AppointmentEntity a where a.appn_id not in(select pmp.id.patn_appn_id from PatientMedicalProfile pmp where pmp.id.patn_id =: patn_id ) and a.pm.patn_id=:patn_id")
 				.setParameter("patn_id", patn_id)
