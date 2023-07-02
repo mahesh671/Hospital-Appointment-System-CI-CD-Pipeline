@@ -3,12 +3,12 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="spring.orm.test.controllers.PostConsultUpdateControllerTest">
+      <class name="spring.orm.test.services.RegistrationServiceTest">
         <methods>
+          <include name="testCreatePatientSession"/>
           <include name="setUp"/>
-          <include name="testGetPatientProfile"/>
         </methods>
-      </class> <!-- spring.orm.test.controllers.PostConsultUpdateControllerTest -->
+      </class> <!-- spring.orm.test.services.RegistrationServiceTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

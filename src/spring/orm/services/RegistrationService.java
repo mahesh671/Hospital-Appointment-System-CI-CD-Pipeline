@@ -89,4 +89,8 @@ public class RegistrationService {
 	public void storePatientSession(HttpSession session, PatientSession patientSession) {
 		session.setAttribute("patientSession", patientSession);
 	}
+
+	 public void setPatientDAO(PatientDAO patientDAO) {
+        this.patientDAO = patientDAO;
+    }
 }

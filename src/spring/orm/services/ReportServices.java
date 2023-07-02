@@ -30,8 +30,7 @@ public class ReportServices {
 
 		byte[] filecontent = null;
 
-		if (!file.isEmpty()) {
-			logger.info("The uploaded image file is not empty");
+		
 
 			try {
 				// converting the image into byte form
@@ -41,11 +40,7 @@ public class ReportServices {
 				e.printStackTrace();
 				return "error";
 			}
-		} else {
-			logger.info("The uploaded image file is empty");
-
-			return "empty";
-		}
+		
 
 		// saves the file to its corresponding report id
 		saveFileDetails(id, filecontent);

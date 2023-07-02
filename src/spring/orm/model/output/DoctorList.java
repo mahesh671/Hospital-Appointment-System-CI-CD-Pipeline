@@ -15,6 +15,11 @@ public class DoctorList {
 	}
 
 
+	public DoctorList() {//extra
+		super();
+	}
+
+
 	public String getDocname() {
 		return doctName;
 	}

@@ -32,7 +32,7 @@ public class PatientFamilyMembersService {
 
 	// Method that saves the family member into the database
 	@Transactional
-	public int addFamilyMember(FamilyMembersInput familyMember, PatientSession patientSession) {
+	public int addFamilyMember(FamilyMembersInput familyMember, int patientId) {
 
 		logger.info("Entered into addFamilyMember");
 
@@ -42,7 +42,7 @@ public class PatientFamilyMembersService {
 		patientModel.setPatn_age(familyMember.getPfmbAge());
 		patientModel.setPatn_gender(familyMember.getPfmbGender());
 		patientModel.setPatn_bgroup(familyMember.getPfmbbgroup());
-		patientModel.setAccessPatientId(patientSession.getId());
+		patientModel.setAccessPatientId(patientId);
 		logger.info("Created a new PatientModel object and set the required information");
 
 		// Save the PatientModel and get the patient ID
@@ -50,7 +50,7 @@ public class PatientFamilyMembersService {
 		logger.info("Saved the PatientModel and get the patient ID");
 
 		// Add the family member using the FamilyMembersDao
-		familyMemberDao.addFamilyByPatientInfo(patientModel, pid, patientSession.getId(), familyMember.getPfmbRelation());
+		familyMemberDao.addFamilyByPatientInfo(patientModel, pid, patientId, familyMember.getPfmbRelation());
 		logger.info("Saved the family member information into the database");
 
 		return patientModel.getPatn_id();

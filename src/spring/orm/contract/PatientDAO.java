@@ -30,7 +30,7 @@ public interface PatientDAO {
 
 	public List<patientPrescriptionOutputmodel> getPatientPrescriptionById(int patn_id);
 
-	public List<ParaGroupOutput> getParameterValues();
+	public List<ParaGroupOutput> getParameterValues(int patientId);
 
 	public List<PatientModel> getFamilyDetailsById(int pat_id);
 

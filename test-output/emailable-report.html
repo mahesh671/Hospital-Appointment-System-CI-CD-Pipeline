@@ -9,18 +9,19 @@
 <table>
 <tr><th>Test</th><th># Passed</th><th># Skipped</th><th># Retried</th><th># Failed</th><th>Time (ms)</th><th>Included Groups</th><th>Excluded Groups</th></tr>
 <tr><th colspan="8">Default suite</th></tr>
-<tr><td><a href="#t0">Default test</a></td><td class="num">3</td><td class="num">0</td><td class="num">0</td><td class="num attn">1</td><td class="num">656</td><td></td><td></td></tr>
+<tr><td><a href="#t0">Default test</a></td><td class="num">6</td><td class="num">0</td><td class="num">0</td><td class="num attn">1</td><td class="num">837</td><td></td><td></td></tr>
 </table>
-<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Default suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Default test &#8212; failed</th></tr><tr class="failedeven"><td rowspan="1">spring.orm.test.controllers.PostConsultUpdateControllerTest</td><td><a href="#m0">testGetPatientProfile</a></td><td rowspan="1">1688120373096</td><td rowspan="1">62</td></tr><tr><th colspan="4">Default test &#8212; passed</th></tr><tr class="passedeven"><td rowspan="3">spring.orm.test.controllers.PostConsultUpdateControllerTest</td><td><a href="#m1">testGetAllPrescription</a></td><td rowspan="1">1688120373021</td><td rowspan="1">30</td></tr><tr class="passedeven"><td><a href="#m2">testGetPatientById</a></td><td rowspan="1">1688120373056</td><td rowspan="1">33</td></tr><tr class="passedeven"><td><a href="#m3">testGetPatientId</a></td><td rowspan="1">1688120373092</td><td rowspan="1">1</td></tr></tbody>
+<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Default suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Default test &#8212; failed</th></tr><tr class="failedeven"><td rowspan="1">spring.orm.test.services.RegistrationServiceTest</td><td><a href="#m0">testCreatePatientSession</a></td><td rowspan="1">1688241490732</td><td rowspan="1">5</td></tr><tr><th colspan="4">Default test &#8212; passed</th></tr><tr class="passedeven"><td rowspan="6">spring.orm.test.services.RegistrationServiceTest</td><td><a href="#m1">testGetPatientDetails</a></td><td rowspan="1">1688241490743</td><td rowspan="1">20</td></tr><tr class="passedeven"><td><a href="#m2">testGetUser</a></td><td rowspan="1">1688241490766</td><td rowspan="1">1</td></tr><tr class="passedeven"><td><a href="#m3">testIsUsernameAvailable</a></td><td rowspan="1">1688241490770</td><td rowspan="1">2</td></tr><tr class="passedeven"><td><a href="#m4">testRegisterPatient</a></td><td rowspan="1">1688241490775</td><td rowspan="1">1</td></tr><tr class="passedeven"><td><a href="#m5">testStorePatientSession</a></td><td rowspan="1">1688241490778</td><td rowspan="1">61</td></tr><tr class="passedeven"><td><a href="#m6">testUpdateUser</a></td><td rowspan="1">1688241490841</td><td rowspan="1">1</td></tr></tbody>
 </table>
-<h2>Default test</h2><h3 id="m0">spring.orm.test.controllers.PostConsultUpdateControllerTest#testGetPatientProfile</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.NullPointerException: Cannot invoke &quot;java.lang.Integer.intValue()&quot; because &quot;this.appnId&quot; is null
-	at spring.orm.model.input.ProfileUpdateForm.getAppnid(ProfileUpdateForm.java:25)
-	at spring.orm.controller.PostConsultUpdateController.getPatientProfile(PostConsultUpdateController.java:84)
-	at spring.orm.test.controllers.PostConsultUpdateControllerTest.testGetPatientProfile(PostConsultUpdateControllerTest.java:128)
+<h2>Default test</h2><h3 id="m0">spring.orm.test.services.RegistrationServiceTest#testCreatePatientSession</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.Error: Unresolved compilation problems: 
+	The method eq(int) is undefined for the type RegistrationServiceTest
+	The method eq(int) is undefined for the type RegistrationServiceTest
+
+	at spring.orm.test.services.RegistrationServiceTest.testCreatePatientSession(RegistrationServiceTest.java:145)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
 	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:139)
 	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:664)
 	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:227)
@@ -29,7 +30,7 @@
 	at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:200)
 	at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:148)
 	at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:128)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1510)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
 	at org.testng.TestRunner.privateRun(TestRunner.java:848)
 	at org.testng.TestRunner.run(TestRunner.java:621)
 	at org.testng.SuiteRunner.runTest(SuiteRunner.java:443)
@@ -46,8 +47,11 @@
 	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
 	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
 </div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m1">spring.orm.test.controllers.PostConsultUpdateControllerTest#testGetAllPrescription</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m2">spring.orm.test.controllers.PostConsultUpdateControllerTest#testGetPatientById</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m3">spring.orm.test.controllers.PostConsultUpdateControllerTest#testGetPatientId</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m1">spring.orm.test.services.RegistrationServiceTest#testGetPatientDetails</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m2">spring.orm.test.services.RegistrationServiceTest#testGetUser</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m3">spring.orm.test.services.RegistrationServiceTest#testIsUsernameAvailable</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m4">spring.orm.test.services.RegistrationServiceTest#testRegisterPatient</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m5">spring.orm.test.services.RegistrationServiceTest#testStorePatientSession</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m6">spring.orm.test.services.RegistrationServiceTest#testUpdateUser</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
 </body>
 </html>

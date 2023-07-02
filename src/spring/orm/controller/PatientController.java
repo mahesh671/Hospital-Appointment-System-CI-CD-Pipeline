@@ -134,7 +134,7 @@ public class PatientController {
 		logger.info("Entered into saveFamilyMember");
 
 		// Saving the family member information into database and getting his/her patient id
-		int patientFamilyMemberId = patientFamilyMemberService.addFamilyMember(familyMember, patientSession);
+		int patientFamilyMemberId = patientFamilyMemberService.addFamilyMember(familyMember, patientSession.getId());
 		logger.info("Saved the family member information into database");
 
 		logger.info("Fetching the myfamily Screen");
