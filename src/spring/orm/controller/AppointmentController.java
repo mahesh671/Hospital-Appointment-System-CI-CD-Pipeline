@@ -60,7 +60,7 @@ public class AppointmentController {
 	private AppointmentDAO appointmentDAO;
 
 	private AppointmentServices appointmentService;
-	private PaymentService ps;
+	private PaymentService paymentservice;
 	private static final Logger logger = LoggerFactory.getLogger(AppointmentController.class);
 
 	@Autowired
@@ -74,19 +74,19 @@ public class AppointmentController {
 		this.doctorservice = doctorservice;
 		this.patientDAO = patientDAO;
 		this.specializationDAO = specializationDAO;
-		this.ps = ps;
+		this.paymentservice = ps;
 	}
 
 	@RequestMapping(value = "admin/newappointment")
-	public String getNewAppointment(Model m) {
+	public String getNewAppointment(Model model) {
 		// Retrieve all specializations and add them to the model
 
 		logger.info("Admin Entered to new appointment Booking page");
-		List<Specialization> aplist = specializationDAO.getAllSpecializations();
-		m.addAttribute("speclist", aplist);
+		List<Specialization> specializationlist = specializationDAO.getAllSpecializations();
+		model.addAttribute("speclist", specializationlist);
 		// Retrieve all patients and add them to the model
 
-		m.addAttribute("patlist", patientDAO.getAllPatientInfo());
+		model.addAttribute("patlist", patientDAO.getAllPatientInfo());
 		logger.info("Retrieved specializations and patients for the appointment form");
 		return "admin/appointment";
 	}
@@ -105,7 +105,7 @@ public class AppointmentController {
 		// model
 		List<AppOutFormFamily> familyMembers = appointmentService.getFormFamily(patientSession.getId());
 		model.addAttribute("fam", familyMembers);
-		logger.debug("Retrieved family appointments: {}", familyMembers);
+		logger.debug("Retrieved family members appointments");
 		return "patient/appointment";
 	}
 
@@ -153,7 +153,7 @@ public class AppointmentController {
 
 		// Fetch doctors by specialization and appointment date
 		List<DoctorList> doctorList = doctorservice.getAllDocBySpecDate(specialization, appointmentDated);
-		logger.info("Fetched doctor list: {}", doctorList);
+		logger.info("Fetched doctor list");
 		return ResponseEntity.status(HttpStatus.OK).body(new Gson().toJson(doctorList));
 
 	}
@@ -209,7 +209,7 @@ public class AppointmentController {
 		} catch (Exception e) {
 
 			e.printStackTrace();
-			String s1 = ps.makeRefund(appointment);
+			String s1 = paymentservice.makeRefund(appointment);
 			System.out.println("Slot Already Booked");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(s1);
 
@@ -245,8 +245,8 @@ public class AppointmentController {
 			appointmentService.sendBookingMail(request, response, app_id);
 		} catch (Exception e) {
 			e.printStackTrace();
-			String s1 = ps.makeRefund(appointment);
-			System.out.println("Slot Already Booked");
+			String s1 = paymentservice.makeRefund(appointment);
+			logger.info("Slot is  Already Booked");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(s1);
 		}
 		return null;

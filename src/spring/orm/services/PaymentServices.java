@@ -7,6 +7,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -19,14 +21,24 @@ import spring.orm.contract.services.PaymentService;
 import spring.orm.model.input.AppointmentForm;
 
 @Service
+@PropertySource("classpath:Razorpay.properties")
 public class PaymentServices implements PaymentService {
+	
+	@Value("${razorpay.key}")
+	private String razorPayKey; 
+	
+	@Value("${razorpay.secret}")
+	private String razorPaySecret;
+	
+	private HttpSession httpSession;
+	
 	@Autowired
 	public PaymentServices(HttpSession httpSession) {
 		super();
 		this.httpSession = httpSession;
 	}
 
-	private HttpSession httpSession;
+	
 	private static final Logger logger = LoggerFactory.getLogger(PaymentServices.class);
 
 	/**
@@ -87,7 +99,7 @@ public class PaymentServices implements PaymentService {
 		logger.info("amount" + " " + amount + " " + "currency" + " " + currency);
 
 		// Initialize Razorpay client
-		RazorpayClient razorpayClient = new RazorpayClient("rzp_test_wTvwL5iaSRljth", "AvneRMjZuce3P1NzgAM18omy");
+		RazorpayClient razorpayClient = new RazorpayClient(razorPayKey, razorPaySecret);
 
 		// Create options for the payment
 		JSONObject options = new JSONObject();
@@ -117,7 +129,7 @@ public class PaymentServices implements PaymentService {
 		logger.info("Inside Make Refund Method");
 
 		// Initialize Razorpay client
-		RazorpayClient razorpay = new RazorpayClient("rzp_test_wTvwL5iaSRljth", "AvneRMjZuce3P1NzgAM18omy");
+		RazorpayClient razorpay = new RazorpayClient(razorPayKey, razorPaySecret);
 
 		// Create refund request
 		JSONObject refundRequest = new JSONObject();

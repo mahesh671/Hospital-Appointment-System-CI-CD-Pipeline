@@ -64,7 +64,6 @@ public class AdminController {
 
 	
 
-	// TODO Auto-generated constructor stub
 	@RequestMapping(value = "/adminprofitdata", method = RequestMethod.GET)
 	public String doctorProfitData(Model model) {
 		logger.info("To calculate doctor profit in Admin's revenue reports page");
@@ -74,8 +73,8 @@ public class AdminController {
 		model.addAttribute("tndata", doctorProfitList);
 		model.addAttribute("tmdata", specializationProfitList); 
 		//fetched data added to model
-		logger.info("Doctors Profits List is : {}", doctorProfitList);
-		logger.info("Specialization Profits List is : {}", specializationProfitList);
+		logger.info("Doctors Profits List is fetched");
+		logger.info("Specialization Profits List is fetched");
 		return "admin/adminProfitData";
 	}
 
@@ -113,24 +112,24 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String basePage(Model m) {
+	public String basePage(Model model) {
 		logger.info("Admin dashboard values");
 		//Aggregate functions & output models are used to get the following data
-		m.addAttribute("dcount", doctorDAO.findCount());
-		m.addAttribute("App", appointmentDAO.getTopAppointments());
-		m.addAttribute("prof", appointmentDAO.getTopprof());
-		m.addAttribute("cards", appointmentDAO.getDashreport());
+		model.addAttribute("dcount", doctorDAO.findCount());
+		model.addAttribute("App", appointmentDAO.getTopAppointments());
+		model.addAttribute("prof", appointmentDAO.getTopprof());
+		model.addAttribute("cards", appointmentDAO.getDashreport());
 		// The data is to be displayed on the cards in admin dashboard
 		return "admin/dashboard";
 	}
 
 	@RequestMapping(value = "/specialization", method = RequestMethod.GET)
-	public String getSpecialization(Model m) {
+	public String getSpecialization(Model model) {
 		logger.info("getting Specialization in admin");
 		// to get the Specialiation details
 		List<Specialization> slist = specializationDAO.getAllSpecializations();
 		//A list format is obtained
-		m.addAttribute("slist", slist);
+		model.addAttribute("slist", slist);
 		logger.info("Specialization List : {}", slist);
 		return "admin/specialization";
 	}
