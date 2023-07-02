@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" 
     pageEncoding="ISO-8859-1" isELIgnored="false"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,20 +14,26 @@
 <body>
 <div class="container text-center">
     <h4 class="mb-4">Set Password</h4>
+    <c:if test="${not empty errorMessage}">
+        <div class="error-message">
+            <p>${errorMessage}</p>
+        </div>
+    </c:if>
     <form action="passwordchange" method="post">
     <div class="form-group">
+    
             <label for="lnpass" class="form-label">User Name</label>
-            <input type="text" name="uname" id="uname" class="form-control" required>
+            <input type="text" name="userName" id="uname" class="form-control" required>
         </div>
 
         <div class="form-group">
             <label for="lnpass" class="form-label">Old Password</label>
-            <input type="password" name="opass" id="opass" class="form-control" required>
+            <input type="password" name="oldPassword" id="opass" class="form-control" required>
         </div>
         
         <div class="form-group">
             <label for="lcpass" class="form-label">New Password</label>
-            <input type="password" name="lcpass" id="lcpass" class="form-control" required>
+            <input type="password" name="newPassword" id="lcpass" class="form-control" required>
         </div>
         
         

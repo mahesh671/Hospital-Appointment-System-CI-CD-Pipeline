@@ -6,19 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import spring.orm.contract.PatientProfileUpdateDAO;
+import spring.orm.contract.DAO.PatientProfileUpdateDAO;
+import spring.orm.contract.services.UpdateProfileServices;
 import spring.orm.controller.AppointmentController;
 import spring.orm.model.entity.PatientConsultationUpdateId;
 import spring.orm.model.entity.PatientMedicalProfile;
 import spring.orm.model.input.ProfileUpdateForm;
 
 @Component
-public class UpdateProfileService {
+public class UpdateProfileService implements UpdateProfileServices {
 
 	@Autowired
 	private PatientProfileUpdateDAO patientProfileUpdate;
 	private static final Logger logger = LoggerFactory.getLogger(AppointmentController.class);
 
+	@Override
 	public void updateProfile(ProfileUpdateForm profileUpdateForm, CommonsMultipartFile reportsInput) {
 		// TODO Auto-generated method stub
 		logger.info("Inside Profile Update service");

@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import spring.orm.contract.services.RegistrationServices;
 import spring.orm.model.PatientModel;
 import spring.orm.model.PatientSession;
 import spring.orm.model.UserPass;
 import spring.orm.model.input.RegistrationForm;
-import spring.orm.services.RegistrationService;
 import spring.orm.util.MailSend;
 
 @Controller
@@ -39,12 +39,12 @@ public class LoginController {
 
 	private String otp;
 
-	private final RegistrationService registrationService;
+	private final RegistrationServices registrationService;
 
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
 	@Autowired
-	public LoginController(RegistrationService rs) {
+	public LoginController(RegistrationServices rs) {
 		/*
 		 * Constructor for the LoginController class that takes a RegistrationService object as a parameter
 		 */
@@ -123,15 +123,16 @@ public class LoginController {
 		 */
 		logger.info("Validating OTP for username: {}", userName);
 		UserPass user = registrationService.getUser(userName); // Retrieve the user information based on the provided
-																// username
+		logger.info("is before {}",LocalDateTime.now().isBefore(user.getotptime()));												// username
 		if (LocalDateTime.now().isBefore(user.getotptime())) {
 			// Check if the current time is before the OTP expiration time
-
+			logger.info("OTP Entered before it expires");
 			if (user.getOtp().equals(enteredOTP)) {
 				// Validate if the entered OTP matches the stored OTP for the user
-
+				logger.info("OTP is Validated");
 				user.setPassword(newPassword); // Update the user's password with the new password
 				registrationService.updateUser(user); // Update the user information in the registration service
+				logger.info("Password updated");
 			}
 
 			return "login/success"; // Return the name of the view template for the password reset success page
@@ -140,16 +141,20 @@ public class LoginController {
 		}
 	}
 
-	@RequestMapping(value = { "admin/passwordchange", "admin/passwordchange",
-			"admin/passwordchange" }, method = RequestMethod.POST)
+	@RequestMapping(value = { "admin/passwordchange", "dcadmin/passwordchange",
+			"patient/passwordchange" }, method = RequestMethod.POST)
 	public String passwordChange(@RequestParam String newPassword, @RequestParam String oldPassword,
-			@RequestParam String userName) {
+			@RequestParam String userName,Model model) {
 		/*
 		 * This method maps the "/passwordchange" URL to handle a POST request for password change.
 		 */
 		logger.info("Processing password change request for username: {}", userName);
 		UserPass user = registrationService.getUser(userName); // Retrieve the user information based on the provided
-																// username
+		if (user==null)
+		{
+			model.addAttribute("errorMessage", "username is wrong or does not exist");
+			return "login/changepass";
+		}
 		if (user.getPassword().equals(oldPassword)) {
 			// Check if the entered old password matches the stored password for the user
 
@@ -158,6 +163,7 @@ public class LoginController {
 
 			return "login/success"; // Return the name of the view template for the password change success page
 		} else {
+			model.addAttribute("errorMessage", "Old password is incorrect");
 			System.out.println("Wrong Old Password");
 			// Handle wrong old password scenario (e.g., display error message, log the
 			// error, etc.)

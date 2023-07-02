@@ -7,10 +7,12 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import spring.orm.contract.AppointmentDAO;
-import spring.orm.contract.DocScheduleDAO;
-import spring.orm.contract.DoctorsDAO;
-import spring.orm.contract.SpecializationDAO;
+
+import spring.orm.contract.DAO.AppointmentDAO;
+import spring.orm.contract.DAO.DocScheduleDAO;
+import spring.orm.contract.DAO.DoctorsDAO;
+import spring.orm.contract.DAO.SpecializationDAO;
+import spring.orm.contract.services.DoctorOutputServices;
 import spring.orm.model.DoctorSchedule;
 import spring.orm.model.Specialization;
 import spring.orm.model.entity.DoctorTemp;
@@ -18,7 +20,6 @@ import spring.orm.model.input.DoctorInput;
 import spring.orm.model.input.DoctorUpdateModel;
 import spring.orm.model.output.DoctorList;
 import spring.orm.model.output.DoctorOutPutModel;
-import spring.orm.services.DoctorOutputService;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class DoctorServiceTest {
     private AppointmentDAO appdao;
 
     @InjectMocks
-    private DoctorOutputService doctorOutputService;
+    private DoctorOutputServices doctorOutputService;
 
     @BeforeMethod
     public void setUp() {

@@ -16,12 +16,12 @@
     <form action="passwordset" method="post">
     <div class="form-group">
             
-            <input type="text" name="uname" id="uname" class="form-control" hidden value="${user.username }">
+            <input type="text" name="userName" id="uname" class="form-control" hidden value="${user.username }">
         </div>
 
         <div class="form-group">
             <label for="lnpass" class="form-label">New Password</label>
-            <input type="password" name="lnpass" id="lnpass" class="form-control" required>
+            <input type="password" name="newPassword" id="lnpass" class="form-control" required>
         </div>
         
         <div class="form-group">
@@ -31,7 +31,7 @@
         
         <div class="form-group">
             <label for="lotp" class="form-label">Enter OTP:</label>
-            <input type="text" name="lotp" id="lotp" class="form-control" required>
+            <input type="text" name="enteredOTP" id="lotp" class="form-control" required>
         </div>
 
         <button type="submit" class="btn btn-primary btn-block">Set Password</button>

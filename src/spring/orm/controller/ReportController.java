@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import spring.orm.contract.DCDAO;
+import spring.orm.contract.DAO.DCDAO;
 import spring.orm.model.input.DCFilter;
 import spring.orm.model.output.OutputReportData;
 import spring.orm.model.output.OutputTestCategoryProfit;

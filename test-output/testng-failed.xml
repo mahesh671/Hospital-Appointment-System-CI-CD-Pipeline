@@ -3,12 +3,15 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="spring.orm.test.services.RegistrationServiceTest">
+      <class name="spring.orm.test.services.AppointmentServiceTest">
         <methods>
-          <include name="testCreatePatientSession"/>
-          <include name="setUp"/>
+          <include name="testBookAppointment"/>
+          <include name="testGetAppointmentByIdOutput"/>
+          <include name="testBookAppointmentWithPatientId"/>
+          <include name="testGetAppointmentByID"/>
+          <include name="setup"/>
         </methods>
-      </class> <!-- spring.orm.test.services.RegistrationServiceTest -->
+      </class> <!-- spring.orm.test.services.AppointmentServiceTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

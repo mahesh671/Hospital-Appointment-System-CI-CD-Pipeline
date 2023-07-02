@@ -6,12 +6,14 @@ import org.mockito.MockitoAnnotations;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import spring.orm.contract.FamilyMembersDAO;
-import spring.orm.contract.PatientDAO;
+
+import spring.orm.contract.DAO.FamilyMembersDAO;
+import spring.orm.contract.DAO.PatientDAO;
+import spring.orm.contract.services.PatientFamilyMembersServices;
 import spring.orm.model.PatientModel;
 import spring.orm.model.PatientSession;
 import spring.orm.model.input.FamilyMembersInput;
-import spring.orm.services.PatientFamilyMembersService;
+
 import java.util.ArrayList;
 import java.util.List;
 import static org.mockito.ArgumentMatchers.*;
@@ -26,7 +28,7 @@ public class FamilyMemberServiceTest {
     private PatientDAO patientDao;
 
     @InjectMocks
-    private PatientFamilyMembersService familyMembersService;
+    private PatientFamilyMembersServices familyMembersService;
 
     @BeforeMethod
     public void setUp() {

@@ -1,113 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="7" passed="6" failed="1" skipped="0">
+<testng-results ignored="0" total="2" passed="2" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2023-07-02T01:28:10 IST" name="Default suite" finished-at="2023-07-02T01:28:10 IST" duration-ms="837">
+  <suite started-at="2023-07-02T19:51:43 IST" name="Default suite" finished-at="2023-07-02T19:51:44 IST" duration-ms="921">
     <groups>
     </groups>
-    <test started-at="2023-07-02T01:28:10 IST" name="Default test" finished-at="2023-07-02T01:28:10 IST" duration-ms="837">
-      <class name="spring.orm.test.services.RegistrationServiceTest">
-        <test-method is-config="true" signature="setUp()[pri:0, instance:spring.orm.test.services.RegistrationServiceTest@3af17be2]" started-at="2023-07-02T01:28:10 IST" name="setUp" finished-at="2023-07-02T01:28:10 IST" duration-ms="681" status="PASS">
+    <test started-at="2023-07-02T19:51:43 IST" name="Default test" finished-at="2023-07-02T19:51:44 IST" duration-ms="921">
+      <class name="spring.orm.test.controllers.SpecializationControllerTest">
+        <test-method signature="testDeleteSpecialization()[pri:0, instance:spring.orm.test.controllers.SpecializationControllerTest@f9879ac]" started-at="2023-07-02T19:51:43 IST" name="testDeleteSpecialization" finished-at="2023-07-02T19:51:43 IST" duration-ms="797" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- setUp -->
-        <test-method signature="testCreatePatientSession()[pri:0, instance:spring.orm.test.services.RegistrationServiceTest@3af17be2]" started-at="2023-07-02T01:28:10 IST" name="testCreatePatientSession" finished-at="2023-07-02T01:28:10 IST" duration-ms="5" status="FAIL">
-          <exception class="java.lang.Error">
-            <message>
-              <![CDATA[Unresolved compilation problems: 
-The method eq(int) is undefined for the type RegistrationServiceTest
-The method eq(int) is undefined for the type RegistrationServiceTest
-]]>
-            </message>
-            <full-stacktrace>
-              <![CDATA[java.lang.Error: Unresolved compilation problems: 
-The method eq(int) is undefined for the type RegistrationServiceTest
-The method eq(int) is undefined for the type RegistrationServiceTest
-
-at spring.orm.test.services.RegistrationServiceTest.testCreatePatientSession(RegistrationServiceTest.java:145)
-at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-at java.base/java.lang.reflect.Method.invoke(Method.java:566)
-at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:139)
-at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:664)
-at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:227)
-at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:50)
-at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:957)
-at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:200)
-at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:148)
-at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:128)
-at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
-at org.testng.TestRunner.privateRun(TestRunner.java:848)
-at org.testng.TestRunner.run(TestRunner.java:621)
-at org.testng.SuiteRunner.runTest(SuiteRunner.java:443)
-at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:437)
-at org.testng.SuiteRunner.privateRun(SuiteRunner.java:397)
-at org.testng.SuiteRunner.run(SuiteRunner.java:336)
-at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
-at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
-at org.testng.TestNG.runSuitesSequentially(TestNG.java:1280)
-at org.testng.TestNG.runSuitesLocally(TestNG.java:1200)
-at org.testng.TestNG.runSuites(TestNG.java:1114)
-at org.testng.TestNG.run(TestNG.java:1082)
-at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
-at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
-at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
-]]>
-            </full-stacktrace>
-          </exception> <!-- java.lang.Error -->
+        </test-method> <!-- testDeleteSpecialization -->
+        <test-method signature="testGetSpecialization()[pri:0, instance:spring.orm.test.controllers.SpecializationControllerTest@f9879ac]" started-at="2023-07-02T19:51:44 IST" name="testGetSpecialization" finished-at="2023-07-02T19:51:44 IST" duration-ms="66" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testCreatePatientSession -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:spring.orm.test.services.RegistrationServiceTest@3af17be2]" started-at="2023-07-02T01:28:10 IST" name="setUp" finished-at="2023-07-02T01:28:10 IST" duration-ms="0" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUp -->
-        <test-method signature="testGetPatientDetails()[pri:0, instance:spring.orm.test.services.RegistrationServiceTest@3af17be2]" started-at="2023-07-02T01:28:10 IST" name="testGetPatientDetails" finished-at="2023-07-02T01:28:10 IST" duration-ms="20" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- testGetPatientDetails -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:spring.orm.test.services.RegistrationServiceTest@3af17be2]" started-at="2023-07-02T01:28:10 IST" name="setUp" finished-at="2023-07-02T01:28:10 IST" duration-ms="1" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUp -->
-        <test-method signature="testGetUser()[pri:0, instance:spring.orm.test.services.RegistrationServiceTest@3af17be2]" started-at="2023-07-02T01:28:10 IST" name="testGetUser" finished-at="2023-07-02T01:28:10 IST" duration-ms="1" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- testGetUser -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:spring.orm.test.services.RegistrationServiceTest@3af17be2]" started-at="2023-07-02T01:28:10 IST" name="setUp" finished-at="2023-07-02T01:28:10 IST" duration-ms="1" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUp -->
-        <test-method signature="testIsUsernameAvailable()[pri:0, instance:spring.orm.test.services.RegistrationServiceTest@3af17be2]" started-at="2023-07-02T01:28:10 IST" name="testIsUsernameAvailable" finished-at="2023-07-02T01:28:10 IST" duration-ms="2" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- testIsUsernameAvailable -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:spring.orm.test.services.RegistrationServiceTest@3af17be2]" started-at="2023-07-02T01:28:10 IST" name="setUp" finished-at="2023-07-02T01:28:10 IST" duration-ms="1" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUp -->
-        <test-method signature="testRegisterPatient()[pri:0, instance:spring.orm.test.services.RegistrationServiceTest@3af17be2]" started-at="2023-07-02T01:28:10 IST" name="testRegisterPatient" finished-at="2023-07-02T01:28:10 IST" duration-ms="1" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- testRegisterPatient -->
-        <test-method signature="testStorePatientSession()[pri:0, instance:spring.orm.test.services.RegistrationServiceTest@3af17be2]" started-at="2023-07-02T01:28:10 IST" name="testStorePatientSession" finished-at="2023-07-02T01:28:10 IST" duration-ms="61" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- testStorePatientSession -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:spring.orm.test.services.RegistrationServiceTest@3af17be2]" started-at="2023-07-02T01:28:10 IST" name="setUp" finished-at="2023-07-02T01:28:10 IST" duration-ms="0" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUp -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:spring.orm.test.services.RegistrationServiceTest@3af17be2]" started-at="2023-07-02T01:28:10 IST" name="setUp" finished-at="2023-07-02T01:28:10 IST" duration-ms="1" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUp -->
-        <test-method signature="testUpdateUser()[pri:0, instance:spring.orm.test.services.RegistrationServiceTest@3af17be2]" started-at="2023-07-02T01:28:10 IST" name="testUpdateUser" finished-at="2023-07-02T01:28:10 IST" duration-ms="1" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- testUpdateUser -->
-      </class> <!-- spring.orm.test.services.RegistrationServiceTest -->
+        </test-method> <!-- testGetSpecialization -->
+      </class> <!-- spring.orm.test.controllers.SpecializationControllerTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

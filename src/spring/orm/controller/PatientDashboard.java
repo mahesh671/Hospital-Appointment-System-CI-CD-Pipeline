@@ -15,17 +15,17 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.google.gson.Gson;
 
+import spring.orm.contract.services.PatientService;
 import spring.orm.model.PatientSession;
 import spring.orm.model.output.ParaGroupOutput;
 import spring.orm.model.output.PatientlastvisitOutput;
-import spring.orm.services.PatientServices;
 
 @Controller
 @RequestMapping("/patient")
 public class PatientDashboard {
 
 	@Autowired
-	private PatientServices patientservice;
+	private PatientService patientservice;
 	private static final Logger logger = LoggerFactory.getLogger(PatientDashboard.class);
 
 	// Display all the appointments and test details

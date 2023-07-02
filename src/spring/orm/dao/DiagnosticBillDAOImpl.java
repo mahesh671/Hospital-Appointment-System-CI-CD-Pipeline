@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import spring.orm.contract.DiagnosticBillDAO;
-import spring.orm.contract.PatientDAO;
-import spring.orm.contract.TestDAO;
+import spring.orm.contract.DAO.DiagnosticBillDAO;
+import spring.orm.contract.DAO.PatientDAO;
+import spring.orm.contract.DAO.TestDAO;
 import spring.orm.model.DiagnosticBillModel;
 import spring.orm.model.DiagnosticBillModelId;
 import spring.orm.model.Diagnostictestbill;

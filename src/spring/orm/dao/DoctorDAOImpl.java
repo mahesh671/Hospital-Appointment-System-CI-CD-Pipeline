@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import spring.orm.contract.DocScheduleDAO;
-import spring.orm.contract.DoctorsDAO;
+import spring.orm.contract.DAO.DocScheduleDAO;
+import spring.orm.contract.DAO.DoctorsDAO;
 import spring.orm.model.DoctorSchedule;
 import spring.orm.model.entity.DoctorTemp;
 import spring.orm.model.output.DoctorList;

@@ -1,4 +1,4 @@
-package spring.orm.contract;
+package spring.orm.contract.DAO;
 
 import spring.orm.model.DoctorSchedule;
 import spring.orm.model.input.DoctorInput;

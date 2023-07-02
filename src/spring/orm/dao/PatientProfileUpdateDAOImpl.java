@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import spring.orm.contract.PatientProfileUpdateDAO;
+import spring.orm.contract.DAO.PatientProfileUpdateDAO;
 import spring.orm.controller.AppointmentController;
 import spring.orm.model.entity.PatientMedicalProfile;
 import spring.orm.model.output.PrescriptionOutputmodel;

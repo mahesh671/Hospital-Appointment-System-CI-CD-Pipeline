@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import spring.orm.contract.SpecializationDAO;
+import spring.orm.contract.DAO.SpecializationDAO;
 import spring.orm.model.Specialization;
 
 @Component

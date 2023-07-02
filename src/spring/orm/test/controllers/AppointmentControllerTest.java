@@ -11,24 +11,24 @@ import org.springframework.ui.Model;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import spring.orm.contract.AppointmentDAO;
-import spring.orm.contract.DoctorsDAO;
-import spring.orm.contract.PatientDAO;
-import spring.orm.contract.SpecializationDAO;
+import spring.orm.contract.DAO.AppointmentDAO;
+import spring.orm.contract.DAO.DoctorsDAO;
+import spring.orm.contract.DAO.PatientDAO;
+import spring.orm.contract.DAO.SpecializationDAO;
+import spring.orm.contract.services.DoctorOutputServices;
+import spring.orm.contract.services.PaymentService;
 import spring.orm.controller.AppointmentController;
 import spring.orm.model.PatientSession;
 import spring.orm.model.Specialization;
 import spring.orm.model.output.AppOutFormFamily;
 import spring.orm.services.AppointmentService;
-import spring.orm.services.DoctorOutputService;
-import spring.orm.services.PaymentServices;
 
 public class AppointmentControllerTest {
 	@Mock
 	private SpecializationDAO specializationDAO;
 
 	@Mock
-	private DoctorOutputService doctorservice;
+	private DoctorOutputServices doctorservice;
 
 	@Mock
 	private PatientDAO patientDAO;
@@ -43,7 +43,7 @@ public class AppointmentControllerTest {
 	private AppointmentService appointmentService;
 
 	@Mock
-	private PaymentServices ps;
+	private PaymentService ps;
 
 	@InjectMocks
 	private AppointmentController appointmentController;

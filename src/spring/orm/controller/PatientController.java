@@ -19,14 +19,14 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.google.gson.Gson;
 
-import spring.orm.contract.DiagnosticBillDAO;
-import spring.orm.contract.PatientDAO;
+import spring.orm.contract.DAO.DiagnosticBillDAO;
+import spring.orm.contract.DAO.PatientDAO;
+import spring.orm.contract.services.PatientFamilyMembersServices;
 import spring.orm.model.PatientModel;
 import spring.orm.model.PatientSession;
 import spring.orm.model.input.FamilyMembersInput;
 import spring.orm.model.input.ProfileInputModel;
 import spring.orm.model.output.OutputPatientTestReports;
-import spring.orm.services.PatientFamilyMembersService;
 
 @Controller
 @RequestMapping("/patient")
@@ -36,13 +36,13 @@ public class PatientController {
 
 	private DiagnosticBillDAO diagnosticBillDAO;
 
-	private PatientFamilyMembersService patientFamilyMemberService;
+	private PatientFamilyMembersServices patientFamilyMemberService;
 
 	private static final Logger logger = LoggerFactory.getLogger(PatientController.class);
 
 	@Autowired
 	public PatientController(PatientDAO patientDAO, DiagnosticBillDAO diagnosticBillDAO,
-			PatientFamilyMembersService patientFamilyMemberService) {
+			PatientFamilyMembersServices patientFamilyMemberService) {
 		super();
 		this.patientDAO = patientDAO;
 		this.diagnosticBillDAO = diagnosticBillDAO;

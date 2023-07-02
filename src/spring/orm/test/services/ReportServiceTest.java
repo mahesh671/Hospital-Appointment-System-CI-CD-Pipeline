@@ -8,7 +8,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import spring.orm.contract.DCDAO;
+import spring.orm.contract.DAO.DCDAO;
 import spring.orm.services.ReportServices;
 
 public class ReportServiceTest {

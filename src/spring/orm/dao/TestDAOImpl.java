@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import spring.orm.contract.TestDAO;
+import spring.orm.contract.DAO.TestDAO;
 import spring.orm.model.TestModel;
 import spring.orm.model.input.TestInputModel;
 import spring.orm.model.output.patientsoutputmodel;

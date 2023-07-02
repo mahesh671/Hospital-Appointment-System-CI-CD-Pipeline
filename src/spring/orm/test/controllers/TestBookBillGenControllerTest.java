@@ -23,20 +23,20 @@ import org.testng.annotations.Test;
 
 import com.google.gson.Gson;
 
-import spring.orm.contract.DiagnosticBillDAO;
-import spring.orm.contract.PatientDAO;
-import spring.orm.contract.TestDAO;
+import spring.orm.contract.DAO.DiagnosticBillDAO;
+import spring.orm.contract.DAO.PatientDAO;
+import spring.orm.contract.DAO.TestDAO;
+import spring.orm.contract.services.TestService;
 import spring.orm.controller.TestBookBillGenController;
 import spring.orm.model.TestModel;
 import spring.orm.model.input.BillInputModel;
 import spring.orm.model.output.patientsoutputmodel;
 import spring.orm.model.output.testsCategoriesModel;
-import spring.orm.services.TestServices;
 
 public class TestBookBillGenControllerTest {
 
 	@Mock
-	private TestServices testService;
+	private TestService testService;
 
 	@Mock
 	private DiagnosticBillDAO diagnosticBillDAO;

@@ -9,14 +9,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import spring.orm.contract.FamilyMembersDAO;
-import spring.orm.contract.PatientDAO;
+import spring.orm.contract.DAO.FamilyMembersDAO;
+import spring.orm.contract.DAO.PatientDAO;
+import spring.orm.contract.services.PatientFamilyMembersServices;
 import spring.orm.model.PatientModel;
 import spring.orm.model.PatientSession;
 import spring.orm.model.input.FamilyMembersInput;
 
 @Service
-public class PatientFamilyMembersService {
+public class PatientFamilyMembersService implements PatientFamilyMembersServices {
 	FamilyMembersDAO familyMemberDao;
 
 	private PatientDAO patientDao;
@@ -31,6 +32,7 @@ public class PatientFamilyMembersService {
 	private static final Logger logger = LoggerFactory.getLogger(PatientFamilyMembersService.class);
 
 	// Method that saves the family member into the database
+	@Override
 	@Transactional
 	public int addFamilyMember(FamilyMembersInput familyMember, int patientId) {
 
@@ -57,6 +59,7 @@ public class PatientFamilyMembersService {
 	}
 
 	// method to fetch all family members for the given ID using the FamilyMembersDao
+	@Override
 	public List<FamilyMembersInput> getAllFamilyMembers(Integer patientId) {
 		logger.info("Entered into getAllFamilyMembers");
 
@@ -66,6 +69,7 @@ public class PatientFamilyMembersService {
 	}
 
 	// method that fetches family member information
+	@Override
 	public FamilyMembersInput getFamilyMemberInfo(int patientId, int familyMemberid) {
 		logger.info("Entered into getFamilyMemberInfo");
 
@@ -73,12 +77,14 @@ public class PatientFamilyMembersService {
 	}
 
 	// method that saves the family member details
+	@Override
 	public void saveFamilyMemberInfo(FamilyMembersInput familyMember) {
 		logger.info("Entered into saveFamilyMemberInfo");
 		familyMemberDao.saveChanges(familyMember);
 	}
 
 	// method that deletes the family member
+	@Override
 	public void deleteFamilyMember(int patientId) {
 		logger.info("Entered into deleteFamilyMember");
 		familyMemberDao.deleteFamilyMember(patientId);

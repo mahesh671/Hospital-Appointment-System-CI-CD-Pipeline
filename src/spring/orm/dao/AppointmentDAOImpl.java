@@ -21,9 +21,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import spring.orm.contract.AppointmentDAO;
-import spring.orm.contract.DoctorsDAO;
-import spring.orm.contract.PatientDAO;
+import spring.orm.contract.DAO.AppointmentDAO;
+import spring.orm.contract.DAO.DoctorsDAO;
+import spring.orm.contract.DAO.PatientDAO;
 import spring.orm.customexceptions.SlotAlreadyBookedException;
 import spring.orm.model.PatientModel;
 import spring.orm.model.entity.AppointmentEntity;

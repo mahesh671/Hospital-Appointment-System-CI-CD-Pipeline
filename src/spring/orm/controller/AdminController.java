@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import spring.orm.contract.AdminDAO;
-import spring.orm.contract.AppointmentDAO;
-import spring.orm.contract.DoctorsDAO;
-import spring.orm.contract.PatientDAO;
-import spring.orm.contract.PatientProfileUpdateDAO;
-import spring.orm.contract.SpecializationDAO;
+import spring.orm.contract.DAO.AdminDAO;
+import spring.orm.contract.DAO.AppointmentDAO;
+import spring.orm.contract.DAO.DoctorsDAO;
+import spring.orm.contract.DAO.PatientDAO;
+import spring.orm.contract.DAO.PatientProfileUpdateDAO;
+import spring.orm.contract.DAO.SpecializationDAO;
+import spring.orm.contract.services.UpdateProfileServices;
 import spring.orm.model.Specialization;
 import spring.orm.model.input.AdminFilter;
 import spring.orm.model.output.OutputDoctorProfit;
 import spring.orm.model.output.OutputSpecializationProfit;
-import spring.orm.services.UpdateProfileService;
 
 @Controller
 @RequestMapping("/admin")
@@ -37,7 +37,7 @@ public class AdminController {
 
 	private HttpSession httpSession;
 
-	private UpdateProfileService updateProfileService;
+	private UpdateProfileServices updateProfileService;
 
 	private PatientDAO patientDAO;
 
@@ -50,7 +50,7 @@ public class AdminController {
 	
 @Autowired    //dependency injection, it eliminates manual configuations
 	public AdminController(SpecializationDAO specdao, AppointmentDAO apdao, DoctorsDAO docdao, HttpSession httpSession,
-			UpdateProfileService ups, PatientDAO pdao, AdminDAO ad, PatientProfileUpdateDAO pcudao) {
+			UpdateProfileServices ups, PatientDAO pdao, AdminDAO ad, PatientProfileUpdateDAO pcudao) {
 		super();
 		this.specializationDAO = specdao;
 		this.appointmentDAO = apdao;

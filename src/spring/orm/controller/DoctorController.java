@@ -20,15 +20,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import spring.orm.contract.DocScheduleDAO;
-import spring.orm.contract.DoctorsDAO;
-import spring.orm.contract.SpecializationDAO;
+import spring.orm.contract.DAO.DocScheduleDAO;
+import spring.orm.contract.DAO.DoctorsDAO;
+import spring.orm.contract.DAO.SpecializationDAO;
+import spring.orm.contract.services.DoctorOutputServices;
 import spring.orm.customexceptions.InvalidWeekdayException;
 import spring.orm.model.entity.DoctorTemp;
 import spring.orm.model.input.DoctorInput;
 import spring.orm.model.input.DoctorUpdateModel;
 import spring.orm.model.output.DoctorOutPutModel;
-import spring.orm.services.DoctorOutputService;
 
 @Controller
 
@@ -40,7 +40,7 @@ public class DoctorController {
 
 	private SpecializationDAO specializationDAO;
 
-	private DoctorOutputService doctorOutputService;
+	private DoctorOutputServices doctorOutputService;
 
 	private DocScheduleDAO doctorScheduleDAO;
 
@@ -48,7 +48,7 @@ public class DoctorController {
 
 	@Autowired
 	public DoctorController(DoctorsDAO doctorDAO, SpecializationDAO specializationDAO,
-			DoctorOutputService doctorOutputService, DocScheduleDAO doctorScheduleDAO) {
+			DoctorOutputServices doctorOutputService, DocScheduleDAO doctorScheduleDAO) {
 		super();
 		this.doctorDAO = doctorDAO;
 		this.specializationDAO = specializationDAO;

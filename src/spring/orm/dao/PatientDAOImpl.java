@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import spring.orm.contract.PatientDAO;
+import spring.orm.contract.DAO.PatientDAO;
 import spring.orm.model.PatientModel;
 import spring.orm.model.PatientSession;
 import spring.orm.model.entity.AppointmentEntity;

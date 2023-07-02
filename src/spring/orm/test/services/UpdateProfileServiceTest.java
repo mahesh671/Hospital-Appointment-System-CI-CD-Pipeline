@@ -12,10 +12,10 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import spring.orm.contract.PatientProfileUpdateDAO;
+import spring.orm.contract.DAO.PatientProfileUpdateDAO;
+import spring.orm.contract.services.UpdateProfileServices;
 import spring.orm.model.entity.PatientMedicalProfile;
 import spring.orm.model.input.ProfileUpdateForm;
-import spring.orm.services.UpdateProfileService;
 
 public class UpdateProfileServiceTest {
 
@@ -23,7 +23,7 @@ public class UpdateProfileServiceTest {
 	private PatientProfileUpdateDAO patientProfileUpdateDAO;
 
 	@InjectMocks
-	private UpdateProfileService updateProfileService;
+	private UpdateProfileServices updateProfileService;
 
 	@BeforeMethod
 	public void setUp() {

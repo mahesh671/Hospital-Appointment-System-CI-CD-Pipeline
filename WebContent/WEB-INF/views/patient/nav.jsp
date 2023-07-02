@@ -22,8 +22,8 @@
 			</li>
 			<li class="nav-item"><a href="./patienttest" class="nav-link"
 				aria-current="page">Test Reports</a></li>
-				<li class="nav-item"><a href="./getallPrescription" class="nav-link"
-				aria-current="page">Prescriptions Page</a></li>
+			<li class="nav-item"><a href="./getallPrescription"
+				class="nav-link" aria-current="page">Prescriptions Page</a></li>
 			<li class="nav-item"><a href="./myfamily" class="nav-link"
 				aria-current="page">My Family</a></li>
 		</ul>
@@ -42,6 +42,7 @@
 							aria-haspopup="true" aria-expanded="false">Patient</button>
 						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 							<a class="dropdown-item" href="./profile">My Profile</a> <a
+								class="dropdown-item" href="./change">Change Password</a> <a
 								class="dropdown-item" href="./logout">Logout</a>
 						</div>
 					</div>

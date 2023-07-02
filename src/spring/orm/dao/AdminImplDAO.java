@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import spring.orm.contract.AdminDAO;
+import spring.orm.contract.DAO.AdminDAO;
 import spring.orm.model.output.OutputDoctorProfit;
 import spring.orm.model.output.OutputSpecializationProfit;
 

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 
-import spring.orm.contract.TestDAO;
+import spring.orm.contract.DAO.TestDAO;
 import spring.orm.model.TestModel;
 import spring.orm.model.input.TestInputModel;
 import spring.orm.model.output.testsPatientsModel;

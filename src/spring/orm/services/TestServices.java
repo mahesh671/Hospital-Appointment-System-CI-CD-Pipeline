@@ -7,12 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import spring.orm.contract.TestDAO;
+import spring.orm.contract.DAO.TestDAO;
+import spring.orm.contract.services.TestService;
 import spring.orm.model.TestModel;
 import spring.orm.model.output.testsCategoriesModel;
 
 @Service
-public class TestServices {
+public class TestServices implements TestService {
 	@Autowired
 	private TestDAO testDAO;
 

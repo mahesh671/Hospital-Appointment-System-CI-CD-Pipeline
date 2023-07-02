@@ -1,4 +1,4 @@
-package spring.orm.contract;
+package spring.orm.contract.DAO;
 
 import java.time.LocalDate;
 import java.util.List;

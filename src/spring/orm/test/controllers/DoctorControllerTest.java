@@ -24,15 +24,15 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import spring.orm.contract.DocScheduleDAO;
-import spring.orm.contract.DoctorsDAO;
-import spring.orm.contract.SpecializationDAO;
+import spring.orm.contract.DAO.DocScheduleDAO;
+import spring.orm.contract.DAO.DoctorsDAO;
+import spring.orm.contract.DAO.SpecializationDAO;
+import spring.orm.contract.services.DoctorOutputServices;
 import spring.orm.controller.DoctorController;
 import spring.orm.customexceptions.InvalidWeekdayException;
 import spring.orm.model.entity.DoctorTemp;
 import spring.orm.model.input.DoctorInput;
 import spring.orm.model.input.DoctorUpdateModel;
-import spring.orm.services.DoctorOutputService;
 
 public class DoctorControllerTest {
 
@@ -43,7 +43,7 @@ public class DoctorControllerTest {
 	private SpecializationDAO specializationDAO;
 
 	@Mock
-	private DoctorOutputService doctorOutputService;
+	private DoctorOutputServices doctorOutputService;
 
 	@Mock
 	private DocScheduleDAO doctorScheduleDAO;

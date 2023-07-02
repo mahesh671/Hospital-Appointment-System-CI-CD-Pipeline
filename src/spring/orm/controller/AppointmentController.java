@@ -26,10 +26,13 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import com.google.gson.Gson;
 import com.razorpay.RazorpayException;
 
-import spring.orm.contract.AppointmentDAO;
-import spring.orm.contract.DoctorsDAO;
-import spring.orm.contract.PatientDAO;
-import spring.orm.contract.SpecializationDAO;
+import spring.orm.contract.DAO.AppointmentDAO;
+import spring.orm.contract.DAO.DoctorsDAO;
+import spring.orm.contract.DAO.PatientDAO;
+import spring.orm.contract.DAO.SpecializationDAO;
+import spring.orm.contract.services.AppointmentServices;
+import spring.orm.contract.services.DoctorOutputServices;
+import spring.orm.contract.services.PaymentService;
 import spring.orm.model.PatientSession;
 import spring.orm.model.Specialization;
 import spring.orm.model.entity.DoctorTemp;
@@ -41,9 +44,6 @@ import spring.orm.model.output.DoctorList;
 import spring.orm.model.output.DoctorOutPutModel;
 import spring.orm.model.output.OutputBookedAppointmnets;
 import spring.orm.model.output.RescheduleAppointmentOutput;
-import spring.orm.services.AppointmentService;
-import spring.orm.services.DoctorOutputService;
-import spring.orm.services.PaymentServices;
 
 @Controller
 @RequestMapping
@@ -51,7 +51,7 @@ public class AppointmentController {
 
 	private SpecializationDAO specializationDAO;
 
-	private DoctorOutputService doctorservice;
+	private DoctorOutputServices doctorservice;
 
 	private PatientDAO patientDAO;
 
@@ -59,14 +59,14 @@ public class AppointmentController {
 
 	private AppointmentDAO appointmentDAO;
 
-	private AppointmentService appointmentService;
-	private PaymentServices ps;
+	private AppointmentServices appointmentService;
+	private PaymentService ps;
 	private static final Logger logger = LoggerFactory.getLogger(AppointmentController.class);
 
 	@Autowired
-	public AppointmentController(SpecializationDAO specializationDAO, DoctorOutputService doctorservice,
-			PatientDAO patientDAO, DoctorsDAO doctorsDAO, AppointmentDAO appointmentDAO, PaymentServices ps,
-			AppointmentService a) {
+	public AppointmentController(SpecializationDAO specializationDAO, DoctorOutputServices doctorservice,
+			PatientDAO patientDAO, DoctorsDAO doctorsDAO, AppointmentDAO appointmentDAO, PaymentService ps,
+			AppointmentServices a) {
 
 		this.appointmentDAO = appointmentDAO;
 		this.appointmentService = a;
@@ -208,6 +208,7 @@ public class AppointmentController {
 			}
 		} catch (Exception e) {
 
+			e.printStackTrace();
 			String s1 = ps.makeRefund(appointment);
 			System.out.println("Slot Already Booked");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(s1);
@@ -243,6 +244,7 @@ public class AppointmentController {
 			String userMail = patientSession.getEmail();
 			appointmentService.sendBookingMail(request, response, app_id);
 		} catch (Exception e) {
+			e.printStackTrace();
 			String s1 = ps.makeRefund(appointment);
 			System.out.println("Slot Already Booked");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(s1);

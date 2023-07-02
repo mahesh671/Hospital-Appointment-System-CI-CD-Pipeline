@@ -15,7 +15,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import spring.orm.contract.TestDAO;
+import spring.orm.contract.DAO.TestDAO;
 import spring.orm.model.TestModel;
 import spring.orm.model.output.testsCategoriesModel;
 import spring.orm.services.TestServices;

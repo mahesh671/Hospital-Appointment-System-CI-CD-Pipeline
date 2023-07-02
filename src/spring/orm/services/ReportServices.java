@@ -9,10 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import spring.orm.contract.DCDAO;
+import spring.orm.contract.DAO.DCDAO;
+import spring.orm.contract.services.ReportService;
 
 @Component
-public class ReportServices {
+public class ReportServices implements ReportService {
 
 	DCDAO dc;
 

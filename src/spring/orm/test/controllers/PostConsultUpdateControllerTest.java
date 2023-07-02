@@ -21,9 +21,9 @@ import org.testng.annotations.Test;
 
 import com.google.gson.Gson;
 
-import spring.orm.contract.AppointmentDAO;
-import spring.orm.contract.PatientDAO;
-import spring.orm.contract.PatientProfileUpdateDAO;
+import spring.orm.contract.DAO.AppointmentDAO;
+import spring.orm.contract.DAO.PatientDAO;
+import spring.orm.contract.DAO.PatientProfileUpdateDAO;
 import spring.orm.controller.PostConsultUpdateController;
 import spring.orm.model.PatientSession;
 import spring.orm.model.entity.AppointmentEntity;

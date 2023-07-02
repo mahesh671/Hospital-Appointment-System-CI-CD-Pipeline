@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.gson.Gson;
 
-import spring.orm.contract.DoctorsDAO;
-import spring.orm.contract.SpecializationDAO;
+import spring.orm.contract.DAO.DoctorsDAO;
+import spring.orm.contract.DAO.SpecializationDAO;
 import spring.orm.model.Specialization;
 
 @Controller

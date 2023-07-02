@@ -14,10 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import spring.orm.contract.AppointmentDAO;
-import spring.orm.contract.DocScheduleDAO;
-import spring.orm.contract.DoctorsDAO;
-import spring.orm.contract.SpecializationDAO;
+import spring.orm.contract.DAO.AppointmentDAO;
+import spring.orm.contract.DAO.DocScheduleDAO;
+import spring.orm.contract.DAO.DoctorsDAO;
+import spring.orm.contract.DAO.SpecializationDAO;
+import spring.orm.contract.services.DoctorOutputServices;
 import spring.orm.model.DoctorSchedule;
 import spring.orm.model.Specialization;
 import spring.orm.model.entity.DoctorTemp;
@@ -27,7 +28,7 @@ import spring.orm.model.output.DoctorList;
 import spring.orm.model.output.DoctorOutPutModel;
 
 @Component
-public class DoctorOutputService {
+public class DoctorOutputService implements DoctorOutputServices {
 
 	@Autowired
 	private DocScheduleDAO docschedao;
@@ -45,6 +46,7 @@ public class DoctorOutputService {
 	 * Retrieve a list of doctors with their schedules based on specialization and
 	 * appointment date
 	 */
+	@Override
 	public List<DoctorList> getAllDocBySpecDate(String specialization, Date appointmentDated) {
 		List<DoctorList> docspec = new ArrayList<>();
 		Map<Integer, String> daymap = new HashMap<>();
@@ -66,11 +68,13 @@ public class DoctorOutputService {
 	}
 
 	// Retrieve doctor information based on ID
+	@Override
 	public DoctorOutPutModel getDocbyID(int id) {
 		return doctdao.getDocById(id);
 	}
 
 	// Get available time slots for a doctor on a specific date
+	@Override
 	public List<String> getDocTimeSlots(int id, String date) {
 		DoctorSchedule s = docschedao.getSchedulebyId(id);
 		List<String> slots = generateTimeSlots(s.getTimeFrom(), s.getTimeTo(), s.getAverageAppointmentTime(), date, id);
@@ -78,6 +82,7 @@ public class DoctorOutputService {
 	}
 
 	// Generate time slots based on the doctor's schedule and availability
+	@Override
 	public List<String> generateTimeSlots(String fromTime, String toTime, int avgTime, String date, int id) {
 		List<String> timeSlots = new ArrayList<>();
 
@@ -98,6 +103,7 @@ public class DoctorOutputService {
 	}
 
 	// Add a new doctor with the provided information
+	@Override
 	public int addDoc(DoctorInput d, CommonsMultipartFile pic) {
 		DoctorTemp dt = new DoctorTemp();
 		Specialization s = specdao.getSpecialization(d.getDocspec());
@@ -112,6 +118,7 @@ public class DoctorOutputService {
 
 	}
 
+	@Override
 	@Transactional
 	// Update doctor information based on the provided data
 	public int updateDoctor(DoctorUpdateModel d, CommonsMultipartFile docphoto) {

@@ -15,10 +15,11 @@ import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 import com.razorpay.Refund;
 
+import spring.orm.contract.services.PaymentService;
 import spring.orm.model.input.AppointmentForm;
 
 @Service
-public class PaymentServices {
+public class PaymentServices implements PaymentService {
 	@Autowired
 	public PaymentServices(HttpSession httpSession) {
 		super();
@@ -38,6 +39,7 @@ public class PaymentServices {
 	 * @throws RazorpayException If an error occurs during the payment process.
 	 * @throws JSONException     If an error occurs while creating the JSON object.
 	 */
+	@Override
 	public String makeTestPayment(String billid, String amount, String currency)
 			throws RazorpayException, JSONException {
 		logger.info("Inside Services make Test Payment Method");
@@ -78,6 +80,7 @@ public class PaymentServices {
 	 * @throws RazorpayException If an error occurs during the payment process.
 	 * @throws JSONException     If an error occurs while creating the JSON object.
 	 */
+	@Override
 	public String makeAppointmentPayment(String amount, String currency, Model model)
 			throws RazorpayException, JSONException {
 		logger.info("Inside Services make Appointment Payment Method");
@@ -109,6 +112,7 @@ public class PaymentServices {
 	 * @throws RazorpayException If an error occurs during the refund process.
 	 * @throws JSONException     If an error occurs while creating the JSON object.
 	 */
+	@Override
 	public String makeRefund(AppointmentForm appointment) throws RazorpayException, JSONException {
 		logger.info("Inside Make Refund Method");
 

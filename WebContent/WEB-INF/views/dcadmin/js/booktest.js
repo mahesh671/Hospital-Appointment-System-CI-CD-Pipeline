@@ -264,7 +264,7 @@ function payment() {
 			console.log("in pay");
 			if (response.status == 'created') {
 				var options = {
-					"key": "rzp_test_wTvwL7iaSRljth",
+					"key": "rzp_test_wTvwL5iaSRljth",
 					"amount": response.amount,
 					"currency": "INR",
 					"name": "RaphaHospital",

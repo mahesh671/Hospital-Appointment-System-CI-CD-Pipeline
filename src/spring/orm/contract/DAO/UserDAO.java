@@ -1,4 +1,4 @@
-package spring.orm.contract;
+package spring.orm.contract.DAO;
 
 import spring.orm.model.PatientModel;
 import spring.orm.model.UserPass;

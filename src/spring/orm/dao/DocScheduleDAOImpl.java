@@ -1,7 +1,6 @@
 package spring.orm.dao;
 
 import java.time.format.DateTimeFormatter;
-import java.util.logging.LogManager;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,8 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import spring.orm.contract.DocScheduleDAO;
-import spring.orm.controller.DoctorController;
+import spring.orm.contract.DAO.DocScheduleDAO;
 import spring.orm.model.DoctorSchedule;
 import spring.orm.model.input.DoctorInput;
 import spring.orm.model.input.DoctorUpdateModel;

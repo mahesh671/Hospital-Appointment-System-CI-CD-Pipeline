@@ -20,14 +20,14 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.google.gson.Gson;
 
-import spring.orm.contract.AppointmentDAO;
-import spring.orm.contract.PatientDAO;
-import spring.orm.contract.PatientProfileUpdateDAO;
+import spring.orm.contract.DAO.AppointmentDAO;
+import spring.orm.contract.DAO.PatientDAO;
+import spring.orm.contract.DAO.PatientProfileUpdateDAO;
+import spring.orm.contract.services.UpdateProfileServices;
 import spring.orm.model.PatientSession;
 import spring.orm.model.entity.AppointmentEntity;
 import spring.orm.model.input.ProfileUpdateForm;
 import spring.orm.model.output.PrescriptionOutputmodel;
-import spring.orm.services.UpdateProfileService;
 
 @Controller
 public class PostConsultUpdateController {
@@ -38,7 +38,7 @@ public class PostConsultUpdateController {
 
 	private HttpSession httpSession;
 
-	private UpdateProfileService updateProfileService;
+	private UpdateProfileServices updateProfileService;
 
 	private AppointmentDAO appointmentDAO;
 
@@ -46,7 +46,7 @@ public class PostConsultUpdateController {
 
 	@Autowired
 	public PostConsultUpdateController(PatientDAO patientDAO, PatientProfileUpdateDAO profileUpdateDAO,
-			HttpSession httpSession, UpdateProfileService updateProfileService, AppointmentDAO appointmentDAO) {
+			HttpSession httpSession, UpdateProfileServices updateProfileService, AppointmentDAO appointmentDAO) {
 		super();
 		this.patientDAO = patientDAO;
 		this.profileUpdateDAO = profileUpdateDAO;

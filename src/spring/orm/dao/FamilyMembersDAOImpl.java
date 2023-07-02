@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import spring.orm.contract.FamilyMembersDAO;
+import spring.orm.contract.DAO.FamilyMembersDAO;
 import spring.orm.model.PatientModel;
 import spring.orm.model.entity.FamilyMembers;
 import spring.orm.model.input.FamilyMembersInput;

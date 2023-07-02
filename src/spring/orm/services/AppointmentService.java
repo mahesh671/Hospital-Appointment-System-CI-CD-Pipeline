@@ -17,9 +17,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import spring.orm.contract.AppointmentDAO;
-import spring.orm.contract.DoctorsDAO;
-import spring.orm.contract.PatientDAO;
+import spring.orm.contract.DAO.AppointmentDAO;
+import spring.orm.contract.DAO.DoctorsDAO;
+import spring.orm.contract.DAO.PatientDAO;
+import spring.orm.contract.services.AppointmentServices;
+import spring.orm.contract.services.PaymentService;
 import spring.orm.customexceptions.SlotAlreadyBookedException;
 import spring.orm.model.PatientModel;
 import spring.orm.model.entity.AppointmentEntity;
@@ -31,24 +33,25 @@ import spring.orm.model.output.RescheduleAppointmentOutput;
 import spring.orm.util.MailSendHelper;
 
 @Component
-public class AppointmentService {
+public class AppointmentService implements AppointmentServices {
 
 	private AppointmentDAO appointmentDAO;
 
 	private DoctorsDAO doctorDAO;
 
 	private PatientDAO patientDAO;
-	private PaymentServices ps;
+	private PaymentService ps;
 	private static final Logger logger = LoggerFactory.getLogger(AppointmentService.class);
 
 	@Autowired
-	public AppointmentService(AppointmentDAO apdao, DoctorsDAO docdao, PatientDAO patdao, PaymentServices ps) {
+	public AppointmentService(AppointmentDAO apdao, DoctorsDAO docdao, PatientDAO patdao, PaymentService ps) {
 		this.appointmentDAO = apdao;
 		this.doctorDAO = docdao;
 		this.patientDAO = patdao;
 		this.ps = ps;
 	}
 
+	@Override
 	public List<AppointmentEntity> getAllAppointments() {
 		// Retrieve all appointments
 		List<AppointmentEntity> appointmentlist = appointmentDAO.getAllAppointments();
@@ -67,6 +70,7 @@ public class AppointmentService {
 		return appointmentlist;
 	}
 
+	@Override
 	public int bookAppointment(AppointmentForm app) throws Exception {
 		// Book an appointment
 		logger.info("Booking an appointment");
@@ -85,6 +89,7 @@ public class AppointmentService {
 		return app_id;
 	}
 
+	@Override
 	public RescheduleAppointmentOutput getAppointmentByIdOutput(int app_id) {
 		// Log method entry
 		logger.info("Getting appointment details by ID for rescheduling");
@@ -112,6 +117,7 @@ public class AppointmentService {
 		return rescheduleAppointment;
 	}
 
+	@Override
 	public int bookAppointmentWithNewPatient(AppointmentForm appointmentForm) throws SlotAlreadyBookedException {
 		// Book an appointment with a new patient
 		PatientModel patient = new PatientModel();
@@ -138,6 +144,7 @@ public class AppointmentService {
 		return app_id;
 	}
 
+	@Override
 	public void cancelAppointment(int app_id) {
 		// Cancel an appointment
 		logger.info("Canceling appointment with ID: {}", app_id);
@@ -149,6 +156,7 @@ public class AppointmentService {
 		logger.info("Appointment with ID {} canceled", app_id);
 	}
 
+	@Override
 	public MailAppOutputModel getAppointmentByID(int app_id) {
 		// Get appointment details by ID
 		AppointmentEntity appointment = appointmentDAO.getAppointmentById(app_id);
@@ -190,6 +198,7 @@ public class AppointmentService {
 
 	}
 
+	@Override
 	@Transactional
 	public void reschduleAppointment(RescheduleAppointmentModel rm) {
 		logger.info("Rescheduling appointment");
@@ -201,6 +210,7 @@ public class AppointmentService {
 		logger.info("Appointment rescheduled");
 	}
 
+	@Override
 	public int bookAppointment(AppointmentForm appointment, int patientId) throws SlotAlreadyBookedException {
 		// Book an appointment with a specified patient ID
 		DateTimeFormatter sqlFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -219,12 +229,14 @@ public class AppointmentService {
 		return appointmentId;
 	}
 
+	@Override
 	public List<AppointmentEntity> getPatientAppointmentByID(int patn_id) {
 		// Get all appointments of a patient by their ID
 		List<AppointmentEntity> alist = appointmentDAO.getAppointmentsByPatientId(patn_id);
 		return alist;
 	}
 
+	@Override
 	public List<AppOutFormFamily> getFormFamily(int id) {
 		// Get family members for form filling
 		List<AppOutFormFamily> r = new ArrayList<>();
@@ -238,6 +250,7 @@ public class AppointmentService {
 		return r;
 	}
 
+	@Override
 	public void sendBookingMail(HttpServletRequest request, HttpServletResponse response, int app_id) {
 		logger.info("Sending booking email");
 

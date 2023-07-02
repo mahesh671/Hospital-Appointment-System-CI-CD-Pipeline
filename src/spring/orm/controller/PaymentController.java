@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.razorpay.RazorpayException;
 
-import spring.orm.contract.SpecializationDAO;
+import spring.orm.contract.DAO.SpecializationDAO;
+import spring.orm.contract.services.PaymentService;
 import spring.orm.model.input.AppointmentForm;
-import spring.orm.services.PaymentServices;
 
 @Controller
 public class PaymentController {
@@ -26,12 +26,12 @@ public class PaymentController {
 
 	private HttpSession httpSession;
 
-	private PaymentServices paymentServices;
+	private PaymentService paymentServices;
 	private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
 	@Autowired
 	public PaymentController(SpecializationDAO specializationDAO, HttpSession httpSession,
-			PaymentServices paymentServices) {
+			PaymentService paymentServices) {
 		super();
 		this.specializationDAO = specializationDAO;
 		this.httpSession = httpSession;

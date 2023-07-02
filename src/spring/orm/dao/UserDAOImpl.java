@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
-import spring.orm.contract.UserDAO;
+import spring.orm.contract.DAO.UserDAO;
 import spring.orm.model.DiagnosticBillModel;
 import spring.orm.model.PatientModel;
 import spring.orm.model.Specialization;
