@@ -1,5 +1,17 @@
 package spring.orm.test.services;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -9,123 +21,119 @@ import org.testng.annotations.Test;
 
 import spring.orm.contract.DAO.FamilyMembersDAO;
 import spring.orm.contract.DAO.PatientDAO;
-import spring.orm.contract.services.PatientFamilyMembersServices;
 import spring.orm.model.PatientModel;
-import spring.orm.model.PatientSession;
 import spring.orm.model.input.FamilyMembersInput;
-
-import java.util.ArrayList;
-import java.util.List;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import spring.orm.services.PatientFamilyMembersService;
 
 public class FamilyMemberServiceTest {
 
-    @Mock
-    private FamilyMembersDAO familyMemberDao;
+	@Mock
+	private FamilyMembersDAO familyMemberDao;
 
-    @Mock
-    private PatientDAO patientDao;
+	@Mock
+	private PatientDAO patientDao;
 
-    @InjectMocks
-    private PatientFamilyMembersServices familyMembersService;
+	@InjectMocks
+	private PatientFamilyMembersService familyMembersService;
 
-    @BeforeMethod
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+	@BeforeMethod
+	public void setUp() {
+		MockitoAnnotations.initMocks(this);
+	}
 
-    @Test
-    public void testAddFamilyMember() {
-        // Mock data
-        FamilyMembersInput familyMember = new FamilyMembersInput();
-        familyMember.setPfmbName("John Doe");
-        familyMember.setPfmbAge(30);
-        familyMember.setPfmbGender("Male");
-        familyMember.setPfmbbgroup("AB+");
-        familyMember.setPfmbRelation("Sibling");
+	@Test
+	public void testAddFamilyMember() {
+		// Mock data
+		FamilyMembersInput familyMember = new FamilyMembersInput();
+		familyMember.setPfmbName("John Doe");
+		familyMember.setPfmbAge(30);
+		familyMember.setPfmbGender("Male");
+		familyMember.setPfmbbgroup("AB+");
+		familyMember.setPfmbRelation("Sibling");
 
-        int patientId = 1;
+		int patientId = 1;
 
-        PatientModel patientModel = new PatientModel();
-        patientModel.setPatn_name(familyMember.getPfmbName());
-        patientModel.setPatn_age(familyMember.getPfmbAge());
-        patientModel.setPatn_gender(familyMember.getPfmbGender());
-        patientModel.setPatn_bgroup(familyMember.getPfmbbgroup());
-        patientModel.setAccessPatientId(patientId);
+		PatientModel patientModel = new PatientModel();
+		patientModel.setPatn_name(familyMember.getPfmbName());
+		patientModel.setPatn_age(familyMember.getPfmbAge());
+		patientModel.setPatn_gender(familyMember.getPfmbGender());
+		patientModel.setPatn_bgroup(familyMember.getPfmbbgroup());
+		patientModel.setAccessPatientId(patientId);
 
-        int pid = 1;
+		int pid = 1;
 
-        // Stubbing the methods with argument matchers
-        when(familyMemberDao.savePatientDetails(any(PatientModel.class))).thenReturn(pid);
-        doNothing().when(familyMemberDao).addFamilyByPatientInfo(any(PatientModel.class), anyInt(), anyInt(), anyString());
+		// Stubbing the methods with argument matchers
+		when(familyMemberDao.savePatientDetails(any(PatientModel.class))).thenReturn(pid);
+		doNothing().when(familyMemberDao).addFamilyByPatientInfo(any(PatientModel.class), anyInt(), anyInt(),
+				anyString());
 
-        // Perform the method under test
-        int result = familyMembersService.addFamilyMember(familyMember, patientId);
+		// Perform the method under test
+		int result = familyMembersService.addFamilyMember(familyMember, patientId);
 
-        // Verify the interactions and assertions
-        verify(familyMemberDao, times(1)).savePatientDetails(any(PatientModel.class));
-        verify(familyMemberDao, times(1)).addFamilyByPatientInfo(any(PatientModel.class), eq(pid),
-                eq(patientId), eq(familyMember.getPfmbRelation()));
+		// Verify the interactions and assertions
+		verify(familyMemberDao, times(1)).savePatientDetails(any(PatientModel.class));
+		verify(familyMemberDao, times(1)).addFamilyByPatientInfo(any(PatientModel.class), eq(pid), eq(patientId),
+				eq(familyMember.getPfmbRelation()));
 
-        Assert.assertEquals(patientModel.getPatn_id(), result);
-    }
-    @Test
-    public void testGetAllFamilyMembers() {
-        // Mock data
-        Integer patientId = 1;
+		Assert.assertEquals(patientModel.getPatn_id(), result);
+	}
 
-        // Stubbing the method
-        List<FamilyMembersInput> expectedFamilyMembers = new ArrayList<>();
-        when(familyMemberDao.getFamilyDetailsByPatientId(patientId)).thenReturn(expectedFamilyMembers);
+	@Test
+	public void testGetAllFamilyMembers() {
+		// Mock data
+		Integer patientId = 1;
 
-        // Perform the method under test
-        List<FamilyMembersInput> result = familyMembersService.getAllFamilyMembers(patientId);
+		// Stubbing the method
+		List<FamilyMembersInput> expectedFamilyMembers = new ArrayList<>();
+		when(familyMemberDao.getFamilyDetailsByPatientId(patientId)).thenReturn(expectedFamilyMembers);
 
-        // Verify the interactions and assertions
-        verify(familyMemberDao, times(1)).getFamilyDetailsByPatientId(patientId);
-        assert result == expectedFamilyMembers;
-    }
+		// Perform the method under test
+		List<FamilyMembersInput> result = familyMembersService.getAllFamilyMembers(patientId);
 
-    @Test
-    public void testGetFamilyMemberInfo() {
-        // Mock data
-        int patientId = 1;
-        int familyMemberId = 2;
+		// Verify the interactions and assertions
+		verify(familyMemberDao, times(1)).getFamilyDetailsByPatientId(patientId);
+		assert result == expectedFamilyMembers;
+	}
 
-        // Stubbing the method
-        FamilyMembersInput expectedFamilyMember = new FamilyMembersInput();
-        when(familyMemberDao.getFamilyMemberByPatientId(patientId, familyMemberId)).thenReturn(expectedFamilyMember);
+	@Test
+	public void testGetFamilyMemberInfo() {
+		// Mock data
+		int patientId = 1;
+		int familyMemberId = 2;
 
-        // Perform the method under test
-        FamilyMembersInput result = familyMembersService.getFamilyMemberInfo(patientId, familyMemberId);
+		// Stubbing the method
+		FamilyMembersInput expectedFamilyMember = new FamilyMembersInput();
+		when(familyMemberDao.getFamilyMemberByPatientId(patientId, familyMemberId)).thenReturn(expectedFamilyMember);
 
-        // Verify the interactions and assertions
-        verify(familyMemberDao, times(1)).getFamilyMemberByPatientId(patientId, familyMemberId);
-        assert result == expectedFamilyMember;
-    }
+		// Perform the method under test
+		FamilyMembersInput result = familyMembersService.getFamilyMemberInfo(patientId, familyMemberId);
 
-    @Test
-    public void testSaveFamilyMemberInfo() {
-        // Mock data
-        FamilyMembersInput familyMember = new FamilyMembersInput();
+		// Verify the interactions and assertions
+		verify(familyMemberDao, times(1)).getFamilyMemberByPatientId(patientId, familyMemberId);
+		assert result == expectedFamilyMember;
+	}
 
-        // Perform the method under test
-        familyMembersService.saveFamilyMemberInfo(familyMember);
+	@Test
+	public void testSaveFamilyMemberInfo() {
+		// Mock data
+		FamilyMembersInput familyMember = new FamilyMembersInput();
 
-        // Verify the interactions
-        verify(familyMemberDao, times(1)).saveChanges(familyMember);
-    }
+		// Perform the method under test
+		familyMembersService.saveFamilyMemberInfo(familyMember);
 
-    @Test
-    public void testDeleteFamilyMember() {
-        // Mock data
-        int patientId = 1;
+		// Verify the interactions
+		verify(familyMemberDao, times(1)).saveChanges(familyMember);
+	}
 
-        // Perform the method under test
-        familyMembersService.deleteFamilyMember(patientId);
+	@Test
+	public void testDeleteFamilyMember() {
+		// Mock data
+		int patientId = 1;
 
-        // Verify the interactions
-        verify(familyMemberDao, times(1)).deleteFamilyMember(patientId);
-    }
+		// Perform the method under test
+		familyMembersService.deleteFamilyMember(patientId);
+
+		// Verify the interactions
+		verify(familyMemberDao, times(1)).deleteFamilyMember(patientId);
+	}
 }

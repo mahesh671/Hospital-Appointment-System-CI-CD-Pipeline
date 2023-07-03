@@ -23,22 +23,21 @@ import spring.orm.model.input.AppointmentForm;
 @Service
 @PropertySource("classpath:Razorpay.properties")
 public class PaymentServices implements PaymentService {
-	
+
 	@Value("${razorpay.key}")
-	private String razorPayKey; 
-	
+	private String razorPayKey;
+
 	@Value("${razorpay.secret}")
 	private String razorPaySecret;
-	
+
 	private HttpSession httpSession;
-	
+
 	@Autowired
 	public PaymentServices(HttpSession httpSession) {
 		super();
 		this.httpSession = httpSession;
 	}
 
-	
 	private static final Logger logger = LoggerFactory.getLogger(PaymentServices.class);
 
 	/**
@@ -99,7 +98,7 @@ public class PaymentServices implements PaymentService {
 		logger.info("amount" + " " + amount + " " + "currency" + " " + currency);
 
 		// Initialize Razorpay client
-		RazorpayClient razorpayClient = new RazorpayClient(razorPayKey, razorPaySecret);
+		RazorpayClient razorpayClient = new RazorpayClient("rzp_test_wTvwL5iaSRljth", "AvneRMjZuce3P1NzgAM18omy");
 
 		// Create options for the payment
 		JSONObject options = new JSONObject();
@@ -129,7 +128,7 @@ public class PaymentServices implements PaymentService {
 		logger.info("Inside Make Refund Method");
 
 		// Initialize Razorpay client
-		RazorpayClient razorpay = new RazorpayClient(razorPayKey, razorPaySecret);
+		RazorpayClient razorpay = new RazorpayClient("rzp_test_wTvwL5iaSRljth", "AvneRMjZuce3P1NzgAM18omy");
 
 		// Create refund request
 		JSONObject refundRequest = new JSONObject();

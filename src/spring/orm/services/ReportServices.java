@@ -26,22 +26,20 @@ public class ReportServices implements ReportService {
 	private static final Logger logger = LoggerFactory.getLogger(ReportServices.class);
 
 	// Uploads the image file into db based on report id
+	@Override
 	public String fileUpload(CommonsMultipartFile file, int id) {
 		logger.info("Entered into fileUpload");
 
 		byte[] filecontent = null;
 
-		
-
-			try {
-				// converting the image into byte form
-				filecontent = file.getBytes();
-			} catch (Exception e) {
-				logger.info("Exception caused " + e);
-				e.printStackTrace();
-				return "error";
-			}
-		
+		try {
+			// converting the image into byte form
+			filecontent = file.getBytes();
+		} catch (Exception e) {
+			logger.info("Exception caused " + e);
+			e.printStackTrace();
+			return "error";
+		}
 
 		// saves the file to its corresponding report id
 		saveFileDetails(id, filecontent);
@@ -53,6 +51,7 @@ public class ReportServices implements ReportService {
 	}
 
 	// saves the file in byte form to database
+	@Override
 	public void saveFileDetails(int id, byte[] content) {
 		logger.info("Entered into saveFileDetails");
 
@@ -63,6 +62,7 @@ public class ReportServices implements ReportService {
 	}
 
 	// checks whether file is an Image file or not
+	@Override
 	public boolean isImageFile(CommonsMultipartFile file) {
 		logger.info("Entered into isImageFile");
 

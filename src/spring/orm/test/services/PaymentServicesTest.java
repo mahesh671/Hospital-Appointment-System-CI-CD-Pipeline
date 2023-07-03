@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
 
 import com.razorpay.RazorpayException;
 
-import spring.orm.contract.services.PaymentService;
+import spring.orm.services.PaymentServices;
 
 public class PaymentServicesTest {
 
@@ -24,7 +24,7 @@ public class PaymentServicesTest {
 	private HttpSession httpSession;
 
 	@InjectMocks
-	private PaymentService paymentServices;
+	private PaymentServices paymentServices;
 
 	@BeforeMethod
 	public void setUp() {

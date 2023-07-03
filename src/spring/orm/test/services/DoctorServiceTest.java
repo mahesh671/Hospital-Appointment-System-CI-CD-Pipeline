@@ -1,5 +1,20 @@
 package spring.orm.test.services;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -12,7 +27,6 @@ import spring.orm.contract.DAO.AppointmentDAO;
 import spring.orm.contract.DAO.DocScheduleDAO;
 import spring.orm.contract.DAO.DoctorsDAO;
 import spring.orm.contract.DAO.SpecializationDAO;
-import spring.orm.contract.services.DoctorOutputServices;
 import spring.orm.model.DoctorSchedule;
 import spring.orm.model.Specialization;
 import spring.orm.model.entity.DoctorTemp;
@@ -20,172 +34,154 @@ import spring.orm.model.input.DoctorInput;
 import spring.orm.model.input.DoctorUpdateModel;
 import spring.orm.model.output.DoctorList;
 import spring.orm.model.output.DoctorOutPutModel;
-
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
+import spring.orm.services.DoctorOutputService;
 
 public class DoctorServiceTest {
 
-    @Mock
-    private DocScheduleDAO docschedao;
+	@Mock
+	private DocScheduleDAO docschedao;
 
-    @Mock
-    private SpecializationDAO specdao;
+	@Mock
+	private SpecializationDAO specdao;
 
-    @Mock
-    private DoctorsDAO doctdao;
+	@Mock
+	private DoctorsDAO doctdao;
 
-    @Mock
-    private AppointmentDAO appdao;
+	@Mock
+	private AppointmentDAO appdao;
 
-    @InjectMocks
-    private DoctorOutputServices doctorOutputService;
+	@InjectMocks
+	private DoctorOutputService doctorOutputService;
 
-    @BeforeMethod
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+	@BeforeMethod
+	public void setUp() {
+		MockitoAnnotations.initMocks(this);
+	}
 
-    @Test
-    public void testGetAllDocBySpecDate() {
-        // Mock data
-        String specialization = "Cardiology";
-        Date appointmentDate = new Date();
-        List<DoctorList> expectedList = new ArrayList<>();
-        expectedList.add(new DoctorList());
-        when(doctdao.getallDocScheduleBySpec(eq(specialization), anyString())).thenReturn(expectedList);
+	@Test
+	public void testGetAllDocBySpecDate() {
+		// Mock data
+		String specialization = "Cardiology";
+		Date appointmentDate = new Date();
+		List<DoctorList> expectedList = new ArrayList<>();
+		expectedList.add(new DoctorList());
+		when(doctdao.getallDocScheduleBySpec(eq(specialization), anyString())).thenReturn(expectedList);
 
-        // Invoke the method under test
-        List<DoctorList> result = doctorOutputService.getAllDocBySpecDate(specialization, appointmentDate);
+		// Invoke the method under test
+		List<DoctorList> result = doctorOutputService.getAllDocBySpecDate(specialization, appointmentDate);
 
-        // Verify the interactions and assertions
-        verify(doctdao).getallDocScheduleBySpec(eq(specialization), anyString());
-        Assert.assertEquals(result, expectedList);
-    }
+		// Verify the interactions and assertions
+		verify(doctdao).getallDocScheduleBySpec(eq(specialization), anyString());
+		Assert.assertEquals(result, expectedList);
+	}
 
-    @Test
-    public void testGetDocbyID() {
-        // Mock data
-        int doctorId = 1;
-        DoctorOutPutModel expectedOutput = new DoctorOutPutModel();
-        when(doctdao.getDocById(doctorId)).thenReturn(expectedOutput);
+	@Test
+	public void testGetDocbyID() {
+		// Mock data
+		int doctorId = 1;
+		DoctorOutPutModel expectedOutput = new DoctorOutPutModel();
+		when(doctdao.getDocById(doctorId)).thenReturn(expectedOutput);
 
-        // Invoke the method under test
-        DoctorOutPutModel result = doctorOutputService.getDocbyID(doctorId);
+		// Invoke the method under test
+		DoctorOutPutModel result = doctorOutputService.getDocbyID(doctorId);
 
-        // Verify the interactions and assertions
-        verify(doctdao).getDocById(doctorId);
-        Assert.assertEquals(result, expectedOutput);
-    }
+		// Verify the interactions and assertions
+		verify(doctdao).getDocById(doctorId);
+		Assert.assertEquals(result, expectedOutput);
+	}
 
-    @Test
-    public void testGetDocTimeSlots() {
-        // Mock data
-        int doctorId = 1;
-        String date = "2023-07-01";
-        DoctorSchedule schedule = new DoctorSchedule();
-        schedule.setTimeFrom("09:00");
-        schedule.setTimeTo("17:00");
-        schedule.setAverageAppointmentTime(30);
-        when(docschedao.getSchedulebyId(doctorId)).thenReturn(schedule);
-        List<String> expectedSlots = new ArrayList<>();
-        expectedSlots.add("09:00 AM");
-        expectedSlots.add("09:30 AM");
-        expectedSlots.add("10:00 AM");
-        // ...
+	@Test
+	public void testGetDocTimeSlots() {
+		// Mock data
+		int doctorId = 1;
+		String date = "2023-07-01";
+		DoctorSchedule schedule = new DoctorSchedule();
+		schedule.setTimeFrom("09:00");
+		schedule.setTimeTo("17:00");
+		schedule.setAverageAppointmentTime(30);
+		when(docschedao.getSchedulebyId(doctorId)).thenReturn(schedule);
+		List<String> expectedSlots = new ArrayList<>();
+		expectedSlots.add("09:00 AM");
+		expectedSlots.add("09:30 AM");
+		expectedSlots.add("10:00 AM");
+		// ...
 
-        // Invoke the method under test
-        List<String> result = doctorOutputService.getDocTimeSlots(doctorId, date);
+		// Invoke the method under test
+		List<String> result = doctorOutputService.getDocTimeSlots(doctorId, date);
 
-        // Verify the interactions and assertions
-        verify(docschedao).getSchedulebyId(doctorId);
-        Assert.assertEquals(result, expectedSlots);
-    }
+		// Verify the interactions and assertions
+		verify(docschedao).getSchedulebyId(doctorId);
+		Assert.assertEquals(result, expectedSlots);
+	}
 
-    @Test
-    public void testGenerateTimeSlots() {
-        // Mock data
-        int id = 1;
-        String date = "2023-07-01";
-        DoctorSchedule doctorSchedule = new DoctorSchedule();
-        doctorSchedule.setTimeFrom("09:00");
-        doctorSchedule.setTimeTo("17:00");
-        doctorSchedule.setAverageAppointmentTime(30);
-        when(docschedao.getSchedulebyId(id)).thenReturn(doctorSchedule);
+	@Test
+	public void testGenerateTimeSlots() {
+		// Mock data
+		int id = 1;
+		String date = "2023-07-01";
+		DoctorSchedule doctorSchedule = new DoctorSchedule();
+		doctorSchedule.setTimeFrom("09:00");
+		doctorSchedule.setTimeTo("17:00");
+		doctorSchedule.setAverageAppointmentTime(30);
+		when(docschedao.getSchedulebyId(id)).thenReturn(doctorSchedule);
 
-        // Invoke the method under test
-        List<String> result = doctorOutputService.generateTimeSlots(
-                doctorSchedule.getTimeFrom(),
-                doctorSchedule.getTimeTo(),
-                doctorSchedule.getAverageAppointmentTime(),
-                date,
-                id
-        );
+		// Invoke the method under test
+		List<String> result = doctorOutputService.generateTimeSlots(doctorSchedule.getTimeFrom(),
+				doctorSchedule.getTimeTo(), doctorSchedule.getAverageAppointmentTime(), date, id);
 
-        // Verify the interactions and assertions
-        verify(docschedao).getSchedulebyId(id);
-        assertNotNull(result);
-        assertEquals(result.size(), 17);
-        assertEquals(result.get(0), "09:00 AM");
-        assertEquals(result.get(16), "04:30 PM");
-    }
+		// Verify the interactions and assertions
+		verify(docschedao).getSchedulebyId(id);
+		assertNotNull(result);
+		assertEquals(result.size(), 17);
+		assertEquals(result.get(0), "09:00 AM");
+		assertEquals(result.get(16), "04:30 PM");
+	}
 
-    @Test
-    public void testAddDoc() throws Exception {
-        // Mock data
-        DoctorInput doctorInput = new DoctorInput();
-        CommonsMultipartFile pic = mock(CommonsMultipartFile.class);
-        DoctorTemp doctorTemp = new DoctorTemp();
-        doctorTemp.setDoctId(1);
-        
-        String specialization = "Cardiology"; // Set a valid specialization value
-        doctorInput.setDocspec(specialization);
-        
-        when(specdao.getSpecialization(anyString())).thenReturn(new Specialization());
-        doNothing().when(doctdao).saveDoc(any(DoctorTemp.class));
+	@Test
+	public void testAddDoc() throws Exception {
+		// Mock data
+		DoctorInput doctorInput = new DoctorInput();
+		CommonsMultipartFile pic = mock(CommonsMultipartFile.class);
+		DoctorTemp doctorTemp = new DoctorTemp();
+		doctorTemp.setDoctId(1);
 
-        // Invoke the method under test
-        int result = doctorOutputService.addDoc(doctorInput, pic);
+		String specialization = "Cardiology"; // Set a valid specialization value
+		doctorInput.setDocspec(specialization);
 
-        // Verify the interactions and assertions
-        verify(specdao).getSpecialization(anyString());
-        verify(doctdao).saveDoc(any(DoctorTemp.class));
-        assertEquals(result, 1);
-    }
+		when(specdao.getSpecialization(anyString())).thenReturn(new Specialization());
+		doNothing().when(doctdao).saveDoc(any(DoctorTemp.class));
 
+		// Invoke the method under test
+		int result = doctorOutputService.addDoc(doctorInput, pic);
 
+		// Verify the interactions and assertions
+		verify(specdao).getSpecialization(anyString());
+		verify(doctdao).saveDoc(any(DoctorTemp.class));
+		assertEquals(result, 1);
+	}
 
+	@Test
+	public void testUpdateDoctor() throws Exception {
+		// Mock data
+		DoctorUpdateModel doctorUpdateModel = new DoctorUpdateModel();
+		CommonsMultipartFile docPhoto = mock(CommonsMultipartFile.class);
+		doctorUpdateModel.setDoc_id(1);
+		// Set other properties of doctorUpdateModel
 
-    @Test
-    public void testUpdateDoctor() throws Exception {
-        // Mock data
-        DoctorUpdateModel doctorUpdateModel = new DoctorUpdateModel();
-        CommonsMultipartFile docPhoto = mock(CommonsMultipartFile.class);
-        doctorUpdateModel.setDoc_id(1);
-        // Set other properties of doctorUpdateModel
+		DoctorTemp doctorTemp = new DoctorTemp();
+		doctorTemp.setDoctId(1);
+		when(doctdao.getDoctor(anyInt())).thenReturn(doctorTemp);
+		doNothing().when(doctdao).updatedoc(any(DoctorTemp.class));
+		doNothing().when(docschedao).updateSchedule(any(DoctorUpdateModel.class));
 
-        DoctorTemp doctorTemp = new DoctorTemp();
-        doctorTemp.setDoctId(1);
-        when(doctdao.getDoctor(anyInt())).thenReturn(doctorTemp);
-        doNothing().when(doctdao).updatedoc(any(DoctorTemp.class));
-        doNothing().when(docschedao).updateSchedule(any(DoctorUpdateModel.class));
+		// Invoke the method under test
+		int result = doctorOutputService.updateDoctor(doctorUpdateModel, docPhoto);
 
-        // Invoke the method under test
-        int result = doctorOutputService.updateDoctor(doctorUpdateModel, docPhoto);
-
-        // Verify the interactions and assertions
-        verify(doctdao).getDoctor(anyInt());
-        verify(doctdao).updatedoc(any(DoctorTemp.class));
-        verify(docschedao).updateSchedule(any(DoctorUpdateModel.class));
-        assertEquals(result, 1);
-    }
+		// Verify the interactions and assertions
+		verify(doctdao).getDoctor(anyInt());
+		verify(doctdao).updatedoc(any(DoctorTemp.class));
+		verify(docschedao).updateSchedule(any(DoctorUpdateModel.class));
+		assertEquals(result, 1);
+	}
 
 }
-

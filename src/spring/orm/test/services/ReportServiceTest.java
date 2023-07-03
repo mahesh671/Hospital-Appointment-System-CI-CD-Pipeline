@@ -1,4 +1,9 @@
-package spring.orm.test.services;import static org.mockito.Mockito.*;
+package spring.orm.test.services;
+
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -13,59 +18,59 @@ import spring.orm.services.ReportServices;
 
 public class ReportServiceTest {
 
-    @Mock
-    private DCDAO dcDao;
+	@Mock
+	private DCDAO dcDao;
 
-    @InjectMocks
-    private ReportServices reportServices;
+	@InjectMocks
+	private ReportServices reportServices;
 
-    @BeforeMethod
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        reportServices = new ReportServices(dcDao);
-    }
-    @Test
-    public void testFileUpload_Success() throws Exception {
-        // Mock the file and its content
-        CommonsMultipartFile file = mock(CommonsMultipartFile.class);
-        byte[] content = "file content".getBytes();
-        when(file.getBytes()).thenReturn(content);
+	@BeforeMethod
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+		reportServices = new ReportServices(dcDao);
+	}
 
-        // Perform the file upload
-        String result = reportServices.fileUpload(file, 1);
+	@Test
+	public void testFileUpload_Success() throws Exception {
+		// Mock the file and its content
+		CommonsMultipartFile file = mock(CommonsMultipartFile.class);
+		byte[] content = "file content".getBytes();
+		when(file.getBytes()).thenReturn(content);
 
-        // Verify the interactions and assertions
-        verify(file).getBytes();
-        verify(dcDao).saveReportInfo(eq(1), eq(content));
-        Assert.assertEquals(result, "success");
-    }
+		// Perform the file upload
+		String result = reportServices.fileUpload(file, 1);
 
+		// Verify the interactions and assertions
+		verify(file).getBytes();
+		verify(dcDao).saveReportInfo(eq(1), eq(content));
+		Assert.assertEquals(result, "success");
+	}
 
-    @Test
-    public void testIsImageFile() {
-        // Mock the file with a valid image extension
-        CommonsMultipartFile file = mock(CommonsMultipartFile.class);
-        when(file.getOriginalFilename()).thenReturn("image.jpg");
+	@Test
+	public void testIsImageFile() {
+		// Mock the file with a valid image extension
+		CommonsMultipartFile file = mock(CommonsMultipartFile.class);
+		when(file.getOriginalFilename()).thenReturn("image.jpg");
 
-        // Perform the isImageFile check
-        boolean isImage = reportServices.isImageFile(file);
+		// Perform the isImageFile check
+		boolean isImage = reportServices.isImageFile(file);
 
-        // Verify the interactions and assertions
-        verify(file).getOriginalFilename();
-        Assert.assertTrue(isImage);
-    }
+		// Verify the interactions and assertions
+		verify(file).getOriginalFilename();
+		Assert.assertTrue(isImage);
+	}
 
-    @Test
-    public void testIsNotImageFile() {
-        // Mock the file with an invalid image extension
-        CommonsMultipartFile file = mock(CommonsMultipartFile.class);
-        when(file.getOriginalFilename()).thenReturn("document.pdf");
+	@Test
+	public void testIsNotImageFile() {
+		// Mock the file with an invalid image extension
+		CommonsMultipartFile file = mock(CommonsMultipartFile.class);
+		when(file.getOriginalFilename()).thenReturn("document.pdf");
 
-        // Perform the isImageFile check
-        boolean isImage = reportServices.isImageFile(file);
+		// Perform the isImageFile check
+		boolean isImage = reportServices.isImageFile(file);
 
-        // Verify the interactions and assertions
-        verify(file).getOriginalFilename();
-        Assert.assertFalse(isImage);
-    }
+		// Verify the interactions and assertions
+		verify(file).getOriginalFilename();
+		Assert.assertFalse(isImage);
+	}
 }

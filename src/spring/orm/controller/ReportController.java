@@ -16,25 +16,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import spring.orm.contract.DAO.DCDAO;
+import spring.orm.contract.services.ReportService;
 import spring.orm.model.input.DCFilter;
 import spring.orm.model.output.OutputReportData;
 import spring.orm.model.output.OutputTestCategoryProfit;
 import spring.orm.model.output.OutputTestMethodProfit;
 import spring.orm.model.output.OutputTestNameProfit;
-import spring.orm.services.ReportServices;
 
 @Controller
 @RequestMapping("/dcadmin")
 public class ReportController {
 
-	ReportServices reportService;
+	ReportService reportService;
 
 	private DCDAO dCDAo;
 
 	private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
 
 	@Autowired
-	public ReportController(ReportServices rs, DCDAO dcd) {
+	public ReportController(ReportService rs, DCDAO dcd) {
 		super();
 		this.reportService = rs;
 		this.dCDAo = dcd;

@@ -18,9 +18,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import spring.orm.contract.DAO.PatientDAO;
-import spring.orm.contract.services.PatientService;
 import spring.orm.model.output.ParaGroupOutput;
 import spring.orm.model.output.PatientlastvisitOutput;
+import spring.orm.services.PatientServices;
 
 public class PatientServicesTest {
 
@@ -28,7 +28,7 @@ public class PatientServicesTest {
 	private PatientDAO patientDAOMock;
 
 	@InjectMocks
-	private PatientService patientServices;
+	private PatientServices patientServices;
 
 	@BeforeMethod
 	public void setUp() {
