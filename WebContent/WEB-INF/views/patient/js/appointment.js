@@ -107,9 +107,19 @@
 
 																$('#doctor')
 																		.empty();
+																
+																if(response.length==0)
+																{
+																$('#doctor')
+																		.append(
+																				'<option value="">No Doctor Is Available</option>');
+																}
+																else
+																{
 																$('#doctor')
 																		.append(
 																				'<option value="">Select Doctor</option>');
+																}
 																// Append new options based on response
 																$
 																		.each(
