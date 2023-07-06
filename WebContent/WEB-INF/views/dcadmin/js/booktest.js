@@ -181,12 +181,26 @@ function updatePrice() {
 
 
 function preview() {
+	var category = document.getElementById("category").value;
+	
+	var priceField = document.getElementById("tprice").value;
+	var contact = document.getElementById("contact").value;
+	var patient = document.getElementById("patient").value;
+	var type = document.getElementById("ptype").value;
+	var name = document.getElementById("pname").value;
+	var age=document.getElementById("page").value;
+	var email = document.getElementById("email").value;
+	var gender = document.getElementById("gender").value;
+
+	console.log("age"+age);
+	console.log("email"+email);
+	console.log(gender);
 	var testSelect = document.getElementById("test");
 	var selectedOptionText = testSelect.options[testSelect.selectedIndex].textContent;
 
 	var priceField = $('#tprice').val();
 
-
+if(category!="main"&& priceField!=""&&contact!="main" && patient!=""&& type!=""&&name!="" && selectedOptionText!="undefined"){
 	var bookingDetails = '<h3><strong>Test Confirm</strong></h3>';
 
 
@@ -196,6 +210,54 @@ function preview() {
 
 	$('#bookingDetails').html(bookingDetails);
 	$('#previewModal').modal('show');
+	}
+	else {
+ 
+
+  if (category == "main") {
+    addErrorMessage('#category', 'Please select a category.');
+  }
+
+  if (priceField == "") {
+    addErrorMessage('#tprice', 'Please enter a price.');
+  }
+  if (age == "") {
+    addErrorMessage('#page', 'Please enter age.');
+  }
+  if (email == "") {
+    addErrorMessage('#email', 'Please enter email.');
+  }
+
+  if (contact == "") {
+    addErrorMessage('#contact', 'Please enter contact number.');
+  }
+
+  if (patient == "main") {
+    addErrorMessage('#patient', 'Please select a patient .');
+  }
+
+  if (type == "") {
+    addErrorMessage('#ptype', 'Please enter a type.');
+  }
+
+  if (name == "") {
+    addErrorMessage('#pname', 'Please enter a name.');
+  }
+
+  if (selectedOptionText==undefined) {
+    addErrorMessage('#test', 'Please select a test.');
+  }
+
+  // Display the error message modal
+  $('#errorModal').modal('show');
+}
+
+
+
+}
+function addErrorMessage(selector, message) {
+  $(selector).addClass('error');
+  $(selector).after('<span class="error-message">' + message + '</span>');
 }
 var pdata;
 function totalbills() {
@@ -396,8 +458,15 @@ function sendReceiptByEmail() {
 				alert('Receipt sent successfully!');
 			},
 			error: function(xhr, status, error) {
-				console.error(error);
-				alert('An error occurred while sending the receipt.');
+				var mailError = '<h3><strong> Mail Error </strong></h3>';
+			
+		
+			
+			mailError += '<p>Mail Sending Failed : ' + xhr.responseText + '</p>'
+			
+
+			$('#bookingDetails7').html(mailError);
+			$('#previewModal7').modal('show');
 			}
 		});
 	}

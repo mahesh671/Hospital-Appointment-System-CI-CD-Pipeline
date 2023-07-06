@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -105,7 +106,7 @@ public class MailSendHelper {
 	}
 
 	public static void sendEmailTestBooking(HttpServletRequest request, HttpServletResponse response, String email,
-			String content) throws ServletException, IOException {
+			String content) throws ServletException, MessagingException, IOException {
 		// Resolve JSP view
 
 		String viewName = "TestBookingMailTemplate";
@@ -124,18 +125,16 @@ public class MailSendHelper {
 		logger.debug("Rendered HTML for test booking email:\n{}", renderedHtml);
 
 		Session session = createMailSession();
-		try {
-			MimeMessage message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(EMAIL_USERNAME));
-			message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
-			message.setSubject("Doctor Appointment Booking Details");
-			message.setContent(renderedHtml, "text/html");
 
-			Transport.send(message);
+		MimeMessage message = new MimeMessage(session);
+		message.setFrom(new InternetAddress(EMAIL_USERNAME));
+		message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
+		message.setSubject("Test Booking Details");
+		message.setContent(renderedHtml, "text/html");
 
-			logger.info("Test booking email sent to: {}", email);
-		} catch (Exception e) {
-			logger.error("Failed to send test booking email to: {}", email, e);
-		}
+		Transport.send(message);
+
+		logger.info("Test booking email sent to: {}", email);
+
 	}
 }

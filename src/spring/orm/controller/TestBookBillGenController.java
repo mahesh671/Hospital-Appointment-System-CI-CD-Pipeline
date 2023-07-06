@@ -1,7 +1,10 @@
 package spring.orm.controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import javax.mail.MessagingException;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -29,7 +32,6 @@ import spring.orm.model.TestModel;
 import spring.orm.model.input.BillInputModel;
 import spring.orm.model.output.patientsoutputmodel;
 import spring.orm.model.output.testsCategoriesModel;
-import spring.orm.util.MailSend;
 import spring.orm.util.MailSendHelper;
 
 @Controller
@@ -136,19 +138,23 @@ public class TestBookBillGenController {
 
 	// Calls the sendEmail1() method from the MailSend class to send the email with the provided parameters.
 	@RequestMapping(value = "/dcadmin/mailsend2", method = RequestMethod.POST)
-	public @ResponseBody void mailSend(HttpServletRequest request, HttpServletResponse response,
+	public @ResponseBody ResponseEntity<String> mailSend(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam String email, @RequestParam String content) {
 
 		try {
 			MailSendHelper.sendEmailTestBooking(request, response, email, content);
-		} catch (Exception e) {
-			// Catches any exception that occurs during the email sending process and prints the stack trace.
-			// MessagingException
-			// AuthenticationFailedException
-			// SendFailedException
-			// SMTPException
-			e.printStackTrace();
+		} catch (MessagingException e) {
+			System.out.println("exception");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Invalid Mail");
+
+		} catch (ServletException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while sending mail");
+
+		} catch (IOException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while sending mail");
+
 		}
+		return null;
 
 	}
 

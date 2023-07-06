@@ -162,13 +162,15 @@
 
 		// Function to preview the booking details in the modal
 		function previewBooking() {
+			
 			var specialization = $('#specialization').val();
 			var appointmentDate = $('#appointmentDate').val();
 			var doctor = $('#doctor option:selected').text();
 			var slot = $('#slots option:selected').text();
 			var bookingType = $('input[name="bookingType"]:checked').val();
 			var familyMembers = $('#familyMembers option:selected').text();
-
+			console.log(bookingType);
+if(specialization!="" && appointmentDate!="" && doctor!="Select Doctor" && slot!="Select Slot" && bookingType!="" ){
 			var bookingDetails = '<p><strong>Specialization:</strong> '
 					+ specialization + '</p>';
 			bookingDetails += '<p><strong>Date:</strong> ' + appointmentDate
@@ -188,8 +190,33 @@
 
 			$('#bookingDetails').html(bookingDetails);
 			$('#previewModal').modal('show');
-		}
+			}
+			else{
+				if (specialization == "") {
+  addErrorMessage('#specialization', 'Please fill in the specialization field.');
+}
 
+if (appointmentDate == "") {
+  addErrorMessage('#appointmentDate', 'Please fill in the appointment date field.');
+}
+
+if (doctor == "Select Doctor") {
+  addErrorMessage('#doctor', 'Please select a doctor.');
+}
+
+if (slot == "Select Slot") {
+  addErrorMessage('#slots', 'Please select a slot.');
+}
+
+if (bookingType == "") {
+  addErrorMessage('input[name="bookingType"]', 'Please select a booking type.');
+}
+			}
+		}
+function addErrorMessage(selector, message) {
+  $(selector).addClass('error');
+  $(selector).after('<span class="error-message">' + message + '</span>');
+}
 		// Function to confirm the booking and submit the form
 		function confirmBooking() {
 
