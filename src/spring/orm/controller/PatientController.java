@@ -71,7 +71,10 @@ public class PatientController {
 		PatientModel patientModel = patientDAO.getPatientById(pid);
 		logger.info("fetched the patient information through patient id");
 
+		String email = patientDAO.getUserContactInfo(patientSession.getUsername());
+
 		model.addAttribute("patient", patientModel);
+		model.addAttribute("mail", email);
 		logger.info("Inserte the data into the model");
 
 		logger.info("Fetching the Patient Profile Screen");
@@ -143,7 +146,7 @@ public class PatientController {
 	}
 
 	@RequestMapping(value = "/saveSettings", method = RequestMethod.POST)
-	public String saveSettings(@ModelAttribute ProfileInputModel patientFamilyInputModel,
+	public String saveSettings(@ModelAttribute ProfileInputModel patientFamilyData,
 			@SessionAttribute("patientSession") PatientSession patientSession, Model model) {
 		logger.info("Entered into saveSettings");
 		int pid = patientSession.getId();
@@ -152,10 +155,13 @@ public class PatientController {
 		PatientModel patientModel = patientDAO.getPatientById(pid);
 		logger.info("fetched the patient information through patient id");
 
+		String email = patientDAO.getUserContactInfo(patientSession.getUsername());
+
 		model.addAttribute("patient", patientModel);
+		model.addAttribute("mail", email);
 		logger.info("Inserte the data into the model");
-		patientDAO.updatePatientData(patientFamilyInputModel, patientSession);
-		return "patient/profile";
+		patientDAO.updatePatientData(patientFamilyData, patientSession);
+		return "redirect:./profile";
 	}
 
 	@RequestMapping(value = "/editFamily", method = RequestMethod.GET)

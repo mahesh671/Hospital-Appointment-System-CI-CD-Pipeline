@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import spring.orm.contract.DAO.PatientDAO;
 import spring.orm.model.PatientModel;
 import spring.orm.model.PatientSession;
+import spring.orm.model.UserPass;
 import spring.orm.model.entity.AppointmentEntity;
 import spring.orm.model.entity.PatientMedicalProfile;
 import spring.orm.model.input.ProfileInputModel;
@@ -171,8 +172,8 @@ public class PatientDAOImpl implements PatientDAO {
 		String hql = "SELECT new spring.orm.model.output.ParaGroupOutput(pp.patn_parameter, pp.patn_pargroup, pp.patn_value, a.appn_sch_date) "
 				+ "FROM PatientMedicalProfile pp, AppointmentEntity a WHERE pp.id.patn_id = a.pm.patn_id AND pp.id.patn_id = :p ";
 
-		List<ParaGroupOutput> paraGroupList = entityManager.createQuery(hql, spring.orm.model.output.ParaGroupOutput.class)
-				.setParameter("p", pid).getResultList();
+		List<ParaGroupOutput> paraGroupList = entityManager
+				.createQuery(hql, spring.orm.model.output.ParaGroupOutput.class).setParameter("p", pid).getResultList();
 
 		logger.info("fetched all the ParameterValues of the patient");
 
@@ -271,8 +272,8 @@ public class PatientDAOImpl implements PatientDAO {
 		String hql = "SELECT new spring.orm.model.output.ParaGroupOutput(pp.patn_parameter, pp.patn_pargroup, pp.patn_value, a.appn_sch_date) "
 				+ "FROM PatientMedicalProfile pp, AppointmentEntity a WHERE pp.id.patn_id = a.pm.patn_id AND pp.id.patn_id = :p";
 
-		List<ParaGroupOutput> parameterValuesList = entityManager.createQuery(hql, spring.orm.model.output.ParaGroupOutput.class)
-				.setParameter("p", p).getResultList();
+		List<ParaGroupOutput> parameterValuesList = entityManager
+				.createQuery(hql, spring.orm.model.output.ParaGroupOutput.class).setParameter("p", p).getResultList();
 
 		logger.info("fetched the patient parameter values");
 
@@ -326,6 +327,10 @@ public class PatientDAOImpl implements PatientDAO {
 
 		PatientModel patientModel = entityManager.find(PatientModel.class, ps.getId());
 
+		UserPass userPassData = entityManager.find(UserPass.class, ps.getUsername());
+
+		userPassData.setMail(pim.getMail());
+
 		patientModel.setPatn_id(ps.getId());
 		patientModel.setPatn_name(pim.getPatnName());
 		patientModel.setPatn_age(pim.getPatnAge());
@@ -338,8 +343,16 @@ public class PatientDAOImpl implements PatientDAO {
 		patientModel.setPatn_contact(getContactNumber(ps.getId()));
 
 		entityManager.merge(patientModel);
-
+		entityManager.merge(userPassData);
 		logger.info("updated the patient data");
+
+	}
+
+	public String getUserContactInfo(String name) {
+
+		UserPass userPassData = entityManager.find(UserPass.class, name);
+
+		return userPassData.getMail();
 
 	}
 

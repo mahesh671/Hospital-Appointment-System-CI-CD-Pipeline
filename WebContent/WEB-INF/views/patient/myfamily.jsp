@@ -52,11 +52,12 @@
 		</div>
 	</div>
 
-	<div class="container" align="center" id="myform">
-		<div class="row">
-			<div class="col-md-6">
-				<h4>Add Family Members</h4>
-				<form id="addForm">
+</br>
+	<div class="container" id="myform"">
+		<div class="row" >
+			<div class="col-md-12">
+				<h4 id="addFam">Add Family Members</h4>
+				<form id="addForm" align="center">
 					<div class="form-group">
 						<label for="pfmbName">Name:</label> <input type="text"
 							id="pfmbName" name="pfmbName" class="form-control" required>

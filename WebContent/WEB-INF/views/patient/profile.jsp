@@ -35,12 +35,16 @@
 					</select>
 				</div>
 
-
-
 				<div class="form-group">
 					<label for="patnBgroup" class="form-label">Blood Group</label> <input
 						type="text" name="patnBgroup" id="patnBgroup" class="form-control"
 						value="${patient.patn_bgroup}">
+				</div>
+				
+				<div class="form-group">
+					<label for="mail" class="form-label">Email</label> <input
+						type="text" name="mail" id="mail" class="form-control"
+						value="${mail}">
 				</div>
 
 				<div class="form-group">

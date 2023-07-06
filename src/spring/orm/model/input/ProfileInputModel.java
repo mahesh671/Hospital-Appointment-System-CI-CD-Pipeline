@@ -10,16 +10,27 @@ public class ProfileInputModel {
 
 	private String patnBgroup;
 
-	public ProfileInputModel() {
+	private String mail;
 
-	}
-
-	public ProfileInputModel(String patnName, int patnAge, String patnGender, String patnBgroup) {
+	public ProfileInputModel(String patnName, int patnAge, String patnGender, String patnBgroup, String mail) {
 		super();
 		this.patnName = patnName;
 		this.patnAge = patnAge;
 		this.patnGender = patnGender;
 		this.patnBgroup = patnBgroup;
+		this.mail = mail;
+	}
+
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
+	public ProfileInputModel() {
+
 	}
 
 	public String getPatnName() {

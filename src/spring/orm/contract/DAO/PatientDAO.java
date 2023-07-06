@@ -52,4 +52,6 @@ public interface PatientDAO {
 
 	public void updatePatientData(ProfileInputModel pim, PatientSession ps);
 
+	public String getUserContactInfo(String name);
+
 }
