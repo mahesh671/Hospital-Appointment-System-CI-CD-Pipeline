@@ -1,6 +1,5 @@
 package spring.orm.model.output;
 
-
 import java.util.Base64;
 
 import spring.orm.model.DoctorSchedule;
@@ -8,43 +7,50 @@ import spring.orm.model.entity.DoctorTemp;
 
 public class DoctorOutPutModel {
 
-
 	private int doctId;
 	private String doctName;
 	private String doctQual;
-//	private Specialization specialization;
+	private String specialization;
 	private int doctExp;
 	private String doctPhoto;
+
 	private Double doctCfee;
 	private boolean isDeleted;
-//	private DoctorSchedule docsche;
-	
-	//ScheduleRelated
+	// private DoctorSchedule docsche;
+
+	// ScheduleRelated
 	private String weekday;
 	private String timeFrom;
 	private String timeTo;
 	private int averageAppointmentTime;
-	
-	
-	//Specialization
+
+	// Specialization
 	private String id;
 	private String title;
 	private String description;
-	
 
 	public DoctorOutPutModel(DoctorTemp d2, DoctorSchedule docsche) {
 		super();
-		this.doctId=d2.getDoctId();
-		this.doctName=d2.getDoctName();
-		this.doctQual=d2.getDoctQual();
-		this.doctExp=d2.getDoctExp();
-		this.doctPhoto=Base64.getEncoder().encodeToString(d2.getDoctPhoto());
-		this.doctCfee=d2.getDoctCfee();
-		this.weekday=docsche.getWeekday();
-		this.timeFrom=docsche.getTimeFrom();
-		this.timeTo=docsche.getTimeTo();
-		this.averageAppointmentTime=docsche.getAverageAppointmentTime();
-		
+		this.doctId = d2.getDoctId();
+		this.doctName = d2.getDoctName();
+		this.doctQual = d2.getDoctQual();
+		this.doctExp = d2.getDoctExp();
+		this.doctPhoto = Base64.getEncoder().encodeToString(d2.getDoctPhoto());
+		this.doctCfee = d2.getDoctCfee();
+		this.specialization = d2.getSpecialization().getTitle();
+		this.weekday = docsche.getWeekday();
+		this.timeFrom = docsche.getTimeFrom();
+		this.timeTo = docsche.getTimeTo();
+		this.averageAppointmentTime = docsche.getAverageAppointmentTime();
+
+	}
+
+	public String getSpecialization() {
+		return specialization;
+	}
+
+	public void setSpecialization(String specialization) {
+		this.specialization = specialization;
 	}
 
 	public DoctorOutPutModel() {
@@ -165,30 +171,30 @@ public class DoctorOutPutModel {
 
 	public void setDocsche(DoctorSchedule schedulebyId) {
 		// TODO Auto-generated method stub
-		this.timeFrom=schedulebyId.getTimeFrom();
-		this.timeTo=schedulebyId.getTimeTo();
-		this.weekday=schedulebyId.getWeekday();
-		this.averageAppointmentTime=schedulebyId.getAverageAppointmentTime();
-		
+		this.timeFrom = schedulebyId.getTimeFrom();
+		this.timeTo = schedulebyId.getTimeTo();
+		this.weekday = schedulebyId.getWeekday();
+		this.averageAppointmentTime = schedulebyId.getAverageAppointmentTime();
+
 	}
 
 	public void setD(DoctorTemp d2) {
 		// TODO Auto-generated method stub
-		this.doctId=d2.getDoctId();
-		this.doctName=d2.getDoctName();
-		this.doctQual=d2.getDoctQual();
-		this.doctExp=d2.getDoctExp();
-		this.doctPhoto=Base64.getEncoder().encodeToString(d2.getDoctPhoto());
-		this.doctCfee=d2.getDoctCfee();
+		this.doctId = d2.getDoctId();
+		this.doctName = d2.getDoctName();
+		this.doctQual = d2.getDoctQual();
+		this.doctExp = d2.getDoctExp();
+		this.specialization = d2.getSpecialization().getTitle();
+		this.doctPhoto = Base64.getEncoder().encodeToString(d2.getDoctPhoto());
+		this.doctCfee = d2.getDoctCfee();
 	}
 
 	@Override
 	public String toString() {
 		return "DoctorOutPutModel [doctId=" + doctId + ", doctName=" + doctName + ", doctQual=" + doctQual
-				+ ", doctExp=" + doctExp + ", doctPhoto="  + ", doctCfee=" + doctCfee + ", isDeleted="
-				+ isDeleted + ", weekday=" + weekday + ", timeFrom=" + timeFrom + ", timeTo=" + timeTo
-				+ ", averageAppointmentTime=" + averageAppointmentTime + ", id=" + id + ", title=" + title
-				+ ", description=" + description + "]";
+				+ ", doctExp=" + doctExp + ", doctPhoto=" + ", doctCfee=" + doctCfee + ", isDeleted=" + isDeleted
+				+ ", weekday=" + weekday + ", timeFrom=" + timeFrom + ", timeTo=" + timeTo + ", averageAppointmentTime="
+				+ averageAppointmentTime + ", id=" + id + ", title=" + title + ", description=" + description + "]";
 	}
 
 }

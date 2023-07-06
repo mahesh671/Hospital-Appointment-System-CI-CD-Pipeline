@@ -43,7 +43,7 @@
 						<tr>
 							<td>${s.doctId}</td>
 							<td>${s.doctName}</td>
-							<td>${s.doctQual}</td>
+							<td>${s.specialization} (${s.doctQual})</td>
 							<td>${s.doctExp}</td>
 							<td><img src="data:image/png;base64,${s.doctPhoto}"
 								class="profile-pic" /></td>

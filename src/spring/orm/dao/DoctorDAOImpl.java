@@ -1,5 +1,7 @@
 package spring.orm.dao;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,6 +162,10 @@ public class DoctorDAOImpl implements DoctorsDAO {
 			for (DoctorTemp d : em.createQuery("select d from DoctorTemp d where isDeleted = false", DoctorTemp.class)
 					.getResultList()) {
 				DoctorSchedule schedule = docschedule.getSchedulebyId(d.getDoctId());
+				schedule.setTimeFrom(LocalTime.parse(schedule.getTimeFrom(), DateTimeFormatter.ofPattern("HHmm"))
+						.format(DateTimeFormatter.ofPattern("hh:mm a")).toUpperCase());
+				schedule.setTimeTo(LocalTime.parse(schedule.getTimeTo(), DateTimeFormatter.ofPattern("HHmm"))
+						.format(DateTimeFormatter.ofPattern("hh:mm a")).toUpperCase());
 				doctorSchedules.add(new DoctorOutPutModel(d, schedule));
 			}
 			logger.debug("Retrieved {} doctors with schedules", doctorSchedules.size());
