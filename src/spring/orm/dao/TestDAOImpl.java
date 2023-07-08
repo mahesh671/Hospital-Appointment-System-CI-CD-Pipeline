@@ -196,7 +196,7 @@ public class TestDAOImpl implements TestDAO {
 	@Transactional
 	public List<testsCategoriesModel> getCategories() {
 		// Retrieve all Categories from the database
-		String hql = "SELECT  DISTINCT  new spring.orm.model.output.testsCategoriesModel(t.test_category) FROM TestModel t where isDeleted = false";
+		String hql = "SELECT  DISTINCT  new spring.orm.model.output.testsCategoriesModel(t.test_category) FROM TestModel t ";
 		List<testsCategoriesModel> data = entityManager.createQuery(hql, testsCategoriesModel.class).getResultList();
 		logger.info("Get Categories:{}", data);
 		return data;

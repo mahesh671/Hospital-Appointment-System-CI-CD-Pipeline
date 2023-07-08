@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,42 +44,40 @@ public class DiagnosticBillDAOImpl implements DiagnosticBillDAO {
 	private TestDAO testDAO;
 	private static final Logger logger = LoggerFactory.getLogger(DiagnosticBillDAOImpl.class);
 	TestBookStatus st = new TestBookStatus();
-
 	List<Integer> testi = new ArrayList<>();
 	String con;
 	BookedTestIDs btid = new BookedTestIDs(testi, con);
-
-	public List<DiagnosticBillModel> getdbilldetails() {
+	
+	
+	// Retrieves diagnostic bill details from the database
+	public List<DiagnosticBillModel> getDiagnosticBillDetails() {
 		logger.info("Query to fetch diagnostic bill details");
 		return em.createQuery("SELECT d FROM diagnosticBillModel d", DiagnosticBillModel.class).getResultList();
 	}
 
+	
+	 // Books a DC test for a patient and stores it in the database
 	@Transactional
-	public void bookDcTest(BillInputModel bi) {
-
+	public void bookDcTest(BillInputModel bi) throws Exception {
 		logger.info("Inside Book DC Test method");
 
 		int test = bi.getTest();
-		String type = bi.getType();
-
 		int patn_id = bi.getPatient();
 		logger.info("Booked Test id " + " " + test);
-		logger.info("Patient type " + " " + type);
 		logger.info("Patient Id " + " " + patn_id);
 		TestBookStatusComposite id = new TestBookStatusComposite();
 		id.setTbPatnId(patn_id);
-		id.setTestId(test);
-
-		st.setType(type);
+		id.setTestId(test);	
 		st.setId(id);
 		st.setBookedDate(LocalDate.now());
 		st.setStatus("pending");
-
-		em.persist(st);
-		logger.info("Saved/Persisted booked test to dataBase");
+       em.persist(st);
+       logger.info("Saved/Persisted booked test to dataBase");
 
 	}
 
+	
+	 // Calculates the total bills for the booked tests of a patient
 	@Transactional
 	public List<Object> getTotalBills(int patient) {
 		logger.info("Total Bills Calculation for booked tests ");
@@ -97,7 +96,7 @@ public class DiagnosticBillDAOImpl implements DiagnosticBillDAO {
 				int j = (int) testh.get(i);
 
 				tests1 = em
-						.createQuery("SELECT t.test_name, t.test_method, t.test_price "
+						.createQuery("SELECT t.test_name, t.test_method, t.test_price ,tb.bookedDate "
 								+ "FROM TestModel t, TestBookStatus tb " + "WHERE t.test_id = :testId "
 								+ "AND tb.status = 'pending' " + "AND tb.id.test_id = t.test_id")
 						.setParameter("testId", j).getResultList();
@@ -121,6 +120,7 @@ public class DiagnosticBillDAOImpl implements DiagnosticBillDAO {
 
 	}
 
+	 // Stores paid test details to the database
 	@Transactional
 	public int storeToDatabase(int patient) {
 		logger.info("Storing Paid test details to Database");
@@ -177,6 +177,7 @@ public class DiagnosticBillDAOImpl implements DiagnosticBillDAO {
 
 	}
 
+	 // Retrieves test reports of a patient within a given date range
 	@Override
 	public List<OutputPatientTestReports> gettestdate(String date1, String date2, int pid) {
 
@@ -196,9 +197,30 @@ public class DiagnosticBillDAOImpl implements DiagnosticBillDAO {
 		System.out.println(data.size());
 
 		for (OutputPatientTestReports x : data) {
-			System.out.println(x.getDgbl_date());
+			logger.info("Test Reports Date"+" "+x.getDgbl_date());
 		}
 		return data;
+	}
+
+	
+	  // Cancels a booked test for a patient
+	@Transactional
+	public void cancelTest(int patient, String test) {
+		// TODO Auto-generated method stub
+	
+		int testid=(int) em
+		.createQuery("SELECT t.test_id FROM TestModel t where t.test_name=:test").setParameter("test", test).getSingleResult();
+		
+		logger.info("Test to be cancelled"+" "+testid+" "+"for patient"+" "+patient);
+		TestBookStatus tbs= (TestBookStatus) em.createQuery(
+					"select t  from TestBookStatus t  where t.id.tb_patn_id=:patn_id  and t.id.test_id=:testid")
+					.setParameter("patn_id", patient)
+					.setParameter("testid",testid)
+					 .getSingleResult();
+		
+		em.remove(tbs);	
+		logger.info("Test Cancelled Success");
+		
 	}
 
 }

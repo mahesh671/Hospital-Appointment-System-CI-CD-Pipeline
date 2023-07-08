@@ -12,8 +12,16 @@
 			<li class="nav-item"><a href="./" class="nav-link"
 				aria-current="page">Dashboard</a></li>
 			<li><a href="./gettestdetails" class="nav-link">Tests</a></li>
-			<li><a href="./booktest" class="nav-link">Book Test</a></li>
-
+			  
+			  <li class="nav-item">
+          <a class="nav-link" href="" id="testsLink">Test Booking</a>
+          <div class="dropdown-menu" aria-labelledby="testsLink">
+            <a class="dropdown-item co" href="./booktest">New Test</a>
+            <a class="dropdown-item co" href="./bookedtest">Booked Tests</a>
+          </div>
+        </li>
+			
+		
 			<li class="nav-item"><a class="nav-link" href="./dcpatients"
 				id="appointmentsLink">Patients</a></li>
 			<li><a href="./DCReports" class="nav-link">Reports</a></li>

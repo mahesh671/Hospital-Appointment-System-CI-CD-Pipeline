@@ -1,22 +1,19 @@
 package spring.orm.model.input;
 
 public class BillInputModel {
-	private String name;
+	
 	private String cat;
 	private int test;
 	private int price;
-	private String contact;
 	private int patient;
-
-	public BillInputModel(String name, String cat, int test, int price, String contact, int patient, String type) {
-
-		this.name = name;
+	public BillInputModel( String cat, int test, int price, int patient) {
+	
 		this.cat = cat;
 		this.test = test;
 		this.price = price;
-		this.contact = contact;
+		
 		this.patient = patient;
-		this.type = type;
+		
 	}
 
 	public int getPatient() {
@@ -27,19 +24,11 @@ public class BillInputModel {
 		this.patient = patient;
 	}
 
-	private String type;
-
 	public BillInputModel() {
 		// Default constructor
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+	
 
 	public String getCat() {
 		return cat;
@@ -65,26 +54,14 @@ public class BillInputModel {
 		this.price = price;
 	}
 
-	public String getContact() {
-		return contact;
-	}
+	
 
-	public void setContact(String contact) {
-		this.contact = contact;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
+	
 
 	@Override
 	public String toString() {
-		return "BillInputModel [name=" + name + ", cat=" + cat + ", test=" + test + ", price=" + price + ", contact="
-				+ contact + ", patient=" + patient + ", type=" + type + "]";
+		return "BillInputModel [cat=" + cat + ", test=" + test + ", price=" + price + ", patient=" + patient + "]";
 	}
 
+	
 }

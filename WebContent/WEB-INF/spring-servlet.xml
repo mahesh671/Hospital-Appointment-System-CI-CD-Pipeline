@@ -22,15 +22,12 @@
 	</bean>
 
 
-	<context:property-placeholder
-		location="classpath:db.properties" />
-
-	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="${db.driver}" />
-		<property name="url" value="${db.url}" />
-		<property name="username" value="${db.user}" />
-		<property name="password" value="${db.password}" />
+	
+	 <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url" value="jdbc:postgresql://localhost:5432/newdb" />
+		<property name="username" value="postgres" />
+		<property name="password" value="Beuganji7@" />
 	</bean>
 
 	<bean

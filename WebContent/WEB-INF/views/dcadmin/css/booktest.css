@@ -2,10 +2,27 @@
  .shadow-form {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.error {
-  border: 1px solid red;
-}
+
 
 .error-message {
   color: red;
 }
+
+.nav-link dropdown-toggle {
+	color: #078344;
+	text-decoration: none;
+	border-style: solid;
+	background-color: transparent;
+}
+
+.error-msg {
+        color: red;
+        display: flex;
+        align-items: center;
+    }
+
+.error-icon {
+        margin-right: 5px;
+        color: red;
+    }
+    

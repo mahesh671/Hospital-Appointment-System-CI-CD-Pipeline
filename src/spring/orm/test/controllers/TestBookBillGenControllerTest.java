@@ -68,7 +68,7 @@ public class TestBookBillGenControllerTest {
 		when(testDAO.getCategories()).thenReturn(categories);
 
 		// Act
-		ResponseEntity<String> response = controller.GetCategories(model);
+		ResponseEntity<String> response = controller.getCategories(model);
 
 		// Assert
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
@@ -105,12 +105,12 @@ public class TestBookBillGenControllerTest {
 	}
 
 	@Test
-	public void testBookTest() {
+	public void testBookTest() throws Exception {
 		// Arrange
 		BillInputModel billInputModel = new BillInputModel();
 
 		// Act
-		controller.BookTest(model, billInputModel);
+		controller.bookTest(model, billInputModel);
 
 		// Assert
 		verify(diagnosticBillDAO).bookDcTest(eq(billInputModel));
