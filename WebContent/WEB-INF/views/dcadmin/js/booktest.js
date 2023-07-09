@@ -493,7 +493,7 @@ function storedb(payment_id) {
 		success: function(response) {
 			console.log(response);
 			var bookingDetails = '<h3><strong> Rapha Diagnostic Center </strong></h3>';
-			bookingDetails += '<h4><strong>Total Bill - $' + pdata[pdata.length - 1] + '</strong></h4>';
+			bookingDetails += '<h4><strong>Total Bill - &#8377;' + pdata[pdata.length - 1] + '</strong></h4>';
 			for (var i = 0; i < pdata.length - 1; i++) {
 
 				bookingDetails += '<p><strong>Test - Method - Price</strong> ' + pdata[i][0] + '</p>';

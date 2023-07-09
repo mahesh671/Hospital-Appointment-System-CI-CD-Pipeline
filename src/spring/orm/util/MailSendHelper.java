@@ -109,7 +109,7 @@ public class MailSendHelper {
 			String content) throws ServletException, MessagingException, IOException {
 		// Resolve JSP view
 
-		String viewName = "TestBookingMailTemplate";
+		String viewName = "TestBookingMailTemplet";
 		request.setAttribute("booktest", content);
 		// Render JSP
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/views/" + viewName + ".jsp");
